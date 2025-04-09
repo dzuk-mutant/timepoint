@@ -1,12 +1,10 @@
-import gleam/json.{type Json}
 import gleam/list
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
 import tempo.{type Date, type DateTime}
 import tempo/date
 import tempo/datetime
-import time/store/date as date_store
-import time/window/collision.{
+import window/collision.{
   type PointCollision, PointAfterFinal, PointAtFinal, PointAtStart,
   PointBeforeStart, PointInside,
 }
@@ -49,28 +47,6 @@ pub fn new_with_end_excluding(
 ) -> DateWindow {
   let final = decrement(end_excluding)
   DateWindow(start:, final:)
-}
-
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// ------------------- JSON ----------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-
-/// Converts a DateWindow into JSON.
-/// 
-/// You cannot directly decode a JSON String to a
-/// DateWindow, it has to be decoded into a
-/// RawDateWindow and then attempted to be normalised.
-pub fn to_json(window: DateWindow) -> Json {
-  json.object([
-    #("start", date_store.to_json(window.start)),
-    #("final", date_store.to_json(window.final)),
-  ])
 }
 
 // -----------------------------------------------

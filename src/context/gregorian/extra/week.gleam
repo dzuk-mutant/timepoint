@@ -1,7 +1,7 @@
 import tempo.{type Date}
 import tempo/date.{type DayOfWeek}
 import time/extra/date as date_extra
-import time/window/date_window.{type DateWindow}
+import window/date_window.{type DateWindow}
 
 pub fn date_window_from_date(date: Date) -> DateWindow {
   let monday = date_extra.most_recent_monday_behind(date)
