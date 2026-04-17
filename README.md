@@ -40,6 +40,7 @@ Right now, this is a little messy and borrows things from both gleam_time and gt
 In time I would like to...
 
 - Move functionality to gleam_time where it makes sense to.
+  - Probably replace `UnixTime` with gleam_time's `Timestamp`.
 - Be more self-sufficient from gtempo.
-- Probably replace `UnixTime` with gleam_time's `Timestamp`.
+- Provide more error checking in certain type constructors (especially Intervals). My app relies on stuff coming from the browser to tell it certain things, and if they're wrong then it's a critical failure, and I didn't want to needlessly unwrap Results, so I checked JSON input for sanity but not constructors. I would like to fix this in the future.
 - Come up with neater and more consistent names for `Calendrical`, `Timelined` and related types.
