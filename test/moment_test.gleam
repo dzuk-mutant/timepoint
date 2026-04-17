@@ -1,0 +1,431 @@
+import gleam/json
+import gleam/order.{Eq, Gt, Lt}
+import gleam/result
+import gleeunit/should
+import moment.{type Moment}
+import offset
+import tempo.{type DateTime}
+import tempo/datetime as gtempo_datetime
+import unix_time
+
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -------------------- CONVERSION ---------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+
+pub fn to_unix_milli_test() {
+  moment.from_values(unix_time: 12_498, offset_mins: 0)
+  |> moment.to_unix_time()
+  |> unix_time.to_int
+  |> should.equal(12_498)
+}
+
+pub fn to_offset_test() {
+  moment.from_values(unix_time: 12_498, offset_mins: 0)
+  |> moment.to_offset()
+  |> should.equal(offset.from_minutes(0))
+}
+
+// -------------------------------------------------------
+
+pub fn to_from_gtempo(input_and_expected_output: Moment) {
+  input_and_expected_output
+  |> moment.to_gtempo_datetime()
+  |> result.unwrap(gtempo_datetime.literal("1990-01-01T00:00:00.000+00:00"))
+  |> moment.from_gtempo_datetime()
+  |> should.equal(input_and_expected_output)
+}
+
+pub fn to_from_gtempo_1_test() {
+  to_from_gtempo(moment.from_values(unix_time: 813_479_756_000, offset_mins: 0))
+}
+
+pub fn to_from_gtempo_2_test() {
+  to_from_gtempo(moment.from_values(
+    unix_time: 1_741_392_000_000,
+    offset_mins: 0,
+  ))
+}
+
+pub fn to_from_gtempo_3_test() {
+  to_from_gtempo(moment.from_values(
+    unix_time: 1_267_912_800_000,
+    offset_mins: 60,
+  ))
+}
+
+pub fn to_from_gtempo_4_test() {
+  to_from_gtempo(moment.from_gtempo_literal("2026-03-08T00:00:00.000Z"))
+}
+
+pub fn to_from_gtempo_5_test() {
+  to_from_gtempo(moment.from_gtempo_literal("2026-03-08T00:00:00.000+12:00"))
+}
+
+pub fn to_from_gtempo_6_test() {
+  to_from_gtempo(moment.from_gtempo_literal("2026-03-08T00:00:00.000+14:00"))
+}
+
+pub fn to_from_gtempo_7_test() {
+  to_from_gtempo(moment.from_gtempo_literal("2026-03-08T23:59:59.999Z"))
+}
+
+pub fn to_from_gtempo_8_test() {
+  to_from_gtempo(moment.from_gtempo_literal("1999-01-23T12:30:00.123+07:00"))
+}
+
+pub fn to_from_gtempo_9_test() {
+  to_from_gtempo(moment.from_gtempo_literal("1996-03-08T10:12:00.000-10:00"))
+}
+
+pub fn to_from_gtempo_10_test() {
+  to_from_gtempo(moment.from_gtempo_literal("1976-12-12T04:56:10.000-01:00"))
+}
+
+pub fn to_from_gtempo_11_test() {
+  to_from_gtempo(moment.from_gtempo_literal("2035-09-11T10:05:11.000-02:30"))
+}
+
+pub fn to_from_gtempo_12_test() {
+  to_from_gtempo(moment.from_gtempo_literal("2015-05-12T01:56:00.000+10:00"))
+}
+
+// -------------------------------------------------------
+
+pub fn to_gtempo(input: Moment, expected_output: DateTime) {
+  input
+  |> moment.to_gtempo_datetime()
+  |> result.unwrap(gtempo_datetime.literal("1990-01-01T00:00:00.000Z"))
+  |> should.equal(expected_output)
+}
+
+pub fn to_gtempo_1_test() {
+  to_gtempo(
+    moment.from_values(unix_time: 1_741_392_000_000, offset_mins: 0),
+    gtempo_datetime.literal("2025-03-08T00:00:00.000Z"),
+  )
+}
+
+pub fn to_gtempo_2_test() {
+  to_gtempo(
+    moment.from_values(unix_time: 813_479_756_000, offset_mins: 0),
+    gtempo_datetime.literal("1995-10-12T06:35:56.000Z"),
+  )
+}
+
+pub fn to_gtempo_3_test() {
+  to_gtempo(
+    moment.from_values(unix_time: 1_267_912_800_000, offset_mins: 60),
+    gtempo_datetime.literal("2010-03-06T23:00:00.000+01:00"),
+  )
+}
+
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -------------------- COMPARISON ---------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+
+// actually equal
+pub fn is_equal_1_test() {
+  moment.from_values(unix_time: 12_498, offset_mins: 0)
+  |> moment.is_equal(moment.from_values(unix_time: 12_498, offset_mins: 0))
+  |> should.equal(True)
+}
+
+// actually equal
+pub fn is_equal_2_test() {
+  moment.from_values(unix_time: 23_428_301, offset_mins: 0)
+  |> moment.is_equal(moment.from_values(unix_time: 23_428_301, offset_mins: 0))
+  |> should.equal(True)
+}
+
+// not equal
+pub fn is_equal_3_test() {
+  moment.from_values(unix_time: 23_428_301, offset_mins: 0)
+  |> moment.is_equal(moment.from_values(unix_time: 23_428_302, offset_mins: 0))
+  |> should.equal(False)
+}
+
+// not equal
+pub fn is_equal_4_test() {
+  moment.from_values(unix_time: 11_111_111, offset_mins: 0)
+  |> moment.is_equal(moment.from_values(unix_time: 23_428_302, offset_mins: 0))
+  |> should.equal(False)
+}
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+// -------------------------------------------------------
+
+// Lt
+pub fn compare_1_test() {
+  moment.from_values(unix_time: 111_111, offset_mins: 0)
+  |> moment.compare(moment.from_values(unix_time: 123_123, offset_mins: 0))
+  |> should.equal(Lt)
+}
+
+// Lt
+pub fn compare_2_test() {
+  moment.from_values(unix_time: 0, offset_mins: 0)
+  |> moment.compare(moment.from_values(unix_time: 123_123, offset_mins: 0))
+  |> should.equal(Lt)
+}
+
+// Eq
+pub fn compare_3_test() {
+  moment.from_values(unix_time: 8_986_543, offset_mins: 0)
+  |> moment.compare(moment.from_values(unix_time: 8_986_543, offset_mins: 0))
+  |> should.equal(Eq)
+}
+
+// Eq, even with different offsets
+pub fn compare_4_test() {
+  moment.from_values(unix_time: 8_888_888, offset_mins: 0)
+  |> moment.compare(moment.from_values(unix_time: 8_888_888, offset_mins: 120))
+  |> should.equal(Eq)
+}
+
+// Gt
+pub fn compare_5_test() {
+  moment.from_values(unix_time: 124, offset_mins: 0)
+  |> moment.compare(moment.from_values(unix_time: 123, offset_mins: 0))
+  |> should.equal(Gt)
+}
+
+// Gt
+pub fn compare_6_test() {
+  moment.from_values(unix_time: 3_242_349_809, offset_mins: 0)
+  |> moment.compare(moment.from_values(unix_time: 98_989_989, offset_mins: 0))
+  |> should.equal(Gt)
+}
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+// -------------------------------------------------------
+
+// Lt
+pub fn compare_reverse_1_test() {
+  moment.from_values(unix_time: 111_111, offset_mins: 0)
+  |> moment.compare_reverse(moment.from_values(
+    unix_time: 123_123,
+    offset_mins: 0,
+  ))
+  |> should.equal(Gt)
+}
+
+// Lt
+pub fn compare_reverse_2_test() {
+  moment.from_values(unix_time: 0, offset_mins: 0)
+  |> moment.compare_reverse(moment.from_values(
+    unix_time: 123_123,
+    offset_mins: 0,
+  ))
+  |> should.equal(Gt)
+}
+
+// Eq
+pub fn compare_reverse_3_test() {
+  moment.from_values(unix_time: 8_986_543, offset_mins: 0)
+  |> moment.compare_reverse(moment.from_values(
+    unix_time: 8_986_543,
+    offset_mins: 0,
+  ))
+  |> should.equal(Eq)
+}
+
+// Eq, even with different offsets
+pub fn compare_reverse_4_test() {
+  moment.from_values(unix_time: 8_888_888, offset_mins: 0)
+  |> moment.compare_reverse(moment.from_values(
+    unix_time: 8_888_888,
+    offset_mins: 120,
+  ))
+  |> should.equal(Eq)
+}
+
+// Gt
+pub fn compare_reverse_5_test() {
+  moment.from_values(unix_time: 124, offset_mins: 0)
+  |> moment.compare_reverse(moment.from_values(unix_time: 123, offset_mins: 0))
+  |> should.equal(Lt)
+}
+
+// Gt
+pub fn compare_reverse_6_test() {
+  moment.from_values(unix_time: 3_242_349_809, offset_mins: 0)
+  |> moment.compare_reverse(moment.from_values(
+    unix_time: 98_989_989,
+    offset_mins: 0,
+  ))
+  |> should.equal(Lt)
+}
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+// -------------------------------------------------------
+
+/// even with the offset, the same time is the same time.
+pub fn is_earlier_1_test() {
+  moment.from_values(unix_time: 123, offset_mins: 0)
+  |> moment.is_earlier(than: moment.from_values(
+    unix_time: 124,
+    offset_mins: 600,
+  ))
+  |> should.equal(True)
+}
+
+pub fn is_earlier_2_test() {
+  moment.from_values(unix_time: 123, offset_mins: 0)
+  |> moment.is_earlier(than: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(True)
+}
+
+pub fn is_earlier_3_test() {
+  moment.from_values(unix_time: 123, offset_mins: 0)
+  |> moment.is_earlier(than: moment.from_values(unix_time: 123, offset_mins: 0))
+  |> should.equal(False)
+}
+
+pub fn is_earlier_4_test() {
+  moment.from_values(unix_time: 125, offset_mins: 0)
+  |> moment.is_earlier(than: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(False)
+}
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+// -------------------------------------------------------
+
+pub fn is_later_1_test() {
+  moment.from_values(unix_time: 123, offset_mins: 0)
+  |> moment.is_later(than: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(False)
+}
+
+pub fn is_later_2_test() {
+  moment.from_values(unix_time: 124, offset_mins: 0)
+  |> moment.is_later(than: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(False)
+}
+
+pub fn is_later_3_test() {
+  moment.from_values(unix_time: 125, offset_mins: 0)
+  |> moment.is_later(than: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(True)
+}
+
+/// different offset test
+/// 
+/// (offsets should not affect the calculation)
+pub fn is_later_4_test() {
+  moment.from_values(unix_time: 125, offset_mins: -120)
+  |> moment.is_later(than: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(True)
+}
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+// -------------------------------------------------------
+
+pub fn difference_1_test() {
+  moment.from_values(unix_time: 123, offset_mins: 0)
+  |> moment.difference(from: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(1)
+}
+
+pub fn difference_2_test() {
+  moment.from_values(unix_time: 124, offset_mins: 0)
+  |> moment.difference(from: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(0)
+}
+
+pub fn difference_3_test() {
+  moment.from_values(unix_time: 0, offset_mins: 0)
+  |> moment.difference(from: moment.from_values(unix_time: 124, offset_mins: 0))
+  |> should.equal(124)
+}
+
+// -------------------------------------------------------
+// -------------------------------------------------------
+// -------------------------------------------------------
+
+pub fn add_1_test() {
+  moment.from_values(unix_time: 124, offset_mins: 0)
+  |> moment.add(milli: 1)
+  |> should.equal(moment.from_values(unix_time: 125, offset_mins: 0))
+}
+
+pub fn add_2_test() {
+  moment.from_values(unix_time: 124, offset_mins: 0)
+  |> moment.add(milli: 0)
+  |> should.equal(moment.from_values(unix_time: 124, offset_mins: 0))
+}
+
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -------------------- JSON ---------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+
+pub fn output(input: Moment, expected_output: String) {
+  input
+  |> moment.to_json()
+  |> json.to_string()
+  |> should.equal(expected_output)
+}
+
+pub fn output_input(input_and_expected_output: Moment) {
+  let date_decoder = moment.decoder()
+
+  input_and_expected_output
+  |> moment.to_json()
+  |> json.to_string()
+  |> json.parse(using: date_decoder)
+  |> should.equal(Ok(input_and_expected_output))
+}
+
+// ----------------- TESTS --------------------
+
+pub fn example_1_input_output_test() {
+  output_input(moment.from_values(unix_time: 8_888_888, offset_mins: 0))
+}
+
+pub fn example_2_input_output_test() {
+  output_input(moment.from_values(
+    unix_time: 3_242_342_358_798,
+    offset_mins: 210,
+  ))
+}
+
+pub fn example_3_input_output_test() {
+  output_input(moment.from_values(unix_time: 21_312_312_312, offset_mins: -600))
+}
+
+pub fn example_1_output_test() {
+  output(
+    moment.from_values(unix_time: 1_741_392_000_000, offset_mins: 0),
+    "{\"unix_time\":1741392000000,\"offset\":0}",
+  )
+}
+
+pub fn example_2_output_test() {
+  output(
+    moment.from_values(unix_time: 813_479_756_000, offset_mins: -240),
+    "{\"unix_time\":813479756000,\"offset\":-240}",
+  )
+}
+
+pub fn example_3_output_test() {
+  output(
+    moment.from_values(unix_time: 1_267_912_800_000, offset_mins: 640),
+    "{\"unix_time\":1267912800000,\"offset\":640}",
+  )
+}

@@ -1,0 +1,215 @@
+import duration
+import gleam/dynamic/decode.{type Decoder}
+import gleam/int
+import gleam/json.{type Json}
+import gleam/order.{type Order, Eq, Gt, Lt}
+import moment.{type Moment}
+import offset
+import tempo.{type Date}
+import tempo/date as gtempo_date
+import unix_time
+
+/// Representation of an abstract day that is taking
+/// place on Earth.
+/// 
+/// It is analogous to a Date type in other systems, but
+/// there is no specific calendar representation attached.
+/// 
+/// If you want to work in a specific calendar, you need
+/// to convert the Day.
+pub opaque type Day {
+  Day(unix_days: Int)
+}
+
+/// 1st January 1970
+const unix_epoch_as_rata_die: Int = 719_163
+
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -------------------- CONVERSION ---------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+
+/// Converts gtempo Date to a Day.
+pub fn from_gtempo_date(date: Date) -> Day {
+  date
+  |> gtempo_date.to_rata_die
+  |> from_rata_die
+}
+
+/// Converts a gtempo-compatible literal string into a Day.
+/// 
+/// **This is for testing only.** Will panic if the
+/// input string is wrong.
+pub fn from_gtempo_literal(str: String) -> Day {
+  str
+  |> gtempo_date.literal
+  |> from_gtempo_date
+}
+
+/// Converts a Day into a gtempo Date.
+pub fn to_gtempo_date(day: Day) -> Date {
+  day
+  |> to_rata_die
+  |> gtempo_date.from_rata_die()
+}
+
+/// Converts an Int representing the number of days
+/// from the Unix Epoch (1st January 1970) into a Day.
+pub fn from_unix_days(unix_days: Int) -> Day {
+  Day(unix_days:)
+}
+
+/// Converts a Day into an Int representing days
+/// from the Unix Epoch (1st January 1970).
+pub fn to_unix_days(day: Day) -> Int {
+  day.unix_days
+}
+
+/// Creates a Day from an Int representing Rata Die days.
+pub fn from_rata_die(rata_die: Int) -> Day {
+  rata_die
+  |> int.subtract(unix_epoch_as_rata_die)
+  |> fn(d) { Day(unix_days: d) }
+}
+
+/// Converts a Day into an Int representing Rata Die days.
+pub fn to_rata_die(day: Day) -> Int {
+  day.unix_days
+  |> int.add(unix_epoch_as_rata_die)
+}
+
+/// Gets the Day a Moment sits within.
+pub fn from_moment(ts: Moment) -> Day {
+  let offset_shift =
+    ts
+    |> moment.to_offset
+    |> offset.to_duration
+
+  ts
+  |> moment.to_unix_time
+  |> unix_time.to_duration_from_epoch
+  |> duration.add(offset_shift)
+  |> duration.as_days
+  |> from_unix_days
+}
+
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -------------------- COMPARISON ---------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+
+/// Checks if two Days are the same.
+pub fn is_equal(sd_1: Day, to sd_2: Day) -> Bool {
+  to_rata_die(sd_1) == to_rata_die(sd_2)
+}
+
+/// Compares two Days against each other.
+pub fn compare(sd_1: Day, to sd_2: Day) -> Order {
+  int.compare(to_rata_die(sd_1), with: to_rata_die(sd_2))
+}
+
+/// Compares two Days against each other in reverse chronological order.
+pub fn compare_reverse(sd_1: Day, to sd_2: Day) -> Order {
+  int.compare(to_rata_die(sd_1), with: to_rata_die(sd_2))
+  |> order.negate
+}
+
+/// Checks if a the first Day is earlier than the second.
+pub fn is_earlier(sd_1: Day, than sd_2: Day) -> Bool {
+  compare(sd_1, to: sd_2) == Lt
+}
+
+/// Checks if a the first Day is earlier than or the same as the second.
+pub fn is_earlier_or_equal(sd_1: Day, to sd_2: Day) -> Bool {
+  let comparison = compare(sd_1, to: sd_2)
+  comparison == Lt || comparison == Eq
+}
+
+/// Checks if a the first Day is later than the second.
+pub fn is_later(sd_1: Day, than sd_2: Day) -> Bool {
+  compare(sd_1, to: sd_2) == Gt
+}
+
+/// Gets the difference in Days from the first and the second Day given.
+pub fn difference(a: Day, from b: Day) -> Int {
+  to_unix_days(b) - to_unix_days(a)
+}
+
+/// Subtracts a specified number of days from the Day.
+pub fn add(sd: Day, days days: Int) -> Day {
+  Day(unix_days: sd.unix_days + days)
+}
+
+/// Subtracts a specified number of days from the Day.
+pub fn subtract(sd: Day, days days: Int) -> Day {
+  Day(unix_days: sd.unix_days - days)
+}
+
+// ----------------------------------------------------
+// ----------------------------------------------------
+// --------------------- JSON ------------------------
+// ----------------------------------------------------
+// ----------------------------------------------------
+
+/// Useful for most JSON values, apart from if you need
+/// to use a Day as a Dict key, in which case, use `to_json_dict_key()`.
+pub fn to_json(day: Day) -> Json {
+  json.int(to_unix_days(day))
+}
+
+/// A function that converts a Day to a String that's
+/// usable as a JSON Dict key.
+pub fn to_json_dict_key(day: Day) -> String {
+  day
+  |> to_unix_days
+  |> int.to_string
+}
+
+/// A decoder for Days when used as normal values.
+pub fn decoder() -> Decoder(Day) {
+  // 2000-01-01
+  let default = from_unix_days(730_120)
+
+  decode.new_primitive_decoder("Date", fn(date) {
+    case decode.run(date, decode.int) {
+      Error(_) -> Error(default)
+      Ok(rd) -> Ok(Day(unix_days: rd))
+    }
+  })
+}
+
+/// A decoder for Days when used as Dict keys.
+pub fn decoder_dict_key() -> Decoder(Day) {
+  // 2000-01-01
+  let default = from_unix_days(730_120)
+
+  decode.new_primitive_decoder("Date", fn(date) {
+    case decode.run(date, decode.string) {
+      Error(_) -> Error(default)
+      Ok(str) ->
+        case int.parse(str) {
+          Error(_) -> Error(default)
+          Ok(rd) -> Ok(Day(unix_days: rd))
+        }
+    }
+  })
+}
+
+// ----------------------------------------------------
+// ----------------------------------------------------
+// --------------------- HELPER ------------------------
+// ----------------------------------------------------
+// ----------------------------------------------------
+
+/// a function designed for testing use only.
+pub fn to_string(day: Day) -> String {
+  day
+  |> to_gtempo_date
+  |> gtempo_date.to_string
+}
