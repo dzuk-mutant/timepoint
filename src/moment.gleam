@@ -48,6 +48,25 @@ pub opaque type Moment {
 // -----------------------------------------------------
 // -----------------------------------------------------
 
+/// Returns the Moment representing now on the computer executing this function.
+/// 
+/// ```gleam
+/// moment.system_time()
+/// |> day.from_moment
+/// |> iso_date.from_day
+/// ```
+pub fn system_time() -> Moment {
+  Moment(timestamp.system_time(), offset: offset.from_local())
+}
+
+/// Returns a Moment from a given Timestamp with Offset.
+/// 
+/// ## Examples
+/// 
+/// ```gleam
+/// timestamp.from_unix_seconds(0)
+/// |> moment.from_timestamp(with: offset.from_mins(60))
+/// ```
 pub fn from_timestamp(timestamp: Timestamp, with offset: Offset) -> Moment {
   Moment(timestamp:, offset:)
 }

@@ -1,7 +1,9 @@
+import duration_extra
 import gleam/dynamic/decode.{type Decoder}
 import gleam/int
 import gleam/json.{type Json}
 import gleam/order.{type Order}
+import gleam/time/calendar
 import gleam/time/duration.{type Duration}
 import tempo
 import tempo/duration as gtempo_duration
@@ -52,8 +54,16 @@ pub fn to_minutes(offset: Offset) -> Int {
   offset.minutes
 }
 
+/// Gets the current offset from the computer that is
+/// executing this function.
+pub fn from_local() -> Offset {
+  calendar.local_offset()
+  |> from_duration
+}
+
 /// Creates an Offset from an Int representing minutes.
 /// 
+/// ## Examples
 /// ```gleam
 /// offset.from_minutes(60)
 /// ```
@@ -61,7 +71,21 @@ pub fn from_minutes(mins: Int) -> Offset {
   Offset(minutes: mins)
 }
 
-/// Creates a Timepoint Offset from a gtempo offset.
+/// Creates an Offset from a Duration.
+/// 
+/// ## Examples
+/// 
+/// ```gleam
+/// duration.minutes(60)
+/// |> offset.from_duration
+/// ```
+pub fn from_duration(duration: Duration) -> Offset {
+  duration
+  |> duration_extra.as_minutes
+  |> from_minutes
+}
+
+/// Creates an Offset from a gtempo offset.
 pub fn from_gtempo_offset(offset: tempo.Offset) -> Offset {
   Offset(
     minutes: offset
@@ -70,11 +94,7 @@ pub fn from_gtempo_offset(offset: tempo.Offset) -> Offset {
   )
 }
 
-/// Creates an Offset in the gtempo package from an Timepoint Offset.
-/// 
-/// Currently the same guards are in place to prevent out of bounds offsets
-/// from being passed in Timepoint and gtempo but I'm keeping the result a
-/// result in case things change.
+/// Converts an Offset type in this package to one used by gtempo.
 pub fn to_gtempo_offset(offset: Offset) -> Result(tempo.Offset, Nil) {
   offset.minutes
   |> gtempo_duration.minutes

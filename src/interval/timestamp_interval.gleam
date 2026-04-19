@@ -4,13 +4,15 @@ import gleam/order.{Eq, Gt, Lt}
 import gleam/time/timestamp.{type Timestamp}
 import timestamp_extra
 
-/// A TimestampInterval coming from an internal process,
-/// where other logic and tests guarantees its correctness.
-/// 
 /// Represents a range of time for comparison.
 /// 
-/// The start Timestamp is inclusive (Eq/Gt) and the
-/// end Timestamp is exclusive (Lt).
+/// Collision in a TimestampInterval is inclusive at the start
+/// point (Eq/Gt) and exclusive at the end (Lt).
+/// 
+/// TimestampIntervals can only be compared to Timestamps.
+/// 
+/// If you want to compare with Days and DayIntervals, you need
+/// a MomentWindow.
 pub opaque type TimestampInterval {
   TimestampInterval(start: Timestamp, end_excluding: Timestamp)
 }
