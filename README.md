@@ -12,7 +12,7 @@ This package adds complimentary types to `Timestamp`:
 - `Offsets` provide a generic container for time offsets.
 - `Moments` combine `Timestamp` and `Offset` to create the minimum amount of data required to derive `Days` and calendar date/times. They hold a similar amount of information as a traditional datetime, but in a calendar-agnostic way.
 
-I find that this not only creates a nice structure for holding localising info, it also creates this clean track of information from Timestamps to calendar.
+This not only creates a nice structure for holding localising info, it also creates this clean track of information from Timestamps to calendar.
 
 
 ```gleam
@@ -39,23 +39,25 @@ So for my Gregorian functionality, I aim to explicitly follow ISO 8601 standards
 
 ### ISO weeks and week dates
 
-ISO week dates are niche but an important part of how my app works with and frames time, so this code provides functionality for those.
+They're a niche but useful way of arranging time depending on the situation.
+
+### Internet Time
+
+This is super-niche but has a special place in my heart :)
 
 ---
 
 ## Intervals
 
-My app relies on storing and colliding intervals and points of time together for various features, so I created Interval types for Days, Moments and Timestamps. They provide a clean way to store these, as well as providing various manipulation and collision features.
+Interval types for Days, Moments and Timestamps, providing storage, manipulation and collision detection between various types.
 
-Some of these Interval types help power functionality elsewhere in the package, such as ISO Weeks.
+Some of these Interval types help power functionality elsewhere in the package, such as ISO Weeks and versioning.
 
 ---
 
 ## Historical versioning
 
-My app relies on holding and tracking historical changes to a type over time - either Moments or Days (This is the reason I made the interval types). 
-
-The types (with interim names) `Calendrical` holds a type versioned by `Day`, and `Timelined` holds a type versioned by `Moment`.
+Hold and track historical changes to a type over time, with type-enforced intervals and type-enforced edit outcomes.
 
 ---
 
