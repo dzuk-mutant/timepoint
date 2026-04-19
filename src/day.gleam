@@ -1,9 +1,8 @@
+import duration_extra
 import gleam/dynamic/decode.{type Decoder}
-import gleam/float
 import gleam/int
 import gleam/json.{type Json}
 import gleam/order.{type Order, Eq, Gt, Lt}
-import gleam/time/duration
 import gleam/time/timestamp
 import moment.{type Moment}
 import offset
@@ -113,14 +112,9 @@ pub fn from_moment(moment: Moment) -> Day {
     |> moment.to_timestamp
     |> timestamp.add(offset_shift)
 
-  let day_as_secs = 86_400.0
-
   // duration from epoch
   timestamp.difference(shifted_timestamp, timestamp.from_unix_seconds(0))
-  |> duration.to_seconds
-  |> fn(x) { x /. day_as_secs }
-  |> float.floor
-  |> float.truncate
+  |> duration_extra.as_days
   |> from_unix_days
 }
 

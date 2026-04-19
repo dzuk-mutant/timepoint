@@ -7,11 +7,10 @@ An extension of gleam_time functionality.
 This package adds complimentary types to `Timestamp`:
 
 - `Days` provide an epoch-based way to work in days. This lets you create, track or store abstract days without caring about what calendar system it is.
-- `Moments` combine `Timestamp` and `Offset` to create the minimum amount of data required to derive `Days` and calendar date/times. They hold a similar amount of information as a traditional datetime, but in a calendar-agnostic way.
 - `Offsets` provide a generic container for time offsets.
+- `Moments` combine `Timestamp` and `Offset` to create the minimum amount of data required to derive `Days` and calendar date/times. They hold a similar amount of information as a traditional datetime, but in a calendar-agnostic way.
 
-I find that this not only creates a nice structure for holding localising info, it also
-creates this clean track of information from Timestamps to calendar.
+I find that this not only creates a nice structure for holding localising info, it also creates this clean track of information from Timestamps to calendar.
 
 
 ```gleam
