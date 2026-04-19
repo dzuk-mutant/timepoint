@@ -1,10 +1,10 @@
 import versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
 
 import day.{type Day}
-import day_interval.{type DayInterval}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/result
+import interval/day_interval.{type DayInterval}
 
 ///  A data type representing a version of a data type at a particular point in time in the past.
 pub opaque type CalPastVariant(v) {

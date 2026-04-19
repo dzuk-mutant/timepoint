@@ -1,6 +1,6 @@
 import day
-import day_interval
 import gleeunit/should
+import interval/day_interval
 import moment
 import versioning/timelined
 import versioning/timelined/tl_any_variant.{Current, Past}

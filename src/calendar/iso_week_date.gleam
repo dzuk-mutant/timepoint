@@ -1,6 +1,6 @@
+import calendar/iso_date
+import calendar/iso_week.{type ISOWeek}
 import day.{type Day}
-import iso_date
-import iso_week.{type ISOWeek}
 
 /// A type representing an ISO 8601 Week Date.
 /// 

@@ -1,10 +1,10 @@
 import day.{type Day}
-import day_interval.{type DayInterval}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/result
+import interval/day_interval.{type DayInterval}
+import interval/moment_interval.{type MomentInterval}
 import moment.{type Moment}
-import moment_interval.{type MomentInterval}
 import versioning/timelined/tl_current_variant.{type TLCurrentVariant}
 
 ///  A data type representing a version of a data type at a particular point in time in the past.

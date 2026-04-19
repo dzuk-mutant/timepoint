@@ -1,10 +1,10 @@
 import day
-import day_interval
 import gleam/json
 import gleam/result
 import gleeunit/should
+import interval/day_interval
+import interval/moment_interval.{type MomentInterval}
 import moment
-import moment_interval.{type MomentInterval}
 
 // -----------------------------------------------
 // -----------------------------------------------

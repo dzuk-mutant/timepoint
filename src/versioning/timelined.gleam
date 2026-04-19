@@ -1,5 +1,4 @@
 import day.{type Day}
-import day_interval.{type DayInterval}
 import gleam/bool
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
@@ -8,8 +7,9 @@ import gleam/option.{type Option, None, Some}
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
 import gleam/time/duration
+import interval/day_interval.{type DayInterval}
+import interval/moment_interval.{type MomentInterval}
 import moment.{type Moment}
-import moment_interval.{type MomentInterval}
 import versioning/timelined/tl_any_variant.{type TLAnyVariant}
 import versioning/timelined/tl_current_variant.{type TLCurrentVariant}
 import versioning/timelined/tl_past_variant.{type TLPastVariant}

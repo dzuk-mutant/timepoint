@@ -1,5 +1,4 @@
 import day.{type Day}
-import day_interval.{type DayInterval}
 import gleam/bool
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
@@ -7,6 +6,7 @@ import gleam/list
 import gleam/option.{type Option, None, Some}
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
+import interval/day_interval.{type DayInterval}
 import versioning/calendrical/cal_any_variant.{type CalAnyVariant, Current, Past}
 import versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
 import versioning/calendrical/cal_past_variant.{type CalPastVariant}

@@ -1,8 +1,8 @@
 import day.{type Day}
-import day_interval.{type DayInterval}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/order.{Eq, Gt, Lt}
+import interval/day_interval.{type DayInterval}
 
 /// Represents a starting Day for the relevancy or effect of a piece of associated information.
 /// 

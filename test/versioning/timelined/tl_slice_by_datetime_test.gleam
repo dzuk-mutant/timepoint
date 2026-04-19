@@ -1,6 +1,6 @@
 import gleeunit/should
+import interval/moment_interval
 import moment
-import moment_interval
 import versioning/timelined
 import versioning/timelined/tl_any_variant.{Current, Past}
 import versioning/timelined/tl_current_variant

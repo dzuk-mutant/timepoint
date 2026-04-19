@@ -7,15 +7,15 @@ import versioning/timelined/tl_past_variant
 import versioning/timelined/tl_slice_by_day
 
 import day
-import day_interval
 import gleam/dynamic/decode
 import gleam/json
 import gleam/list
 import gleam/option.{None, Some}
 import gleam/result
 import gleeunit/should
+import interval/day_interval
+import interval/moment_interval
 import moment
-import moment_interval
 import versioning/timelined/tl_slice_by_moment
 
 fn eq_func(a: String, b: String) -> Bool {

@@ -1,6 +1,6 @@
+import calendar/iso_date
 import day
 import gleeunit/should
-import iso_date
 import tempo/date as gtempo_date
 
 // ----------------------------------------------------

@@ -1,6 +1,6 @@
+import calendar/iso_week_date
 import day
 import gleeunit/should
-import iso_week_date
 
 // ----------------------------------------------------
 // ----------------------------------------------------

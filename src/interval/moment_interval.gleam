@@ -1,9 +1,9 @@
 import day.{type Day}
-import day_interval.{type DayInterval}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/order.{Eq, Gt, Lt}
 import gleam/time/duration
+import interval/day_interval.{type DayInterval}
 import moment.{type Moment}
 
 /// A MomentInterval coming from an internal process,

@@ -1,9 +1,9 @@
+import calendar/iso_week
 import day.{type Day}
-import day_interval
 import gleam/list
 import gleam/order
 import gleeunit/should
-import iso_week
+import interval/day_interval
 import tempo/date as gtempo_date
 
 fn day_to_string(sd: Day) -> String {

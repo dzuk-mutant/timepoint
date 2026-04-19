@@ -1,6 +1,6 @@
 import gleam/list
 import gleam/option.{type Option, None, Some}
-import moment_interval.{type MomentInterval}
+import interval/moment_interval.{type MomentInterval}
 import versioning/timelined/tl_any_variant.{type TLAnyVariant}
 import versioning/timelined/tl_current_variant.{type TLCurrentVariant}
 import versioning/timelined/tl_past_variant.{type TLPastVariant}

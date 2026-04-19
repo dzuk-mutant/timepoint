@@ -1,12 +1,12 @@
 import day
-import day_interval.{
-  type DayInterval, PointAfterFinal, PointAtFinal, PointAtStart,
-  PointBeforeStart, PointInside,
-}
 import gleam/json
 import gleam/list
 import gleam/result
 import gleeunit/should
+import interval/day_interval.{
+  type DayInterval, PointAfterFinal, PointAtFinal, PointAtStart,
+  PointBeforeStart, PointInside,
+}
 import moment
 import tempo/date
 

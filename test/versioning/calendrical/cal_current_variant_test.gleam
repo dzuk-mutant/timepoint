@@ -1,8 +1,8 @@
 import day
-import day_interval
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json
 import gleeunit/should
+import interval/day_interval
 import versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
 
 // --------------------------------------------

@@ -1,9 +1,9 @@
+import calendar/iso_date
+import day.{type Day}
 import gleam/list
 import gleam/result
+import interval/day_interval.{type DayInterval}
 import tempo/date.{Sun} as gtempo_date
-import day.{type Day}
-import day_interval.{type DayInterval}
-import iso_date
 
 /// A type-enforced representation of a week
 /// in ISO 8601 dates.

@@ -1,9 +1,9 @@
 import day.{type Day}
-import day_interval.{type DayInterval}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
+import interval/day_interval.{type DayInterval}
+import interval/moment_interval.{type MomentInterval}
 import moment.{type Moment}
-import moment_interval.{type MomentInterval}
 
 /// Represents a starting Moment for the relevancy or effect of a piece of associated information.
 /// 

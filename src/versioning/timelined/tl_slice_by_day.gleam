@@ -1,6 +1,6 @@
-import day_interval.{type DayInterval}
 import gleam/list
 import gleam/option.{type Option, None, Some}
+import interval/day_interval.{type DayInterval}
 import versioning/timelined/tl_any_variant.{type TLAnyVariant}
 import versioning/timelined/tl_current_variant.{type TLCurrentVariant}
 import versioning/timelined/tl_past_variant.{type TLPastVariant}

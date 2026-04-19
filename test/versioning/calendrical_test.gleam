@@ -1,11 +1,11 @@
 import day
-import day_interval
 import gleam/dynamic/decode
 import gleam/json
 import gleam/list
 import gleam/option.{None, Some}
 import gleam/result
 import gleeunit/should
+import interval/day_interval
 import versioning/calendrical.{
   type Calendrical, InvalidNewCurrentIsEarlierThanHistoricalStart, NoChange,
   NonDestructive, WillOverwriteCurrent, WillOverwriteCurrentAndHistory,

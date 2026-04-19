@@ -1,10 +1,10 @@
 import day
-import day_interval
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleeunit/should
+import interval/day_interval
+import interval/moment_interval
 import moment
-import moment_interval
 import versioning/timelined/tl_current_variant.{type TLCurrentVariant}
 
 // --------------------------------------------

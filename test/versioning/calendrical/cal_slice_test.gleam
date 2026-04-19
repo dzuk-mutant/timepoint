@@ -1,6 +1,6 @@
 import day
-import day_interval
 import gleeunit/should
+import interval/day_interval
 import versioning/calendrical
 import versioning/calendrical/cal_any_variant.{Current, Past}
 import versioning/calendrical/cal_current_variant
