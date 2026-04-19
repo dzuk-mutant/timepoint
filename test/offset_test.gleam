@@ -1,8 +1,8 @@
-import duration
 import gleam/int
 import gleam/json
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
+import gleam/time/duration
 import gleeunit/should
 import offset.{type Offset}
 import tempo
@@ -95,15 +95,13 @@ pub fn to_from_minutes_5_test() {
 pub fn to_duration_1_test() {
   offset.from_minutes(60)
   |> offset.to_duration
-  |> duration.as_minutes
-  |> should.equal(60)
+  |> should.equal(duration.minutes(60))
 }
 
 pub fn to_duration_2_test() {
   offset.from_minutes(-600)
   |> offset.to_duration
-  |> duration.as_minutes
-  |> should.equal(-600)
+  |> should.equal(duration.minutes(-600))
 }
 
 // -----------------------------------------------------

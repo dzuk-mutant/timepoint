@@ -1,8 +1,9 @@
+import day.{type Day}
+import day_interval.{type DayInterval}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/order.{Eq, Gt, Lt}
-import day.{type Day}
-import day_interval.{type DayInterval}
+import gleam/time/duration
 import moment.{type Moment}
 
 /// A MomentInterval coming from an internal process,
@@ -157,7 +158,7 @@ pub fn to_collision_with_day(interval: MomentInterval, day: Day) -> DayCollision
 
   let final_moment_day =
     interval.end_excluding
-    |> moment.subtract(milli: 1)
+    |> moment.subtract(duration.nanoseconds(1))
     |> day.from_moment
 
   case day.compare(day, start_day) {

@@ -44,7 +44,7 @@ pub opaque type Moment {
 // -----------------------------------------------------
 // -----------------------------------------------------
 
-pub fn from_timestamp(timestamp: Timestamp, at offset: Offset) -> Moment {
+pub fn from_timestamp(timestamp: Timestamp, with offset: Offset) -> Moment {
   Moment(timestamp:, offset:)
 }
 

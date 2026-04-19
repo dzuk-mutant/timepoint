@@ -7,6 +7,7 @@ import gleam/list
 import gleam/option.{type Option, None, Some}
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
+import gleam/time/duration
 import moment.{type Moment}
 import moment_interval.{type MomentInterval}
 import versioning/timelined/tl_any_variant.{type TLAnyVariant}
@@ -462,7 +463,8 @@ fn current_is_contiguous_with_history(timelined: Timelined(v)) -> Bool {
     let last_history_final = tl_past_variant.to_end_excluding_moment(v)
     let current_start = tl_current_variant.to_start_moment(timelined.current)
 
-    moment.difference(last_history_final, from: current_start) == 0
+    moment.difference(last_history_final, from: current_start)
+    == duration.nanoseconds(0)
   })
   |> result.unwrap(True)
 }
