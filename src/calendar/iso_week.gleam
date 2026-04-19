@@ -155,7 +155,7 @@ pub fn list_from_around_interval(interval: DayInterval) -> List(ISOWeek) {
     _ -> {
       interval_final
       |> iso_date.from_day
-      |> iso_date.next_day_of_week(iso_date.Sunday)
+      |> iso_date.closest_next_day_of_week(iso_date.Sunday)
       |> iso_date.to_day
     }
   }
@@ -284,14 +284,10 @@ pub fn compare_reverse(a: ISOWeek, to b: ISOWeek) {
 /// the given Day is Monday, in which case that will be 
 /// returned instead.
 fn most_recent_monday_behind(day: Day) -> Day {
-  let date = iso_date.from_day(day)
-  case iso_date.to_day_of_week(date) {
-    iso_date.Monday -> day
-    _ ->
-      date
-      |> iso_date.prev_day_of_week(iso_date.Monday)
-      |> fn(x) { x.day }
-  }
+  day
+  |> iso_date.from_day
+  |> iso_date.closest_prev_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
 }
 
 /// Creates a week no / year tuple from a Day.

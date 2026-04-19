@@ -4,47 +4,63 @@ import gleeunit/should
 
 // ----------------------------------------------------
 // ----------------------------------------------------
-// ------------- most_recent_monday_behind ------------
+// -------------------- to_day_of_week ----------------
+// ----------------------------------------------------
+// ----------------------------------------------------
+fn day_of_week_chain(day: Day) -> iso_date.DayOfWeek {
+  day
+  |> iso_date.from_day
+  |> iso_date.to_day_of_week
+}
+
+pub fn to_day_of_week_1_test() {
+  day.from_gtempo_literal("2026-04-19")
+  |> day_of_week_chain
+  |> should.equal(iso_date.Sunday)
+}
+
+pub fn to_day_of_week_2_test() {
+  day.from_gtempo_literal("2026-04-13")
+  |> day_of_week_chain
+  |> should.equal(iso_date.Monday)
+}
+
+pub fn to_day_of_week_3_test() {
+  day.from_gtempo_literal("2026-04-15")
+  |> day_of_week_chain
+  |> should.equal(iso_date.Wednesday)
+}
+
+pub fn to_day_of_week_4_test() {
+  day.from_gtempo_literal("2029-09-24")
+  |> day_of_week_chain
+  |> should.equal(iso_date.Monday)
+}
+
+pub fn to_day_of_week_5_test() {
+  day.from_gtempo_literal("2029-08-31")
+  |> day_of_week_chain
+  |> should.equal(iso_date.Friday)
+}
+
+// ----------------------------------------------------
+// ----------------------------------------------------
+// ------------- to_day_of_week_number ------------
 // ----------------------------------------------------
 // ----------------------------------------------------
 
-pub fn most_recent_monday_behind_1_test() {
-  day.from_gtempo_literal("2025-02-22")
+pub fn to_day_of_week_number_1_test() {
+  day.from_gtempo_literal("2025-03-29")
   |> iso_date.from_day
-  |> iso_date.prev_day_of_week(iso_date.Monday)
-  |> iso_date.to_day
-  |> day.to_string
-  |> should.equal("2025-02-17")
+  |> iso_date.to_day_of_week_number()
+  |> should.equal(6)
 }
 
-/// On Monday.
-pub fn most_recent_monday_behind_2_test() {
-  day.from_gtempo_literal("2025-04-14")
+pub fn to_day_of_week_number_2_test() {
+  day.from_gtempo_literal("2025-03-30")
   |> iso_date.from_day
-  |> iso_date.prev_day_of_week(iso_date.Monday)
-  |> iso_date.to_day
-  |> day.to_string
-  |> should.equal("2025-04-07")
-}
-
-/// On Sunday.
-pub fn most_recent_monday_behind_3_test() {
-  day.from_gtempo_literal("2025-07-21")
-  |> iso_date.from_day
-  |> iso_date.prev_day_of_week(iso_date.Monday)
-  |> iso_date.to_day
-  |> day.to_string
-  |> should.equal("2025-07-21")
-}
-
-/// On Wednesday.
-pub fn most_recent_monday_behind_4_test() {
-  day.from_gtempo_literal("2025-05-14")
-  |> iso_date.from_day
-  |> iso_date.prev_day_of_week(iso_date.Monday)
-  |> iso_date.to_day
-  |> day.to_string
-  |> should.equal("2025-05-12")
+  |> iso_date.to_day_of_week_number()
+  |> should.equal(7)
 }
 
 // ----------------------------------------------------
@@ -219,20 +235,51 @@ pub fn to_ordinal_day_leap_year_12_test() {
 
 // ----------------------------------------------------
 // ----------------------------------------------------
-// ------------- to_day_of_week_number ------------
+// ------------------ prev_day_of_week ----------------
 // ----------------------------------------------------
 // ----------------------------------------------------
 
-pub fn to_day_of_week_number_1_test() {
-  day.from_gtempo_literal("2025-03-29")
+pub fn prev_day_of_week_1_test() {
+  day.from_gtempo_literal("2025-02-22")
   |> iso_date.from_day
-  |> iso_date.to_day_of_week_number()
-  |> should.equal(6)
+  |> iso_date.prev_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
+  |> day.to_string
+  |> should.equal("2025-02-17")
 }
 
-pub fn to_day_of_week_number_2_test() {
-  day.from_gtempo_literal("2025-03-30")
+/// On Monday.
+pub fn prev_day_of_week_2_test() {
+  day.from_gtempo_literal("2025-04-14")
   |> iso_date.from_day
-  |> iso_date.to_day_of_week_number()
-  |> should.equal(7)
+  |> iso_date.prev_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
+  |> day.to_string
+  |> should.equal("2025-04-07")
+}
+
+/// On Wednesday.
+pub fn prev_day_of_week_3_test() {
+  day.from_gtempo_literal("2025-05-14")
+  |> iso_date.from_day
+  |> iso_date.prev_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
+  |> day.to_string
+  |> should.equal("2025-05-12")
+}
+
+// ----------------------------------------------------
+// ----------------------------------------------------
+// --------------- most_recent_day_of_week ------------
+// ----------------------------------------------------
+// ----------------------------------------------------
+
+/// On Sunday.
+pub fn most_recent_day_of_week_1_test() {
+  day.from_gtempo_literal("2025-07-21")
+  |> iso_date.from_day
+  |> iso_date.closest_next_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
+  |> day.to_string
+  |> should.equal("2025-07-21")
 }

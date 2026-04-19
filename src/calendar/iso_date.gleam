@@ -1,7 +1,6 @@
 import day.{type Day}
 import duration_extra
 import gleam/int
-import gleam/result
 import gleam/time/calendar.{type Month}
 import gleam/time/duration
 import gleam/time/timestamp
@@ -91,36 +90,20 @@ pub fn to_day_number(date: ISODate) -> Int {
 // ----------------------------------------------------
 // ----------------------------------------------------
 
-pub fn to_day_of_week(date: ISODate) -> DayOfWeek {
-  let century_mod =
-    int.modulo(date.year / 100, 4)
-    |> result.unwrap(0)
-
-  let remainder =
-    int.modulo(
-      { date.day_number + to_month_number(date) + date.year + century_mod },
-      7,
-    )
-    |> result.unwrap(0)
-
-  case remainder {
-    0 -> Saturday
-    1 -> Sunday
-    2 -> Monday
-    3 -> Tuesday
-    4 -> Wednesday
-    5 -> Thursday
-    6 -> Friday
-    _ -> Friday
-    // should not be possible
+pub fn to_day_of_week_number(date: ISODate) -> Int {
+  case int.modulo(day.to_unix_days(date.day) + 3, 7) {
+    Error(Nil) -> panic as "modulo broke in an unexpected way."
+    Ok(n) -> n + 1
   }
 }
 
 /// Returns day of week number, to ISO standards.
 /// 
 /// (The first day is Monday, which equals 1.)
-pub fn to_day_of_week_number(date: ISODate) -> Int {
-  dow_to_int(to_day_of_week(date))
+pub fn to_day_of_week(date: ISODate) -> DayOfWeek {
+  date
+  |> to_day_of_week_number
+  |> int_to_dow
 }
 
 /// Gets a number representing the Ordinal Day of a year out of a Day.
@@ -180,13 +163,27 @@ pub fn to_month_number(date: ISODate) -> Int {
 // ----------------------------------------------------
 // ----------------------------------------------------
 
-pub fn next_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
-  let existing_dow_num = to_day_of_week_number(date)
-  let target_dow_num = dow_to_int(day_of_week)
+/// Looks for the previous closest day of week
+/// from the one given, excluding the current day.
+pub fn prev_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
+  let diff = to_day_of_week_number(date) - dow_to_int(day_of_week)
 
-  let diff = {
-    existing_dow_num - target_dow_num
+  case diff {
+    n if n <= 0 -> {
+      day.subtract(date.day, 7 + n)
+      |> from_day
+    }
+    _ -> {
+      day.subtract(date.day, diff)
+      |> from_day
+    }
   }
+}
+
+/// Looks for the next closest day of week
+/// from the one given, excluding the current day.
+pub fn next_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
+  let diff = to_day_of_week_number(date) - dow_to_int(day_of_week)
 
   case diff {
     n if n <= 0 -> {
@@ -200,21 +197,39 @@ pub fn next_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
   }
 }
 
-pub fn prev_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
-  let existing_dow_num = to_day_of_week_number(date)
-  let target_dow_num = dow_to_int(day_of_week)
-
-  let diff = {
-    existing_dow_num - target_dow_num
-  }
+/// Looks for the previous closest day of week
+/// from the one given, including the current day.
+pub fn closest_prev_day_of_week(
+  date: ISODate,
+  day_of_week: DayOfWeek,
+) -> ISODate {
+  let diff = to_day_of_week_number(date) - dow_to_int(day_of_week)
 
   case diff {
     n if n <= 0 -> {
-      day.subtract(date.day, 7 + n)
-      |> from_day
+      date
     }
     _ -> {
       day.subtract(date.day, diff)
+      |> from_day
+    }
+  }
+}
+
+/// Looks for the next closest day of week
+/// from the one given, including the current day.
+pub fn closest_next_day_of_week(
+  date: ISODate,
+  day_of_week: DayOfWeek,
+) -> ISODate {
+  let diff = to_day_of_week_number(date) - dow_to_int(day_of_week)
+
+  case diff {
+    n if n <= 0 -> {
+      date
+    }
+    _ -> {
+      day.add(date.day, diff)
       |> from_day
     }
   }
@@ -251,18 +266,6 @@ pub fn is_one_day_after(a: Day, from b: Day) {
 // ----------------------------------------------------
 // ----------------------------------------------------
 
-fn dow_to_int(dow: DayOfWeek) -> Int {
-  case dow {
-    Monday -> 1
-    Tuesday -> 2
-    Wednesday -> 3
-    Thursday -> 4
-    Friday -> 5
-    Saturday -> 6
-    Sunday -> 7
-  }
-}
-
 fn to_amount_of_days_in_month(date: ISODate) -> Int {
   case date.month, calendar.is_leap_year(date.year) {
     calendar.January, _ -> 31
@@ -278,5 +281,32 @@ fn to_amount_of_days_in_month(date: ISODate) -> Int {
     calendar.October, _ -> 31
     calendar.November, _ -> 30
     calendar.December, _ -> 31
+  }
+}
+
+fn int_to_dow(int: Int) -> DayOfWeek {
+  case int {
+    1 -> Monday
+    2 -> Tuesday
+    3 -> Wednesday
+    4 -> Thursday
+    5 -> Friday
+    6 -> Saturday
+    7 -> Sunday
+    _ -> Sunday
+    // should not be possible
+  }
+}
+
+fn dow_to_int(dow: DayOfWeek) -> Int {
+  case dow {
+    Monday -> 1
+    Tuesday -> 2
+    Wednesday -> 3
+    Thursday -> 4
+    Friday -> 5
+    Saturday -> 6
+    Sunday -> 7
+    // should not be possible
   }
 }

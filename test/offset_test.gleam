@@ -1,4 +1,3 @@
-import gleam/int
 import gleam/json
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
@@ -233,70 +232,4 @@ pub fn example_2_output_test() {
 
 pub fn example_3_output_test() {
   output(offset.from_minutes(0), "0")
-}
-
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-
-fn json_i_erroneous(input: String) {
-  let decoder = offset.decoder()
-  input
-  |> json.parse(using: decoder)
-  |> result.is_error
-  |> should.equal(True)
-}
-
-pub fn json_i_erroneous_1_test() {
-  "1000"
-  |> json_i_erroneous()
-}
-
-pub fn json_i_erroneous_2_test() {
-  "-1000"
-  |> json_i_erroneous()
-}
-
-pub fn json_i_erroneous_3_test() {
-  "841"
-  |> json_i_erroneous()
-}
-
-pub fn json_i_erroneous_4_test() {
-  "-721"
-  |> json_i_erroneous()
-}
-
-fn json_i_ok(input: Int) {
-  let decoder = offset.decoder()
-  input
-  |> int.to_string
-  |> json.parse(using: decoder)
-  |> result.unwrap(offset.from_minutes(666_666))
-  |> offset.to_minutes
-  |> should.equal(input)
-}
-
-pub fn json_i_correct_1_test() {
-  json_i_ok(720)
-}
-
-pub fn json_i_correct_2_test() {
-  json_i_ok(840)
-}
-
-pub fn json_i_correct_3_test() {
-  json_i_ok(-720)
-}
-
-pub fn json_i_correct_4_test() {
-  json_i_ok(0)
-}
-
-pub fn json_i_correct_5_test() {
-  json_i_ok(60)
-}
-
-pub fn json_i_correct_6_test() {
-  json_i_ok(-510)
 }

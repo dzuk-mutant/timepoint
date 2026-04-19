@@ -72,3 +72,7 @@ pub fn to_week_number(week_date: ISOWeekDate) -> Int {
 pub fn to_day_number(week_date: ISOWeekDate) -> Int {
   week_date.day_no
 }
+
+pub fn to_day(week_date: ISOWeekDate) -> Day {
+  week_date.day
+}
