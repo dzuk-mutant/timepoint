@@ -1,16 +1,9 @@
 import calendar/iso_week
-import day.{type Day}
+import day
 import gleam/list
 import gleam/order
 import gleeunit/should
 import interval/day_interval
-import tempo/date as gtempo_date
-
-fn day_to_string(sd: Day) -> String {
-  sd
-  |> day.to_gtempo_date
-  |> gtempo_date.to_string
-}
 
 // ----------------------------------------------------
 // ----------------------------------------------------
@@ -71,7 +64,7 @@ pub fn week_list_from_date_1_test() {
   day.from_gtempo_literal("2025-02-22")
   |> iso_week.from_day
   |> iso_week.to_list
-  |> list.map(day_to_string)
+  |> list.map(day.to_string)
   |> should.equal([
     "2025-02-17", "2025-02-18", "2025-02-19", "2025-02-20", "2025-02-21",
     "2025-02-22", "2025-02-23",
@@ -82,7 +75,7 @@ pub fn week_list_from_date_monday_test() {
   day.from_gtempo_literal("2025-04-14")
   |> iso_week.from_day
   |> iso_week.to_list
-  |> list.map(day_to_string)
+  |> list.map(day.to_string)
   |> should.equal([
     "2025-04-14", "2025-04-15", "2025-04-16", "2025-04-17", "2025-04-18",
     "2025-04-19", "2025-04-20",
@@ -93,7 +86,7 @@ pub fn week_list_from_date_sunday_test() {
   day.from_gtempo_literal("2024-07-21")
   |> iso_week.from_day
   |> iso_week.to_list
-  |> list.map(day_to_string)
+  |> list.map(day.to_string)
   |> should.equal([
     "2024-07-15", "2024-07-16", "2024-07-17", "2024-07-18", "2024-07-19",
     "2024-07-20", "2024-07-21",

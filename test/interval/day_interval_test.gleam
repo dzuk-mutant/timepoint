@@ -8,7 +8,6 @@ import interval/day_interval.{
   PointBeforeStart, PointInside,
 }
 import moment
-import tempo/date
 
 pub fn new_single_1_test() {
   day_interval.new_single(day.from_gtempo_literal("2025-03-03"))
@@ -261,8 +260,7 @@ pub fn to_list_1_test() {
     final: day.from_gtempo_literal("2025-03-05"),
   )
   |> day_interval.to_list()
-  |> list.map(day.to_gtempo_date)
-  |> list.map(date.to_string)
+  |> list.map(day.to_string)
   |> should.equal(["2025-03-05"])
 }
 
@@ -272,8 +270,7 @@ pub fn to_list_2_test() {
     final: day.from_gtempo_literal("2025-03-09"),
   )
   |> day_interval.to_list()
-  |> list.map(day.to_gtempo_date)
-  |> list.map(date.to_string)
+  |> list.map(day.to_string)
   |> should.equal([
     "2025-03-05", "2025-03-06", "2025-03-07", "2025-03-08", "2025-03-09",
   ])
@@ -285,8 +282,7 @@ pub fn to_list_3_test() {
     final: day.from_gtempo_literal("2024-10-10"),
   )
   |> day_interval.to_list()
-  |> list.map(day.to_gtempo_date)
-  |> list.map(date.to_string)
+  |> list.map(day.to_string)
   |> should.equal([
     "2024-10-05", "2024-10-06", "2024-10-07", "2024-10-08", "2024-10-09",
     "2024-10-10",
@@ -299,8 +295,7 @@ pub fn to_list_4_test() {
     final: day.from_gtempo_literal("1990-01-07"),
   )
   |> day_interval.to_list()
-  |> list.map(day.to_gtempo_date)
-  |> list.map(date.to_string)
+  |> list.map(day.to_string)
   |> should.equal([
     "1989-12-30", "1989-12-31", "1990-01-01", "1990-01-02", "1990-01-03",
     "1990-01-04", "1990-01-05", "1990-01-06", "1990-01-07",
