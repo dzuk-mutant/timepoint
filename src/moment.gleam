@@ -1,27 +1,39 @@
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
-import gleam/order.{type Order}
+import gleam/order.{type Order, Eq, Gt, Lt}
 import gleam/result
+import gleam/time/duration.{type Duration}
+import gleam/time/timestamp.{type Timestamp}
+import offset.{type Offset}
 import tempo.{type DateTime}
 import tempo/datetime as gtempo_datetime
 import tempo/naive_datetime as tempo_naive_datetime
 import tempo/offset as tempo_offset
-import offset.{type Offset}
-import unix_time.{type UnixTime}
+import timestamp_extra
 
-/// A type representing a universal point in time, plus offset context.
+/// A type that combines a Timestamp with an Offset.
 /// 
-/// This type can tell you when in UNIX time something happened, and also
-/// can tell you what time zone offset it happened in, allowing you
-/// to deduce local calendar days and time.
+/// A Timestamp is perfect for a non-ambiguous point in time, but without
+/// an Offset, it can't tell you what solar day an event happened in,
+/// and it can't be used to deduce a calendar date/time.
 /// 
-/// This is useful when knowing when something happened should be
-/// contextualised with the offset that that particular event took place with.
+/// Moments keep the best parts of Timestamp while adding the minimum
+/// possible information to derive Days, dates and times.
+///
+/// ```gleam
 /// 
-/// This is also important for being able to cast Moments to Solar Days;
-/// without an Offset, it's unclear what day a Moment would fit into.
+/// timestamp.from_unix_seconds(1_718_234_444_923)
+/// |> moment.from_timestamp(at: offset.from_minutes(60))
+/// |> day.from_moment
+/// |> iso_date.from_day
+/// ```
+/// 
+/// Because Offsets don't tell us when something happened, only a
+/// contextualision detail, Moments are compared to each other
+/// in terms of their Timestamp,
+/// 
 pub opaque type Moment {
-  Moment(unix_time: UnixTime, offset: Offset)
+  Moment(timestamp: Timestamp, offset: Offset)
 }
 
 // -----------------------------------------------------
@@ -32,32 +44,25 @@ pub opaque type Moment {
 // -----------------------------------------------------
 // -----------------------------------------------------
 
-pub fn from_values(
-  unix_time unix_time: Int,
-  offset_mins offset_mins: Int,
-) -> Moment {
-  Moment(
-    unix_time: unix_time.from_int(unix_time),
-    offset: offset.from_minutes(offset_mins),
-  )
+pub fn from_timestamp(timestamp: Timestamp, at offset: Offset) -> Moment {
+  Moment(timestamp:, offset:)
 }
 
 /// Returns the UNIX time value of the Moment, without the contextualising offset.
-pub fn to_unix_time(ts: Moment) -> UnixTime {
-  ts.unix_time
+pub fn to_timestamp(moment: Moment) -> Timestamp {
+  moment.timestamp
 }
 
 /// Returns the Offset portion of a Moment.
-pub fn to_offset(ts: Moment) -> Offset {
-  ts.offset
+pub fn to_offset(moment: Moment) -> Offset {
+  moment.offset
 }
 
 /// Converts a gtempo DateTime to a Moment.
 pub fn from_gtempo_datetime(datetime: DateTime) -> Moment {
   Moment(
-    unix_time: datetime
-      |> gtempo_datetime.to_unix_milli
-      |> unix_time.from_int,
+    timestamp: datetime
+      |> gtempo_datetime.to_timestamp,
     offset: datetime
       |> gtempo_datetime.get_offset
       |> offset.from_gtempo_offset,
@@ -76,19 +81,18 @@ pub fn from_gtempo_literal(str: String) -> Moment {
 /// Converts a Moment to a gtempo DateTime.
 /// 
 /// Offsets are included in the gtempo output.
-pub fn to_gtempo_datetime(ts: Moment) -> Result(DateTime, Nil) {
+pub fn to_gtempo_datetime(moment: Moment) -> Result(DateTime, Nil) {
   //
   // tempo has an unexpected way of handling offsets.
-  case offset.to_gtempo_offset(ts.offset) {
+  case offset.to_gtempo_offset(moment.offset) {
     Error(_) -> Error(Nil)
     Ok(offset) -> {
       let gtempo_offset_as_duration =
         offset
         |> tempo_offset.to_duration
 
-      ts.unix_time
-      |> unix_time.to_int
-      |> gtempo_datetime.from_unix_milli
+      moment.timestamp
+      |> gtempo_datetime.from_timestamp
       |> gtempo_datetime.add(gtempo_offset_as_duration)
       |> gtempo_datetime.apply_offset
       |> tempo_naive_datetime.set_offset(offset)
@@ -106,56 +110,63 @@ pub fn to_gtempo_datetime(ts: Moment) -> Result(DateTime, Nil) {
 // -----------------------------------------------------
 
 /// Checks if the UnixTime portion of two Moments are equal.
-pub fn is_equal(ts_1: Moment, to ts_2: Moment) -> Bool {
-  to_unix_time(ts_1) == to_unix_time(ts_2)
+pub fn is_equal(a: Moment, to b: Moment) -> Bool {
+  to_timestamp(a) == to_timestamp(b)
 }
 
 /// Checks if the offset portion of two Moments are equal.
-pub fn offset_is_equal(ts_1: Moment, to ts_2: Moment) -> Bool {
-  offset.is_equal(to_offset(ts_1), to: to_offset(ts_2))
+pub fn offset_is_equal(a: Moment, to b: Moment) -> Bool {
+  offset.is_equal(to_offset(a), to: to_offset(b))
 }
 
 /// Compares the values of only the UnixTime against each other.
-pub fn compare(ts_1: Moment, to ts_2: Moment) -> Order {
-  unix_time.compare(to_unix_time(ts_1), to: to_unix_time(ts_2))
+pub fn compare(a: Moment, to b: Moment) -> Order {
+  timestamp.compare(to_timestamp(a), to_timestamp(b))
 }
 
-/// Reverse-chronological comparison function. Used a lot in this app.
+/// Reverse-chronological comparison function.
 pub fn compare_reverse(a: Moment, b: Moment) -> Order {
   compare(a, b)
   |> order.negate
 }
 
-pub fn is_earlier(ts_1: Moment, than ts_2: Moment) -> Bool {
-  unix_time.is_earlier(to_unix_time(ts_1), than: to_unix_time(ts_2))
+/// Checks to see if one Moment occurred earlier than another.
+pub fn is_earlier(a: Moment, than b: Moment) -> Bool {
+  timestamp.compare(to_timestamp(a), to_timestamp(b)) == Lt
 }
 
+/// Checks to see if one Moment occurred earlier than or the
+/// same time as another.
 pub fn is_earlier_or_equal(a: Moment, to b: Moment) -> Bool {
-  unix_time.is_earlier_or_equal(to_unix_time(a), to: to_unix_time(b))
+  let comparison = timestamp.compare(to_timestamp(a), to_timestamp(b))
+
+  comparison == Lt || comparison == Eq
 }
 
-pub fn is_later(ts_1: Moment, than ts_2: Moment) -> Bool {
-  unix_time.is_later(to_unix_time(ts_1), than: to_unix_time(ts_2))
+/// Checks to see if one Moment occurred later than another.
+pub fn is_later(a: Moment, than b: Moment) -> Bool {
+  timestamp.compare(to_timestamp(a), to_timestamp(b)) == Gt
 }
 
-// Gets the difference between the UNIX time of both Moments.
-pub fn difference(ts_1: Moment, from ts_2: Moment) -> Int {
-  unix_time.difference(to_unix_time(ts_1), from: to_unix_time(ts_2))
+/// Gets the difference between the Timestamp of both Moments.
+pub fn difference(a: Moment, from b: Moment) -> Duration {
+  timestamp.difference(to_timestamp(a), to_timestamp(b))
 }
 
-/// Adds a specified number of milliseconds from the Moment's
-/// UNIX time.
-pub fn add(ts: Moment, milli milli: Int) -> Moment {
-  Moment(unix_time: unix_time.add(to_unix_time(ts), milli:), offset: ts.offset)
+/// Adds a Duration to the Moment, while retaining the Moment's
+/// Offset.
+pub fn add(moment: Moment, duration duration: Duration) -> Moment {
+  let timestamp = to_timestamp(moment)
+
+  Moment(..moment, timestamp: timestamp.add(timestamp, duration))
 }
 
 /// Subtracts a specified number of milliseconds from the Moment's
 /// UNIX time.
-pub fn subtract(ts: Moment, milli milli: Int) -> Moment {
-  Moment(
-    unix_time: unix_time.subtract(to_unix_time(ts), milli:),
-    offset: ts.offset,
-  )
+pub fn subtract(moment: Moment, duration duration: Duration) -> Moment {
+  let timestamp = to_timestamp(moment)
+
+  Moment(..moment, timestamp: timestamp.subtract(timestamp, duration))
 }
 
 // -----------------------------------------------------
@@ -168,10 +179,10 @@ pub fn subtract(ts: Moment, milli milli: Int) -> Moment {
 
 /// The string function used for all DateTimes
 /// in the Database apart from dict keys.
-pub fn to_json(ts: Moment) -> Json {
+pub fn to_json(moment: Moment) -> Json {
   json.object([
-    #("unix_time", ts.unix_time |> unix_time.to_json),
-    #("offset", ts.offset |> offset.to_json),
+    #("timestamp", moment.timestamp |> timestamp_extra.to_json),
+    #("offset", moment.offset |> offset.to_json),
   ])
 }
 
@@ -181,21 +192,21 @@ pub fn decoder() -> Decoder(Moment) {
   let default =
     Moment(
       // 8 March 2025
-      unix_time: unix_time.from_int(1_741_392_000),
+      timestamp: timestamp_extra.default(),
       offset: offset.from_minutes(0),
     )
   decode.new_primitive_decoder("DateTime", fn(datetime) {
     let offset_decoder = offset.decoder()
-    let unix_milli_decoder = unix_time.decoder()
+    let timestamp_decoder = timestamp_extra.decoder()
 
     let datetimestore_decoder = {
-      use unix_time <- decode.field("unix_time", unix_milli_decoder)
+      use timestamp <- decode.field("timestamp", timestamp_decoder)
       use offset <- decode.field("offset", offset_decoder)
-      decode.success(Moment(unix_time:, offset:))
+      decode.success(Moment(timestamp:, offset:))
     }
     case decode.run(datetime, datetimestore_decoder) {
       Error(_) -> Error(default)
-      Ok(ts) -> Ok(ts)
+      Ok(moment) -> Ok(moment)
     }
   })
 }

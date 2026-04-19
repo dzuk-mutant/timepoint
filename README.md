@@ -1,34 +1,52 @@
 # Timepoint
 
-I've been writing an application in Gleam that relies heavily on time and calendar types and functionality and using gleam_time and gtempo, but I found myself wishing for various kinds of functionality not offered by either, things like...
+An extension of gleam_time functionality.
 
-### Days without calendars
+## Days, Offsets and Moments
 
-Unix Time offered by gleam_time's `Timestamp` is really good and useful, but there's no analogous type for specific days. Counting days without needing to consider the calendar system is really useful and has similar benefits to tracking Unix Time.
+This package adds complimentary types to `Timestamp`:
 
-To achieve this I created a `Day` type - the naming is a little weird but I avoided using `Date` so it wouldn't be confused for a Gregorian date, trying to create that shift in mentality.
+- `Days` provide an epoch-based way to work in days. This lets you create, track or store abstract days without caring about what calendar system it is.
+- `Moments` combine `Timestamp` and `Offset` to create the minimum amount of data required to derive `Days` and calendar date/times. They hold a similar amount of information as a traditional datetime, but in a calendar-agnostic way.
+- `Offsets` provide a generic container for time offsets.
 
-### Casting Timestamps into Days
+I find that this not only creates a nice structure for holding localising info, it also
+creates this clean track of information from Timestamps to calendar.
 
-Relatedly, I wanted to cast Unix Time types into Days, but a Unix Time could be in multiple days without an offset to contextualise the time. So I created an `Offset` type and a new `Moment` type, which combines Unix Time and `Offset`. Moments can be cast into Days, Unix Time cannot.
 
-### Intervals of time
+```gleam
+timestamp.from_unix_seconds(0)
+|> moment.from_timestamp(with: offset.from_mins(60))
+|> day.from_moment()
+|> iso_date.from_day()
+
+```
+
+---
+
+## Intervals
 
 My app relies on storing and colliding intervals and points of time together for various features, so I created `DayInterval` and `MomentInterval` which store these intervals and provide various manipulation and collision features.
 
-### Holding historical versions of a type
+----
+
+## Holding historical versions of a type
 
 My app relies on holding and tracking historical changes to a type over time - either Moments or Days (This is the reason I made the interval types). 
 
 The types (with interim names) `Calendrical` holds a type versioned by `Day`, and `Timelined` holds a type versioned by `Moment`.
 
-### Specifying Gregorian calendars
+---
+
+## Specific calendars
 
 While Gregorian is a popular method of doing calendars, it's not standardised. For instance the starting day of the week can be different in different countries. I noticed that gtempo uses Sunday as the starting day, which is a US convention and not something shared in Europe. This took me by surprise when programming.
 
 So for my Gregorian functionality, I aim to explicitly follow ISO 8601 standards to reduce surprises.
 
-### ISO Week Dates
+---
+
+## ISO Week Dates
 
 ISO Week Dates are niche but an important part of how my app works with and frames time, so this code provides functionality for making ISO Weeks and ISO Week Dates.
 
@@ -39,8 +57,6 @@ ISO Week Dates are niche but an important part of how my app works with and fram
 Right now, this is a little messy and borrows things from both gleam_time and gtempo.
 In time I would like to...
 
-- Move functionality to gleam_time where it makes sense to.
-  - Probably replace `UnixTime` with gleam_time's `Timestamp`.
 - Be more self-sufficient from gtempo.
 - Provide more error checking in certain type constructors (especially Intervals). My app relies on stuff coming from the browser to tell it certain things, and if they're wrong then it's a critical failure, and I didn't want to needlessly unwrap Results, so I checked JSON input for sanity but not constructors. I would like to fix this in the future.
 - Come up with neater and more consistent names for `Calendrical`, `Timelined` and related types.

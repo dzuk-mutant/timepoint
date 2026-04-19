@@ -1,22 +1,32 @@
-import duration
 import gleam/dynamic/decode.{type Decoder}
+import gleam/float
 import gleam/int
 import gleam/json.{type Json}
 import gleam/order.{type Order, Eq, Gt, Lt}
+import gleam/time/duration
+import gleam/time/timestamp
 import moment.{type Moment}
 import offset
 import tempo.{type Date}
 import tempo/date as gtempo_date
-import unix_time
 
-/// Representation of an abstract day that is taking
-/// place on Earth.
+/// A Day is an abstract representation of a specific day on Earth.
 /// 
-/// It is analogous to a Date type in other systems, but
-/// there is no specific calendar representation attached.
+/// This could be...
+/// - A specific solar/calendar day from the perspective of one place
+/// on earth.
+/// - A specific solar/calendar day from the perspective of one person
+/// (eg. if they are travelling and moving across Offsets)
+/// 
+/// Day is roughly analogous to a Date type in other systems - a
+/// Day carries the same information as `2026-04-19` does, but
+/// with important distinctions:
+/// 
+/// - It's impossible to create an invalid Day.
+/// - There is no specific calendar representation attached.
 /// 
 /// If you want to work in a specific calendar, you need
-/// to convert the Day.
+/// to cast the Day into that specific system.
 pub opaque type Day {
   Day(unix_days: Int)
 }
@@ -56,6 +66,8 @@ pub fn to_gtempo_date(day: Day) -> Date {
   |> gtempo_date.from_rata_die()
 }
 
+// -----------------------------------------------------
+
 /// Converts an Int representing the number of days
 /// from the Unix Epoch (1st January 1970) into a Day.
 pub fn from_unix_days(unix_days: Int) -> Day {
@@ -68,7 +80,11 @@ pub fn to_unix_days(day: Day) -> Int {
   day.unix_days
 }
 
+// -----------------------------------------------------
+
 /// Creates a Day from an Int representing Rata Die days.
+/// 
+/// Rata die is the number of days from 1st January, 1 CE.
 pub fn from_rata_die(rata_die: Int) -> Day {
   rata_die
   |> int.subtract(unix_epoch_as_rata_die)
@@ -76,23 +92,35 @@ pub fn from_rata_die(rata_die: Int) -> Day {
 }
 
 /// Converts a Day into an Int representing Rata Die days.
+/// 
+/// Rata die is the number of days from 1st January, 1 CE.
 pub fn to_rata_die(day: Day) -> Int {
   day.unix_days
   |> int.add(unix_epoch_as_rata_die)
 }
 
-/// Gets the Day a Moment sits within.
-pub fn from_moment(ts: Moment) -> Day {
+// -----------------------------------------------------
+
+/// Casts a Moment into a Day.
+pub fn from_moment(moment: Moment) -> Day {
   let offset_shift =
-    ts
+    moment
     |> moment.to_offset
     |> offset.to_duration
 
-  ts
-  |> moment.to_unix_time
-  |> unix_time.to_duration_from_epoch
-  |> duration.add(offset_shift)
-  |> duration.as_days
+  let shifted_timestamp =
+    moment
+    |> moment.to_timestamp
+    |> timestamp.add(offset_shift)
+
+  let day_as_secs = 86_400.0
+
+  // duration from epoch
+  timestamp.difference(shifted_timestamp, timestamp.from_unix_seconds(0))
+  |> duration.to_seconds
+  |> fn(x) { x /. day_as_secs }
+  |> float.floor
+  |> float.truncate
   |> from_unix_days
 }
 
@@ -105,35 +133,35 @@ pub fn from_moment(ts: Moment) -> Day {
 // -----------------------------------------------------
 
 /// Checks if two Days are the same.
-pub fn is_equal(sd_1: Day, to sd_2: Day) -> Bool {
-  to_rata_die(sd_1) == to_rata_die(sd_2)
+pub fn is_equal(a: Day, to b: Day) -> Bool {
+  to_rata_die(a) == to_rata_die(b)
 }
 
 /// Compares two Days against each other.
-pub fn compare(sd_1: Day, to sd_2: Day) -> Order {
-  int.compare(to_rata_die(sd_1), with: to_rata_die(sd_2))
+pub fn compare(a: Day, to b: Day) -> Order {
+  int.compare(to_rata_die(a), with: to_rata_die(b))
 }
 
 /// Compares two Days against each other in reverse chronological order.
-pub fn compare_reverse(sd_1: Day, to sd_2: Day) -> Order {
-  int.compare(to_rata_die(sd_1), with: to_rata_die(sd_2))
+pub fn compare_reverse(a: Day, to b: Day) -> Order {
+  int.compare(to_rata_die(a), with: to_rata_die(b))
   |> order.negate
 }
 
 /// Checks if a the first Day is earlier than the second.
-pub fn is_earlier(sd_1: Day, than sd_2: Day) -> Bool {
-  compare(sd_1, to: sd_2) == Lt
+pub fn is_earlier(a: Day, than b: Day) -> Bool {
+  compare(a, to: b) == Lt
 }
 
 /// Checks if a the first Day is earlier than or the same as the second.
-pub fn is_earlier_or_equal(sd_1: Day, to sd_2: Day) -> Bool {
-  let comparison = compare(sd_1, to: sd_2)
+pub fn is_earlier_or_equal(a: Day, to b: Day) -> Bool {
+  let comparison = compare(a, to: b)
   comparison == Lt || comparison == Eq
 }
 
 /// Checks if a the first Day is later than the second.
-pub fn is_later(sd_1: Day, than sd_2: Day) -> Bool {
-  compare(sd_1, to: sd_2) == Gt
+pub fn is_later(a: Day, than b: Day) -> Bool {
+  compare(a, to: b) == Gt
 }
 
 /// Gets the difference in Days from the first and the second Day given.

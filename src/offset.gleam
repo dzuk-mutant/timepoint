@@ -2,14 +2,33 @@ import gleam/dynamic/decode.{type Decoder}
 import gleam/int
 import gleam/json.{type Json}
 import gleam/order.{type Order}
+import gleam/time/duration.{type Duration}
 import tempo
 import tempo/duration as gtempo_duration
 import tempo/offset as gtempo_offset
-import duration.{type Duration}
 
 /// Offsets are the measure by which time is shifted in timezones.
 /// 
-/// Offsets are stored as an Int representing minutes.
+/// ## On validity
+/// 
+/// This module constructor assumes the minutes coming in are
+/// within correct bounds, and does not check to see if it does.
+/// 
+/// As of April 2026, the current minimum offset is -12hrs
+/// (-720 minutes) and the maximum is +14hrs (+840 minutes).
+/// These are political constructs, and may not be the same in
+/// the future.
+/// 
+/// If you need to guard against offsets being created that don't
+/// exist currently, you will need to create extra functionality.
+/// 
+/// ## Time zones
+/// 
+/// A time zone is a region of the Earth that observes certain
+/// kinds of offset patterns. This module does not cover
+/// time zones, just offsets that may happen to be a part of a
+/// particular time zone.
+/// 
 pub opaque type Offset {
   Offset(minutes: Int)
 }
@@ -22,25 +41,22 @@ pub opaque type Offset {
 // -----------------------------------------------------
 // -----------------------------------------------------
 
+/// Converts an Offset into a Duration.
 pub fn to_duration(offset: Offset) -> Duration {
   offset.minutes
   |> duration.minutes
 }
 
-/// Returns the value of the offset in minutes as an Int.
+/// Converts an Offset into an Int representing minutes.
 pub fn to_minutes(offset: Offset) -> Int {
   offset.minutes
 }
 
-/// Creates an Offset from a number of minutes given as an Int.
+/// Creates an Offset from an Int representing minutes.
 /// 
-/// This constructor assumes the minutes coming in are within correct
-/// bounds, this does not check to see if it does.
-/// 
-/// But this app only gets offsets internally; if it's coming in
-/// wrong, there's something seriously wrong with the user's computer.
-/// 
-/// ( mins < -720 || mins > 840 )
+/// ```gleam
+/// offset.from_minutes(60)
+/// ```
 pub fn from_minutes(mins: Int) -> Offset {
   Offset(minutes: mins)
 }
@@ -98,20 +114,11 @@ pub fn to_json(offset: Offset) -> Json {
   |> json.int()
 }
 
-/// Will fail if the given minutes are in an invalid range.
 pub fn decoder() -> Decoder(Offset) {
   decode.new_primitive_decoder("Offset", fn(offset) {
     case decode.run(offset, decode.int) {
       Error(_) -> Error(default)
-      Ok(mins) ->
-        case is_valid(mins) {
-          False -> Error(default)
-          True -> Ok(from_minutes(mins))
-        }
+      Ok(mins) -> Ok(from_minutes(mins))
     }
   })
-}
-
-pub fn is_valid(minutes: Int) -> Bool {
-  minutes >= -720 && minutes <= 840
 }
