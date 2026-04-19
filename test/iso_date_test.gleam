@@ -1,7 +1,6 @@
 import calendar/iso_date
-import day
+import day.{type Day}
 import gleeunit/should
-import tempo/date as gtempo_date
 
 // ----------------------------------------------------
 // ----------------------------------------------------
@@ -11,36 +10,40 @@ import tempo/date as gtempo_date
 
 pub fn most_recent_monday_behind_1_test() {
   day.from_gtempo_literal("2025-02-22")
-  |> iso_date.most_recent_monday_behind()
-  |> day.to_gtempo_date
-  |> gtempo_date.to_string
+  |> iso_date.from_day
+  |> iso_date.prev_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
+  |> day.to_string
   |> should.equal("2025-02-17")
 }
 
 /// On Monday.
 pub fn most_recent_monday_behind_2_test() {
   day.from_gtempo_literal("2025-04-14")
-  |> iso_date.most_recent_monday_behind()
-  |> day.to_gtempo_date
-  |> gtempo_date.to_string
-  |> should.equal("2025-04-14")
+  |> iso_date.from_day
+  |> iso_date.prev_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
+  |> day.to_string
+  |> should.equal("2025-04-07")
 }
 
 /// On Sunday.
 pub fn most_recent_monday_behind_3_test() {
   day.from_gtempo_literal("2025-07-21")
-  |> iso_date.most_recent_monday_behind()
-  |> day.to_gtempo_date
-  |> gtempo_date.to_string
+  |> iso_date.from_day
+  |> iso_date.prev_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
+  |> day.to_string
   |> should.equal("2025-07-21")
 }
 
 /// On Wednesday.
 pub fn most_recent_monday_behind_4_test() {
   day.from_gtempo_literal("2025-05-14")
-  |> iso_date.most_recent_monday_behind()
-  |> day.to_gtempo_date
-  |> gtempo_date.to_string
+  |> iso_date.from_day
+  |> iso_date.prev_day_of_week(iso_date.Monday)
+  |> iso_date.to_day
+  |> day.to_string
   |> should.equal("2025-05-12")
 }
 
@@ -80,131 +83,137 @@ pub fn date_is_one_day_after_4_test() {
 // ----------------------------------------------------
 // ----------------------------------------------------
 
+fn ordinal_day_test(day: Day) -> Int {
+  day
+  |> iso_date.from_day
+  |> iso_date.to_ordinal_day
+}
+
 pub fn to_ordinal_day_1_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2016-11-05"))
+  ordinal_day_test(day.from_gtempo_literal("2016-11-05"))
   |> should.equal(310)
 }
 
 // explicitly normal year -----------------------------------------
 
 pub fn to_ordinal_day_normal_year_1_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2025-01-31"))
+  ordinal_day_test(day.from_gtempo_literal("2025-01-31"))
   |> should.equal(31)
 }
 
 pub fn to_ordinal_day_normal_year_2_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2025-02-10"))
+  ordinal_day_test(day.from_gtempo_literal("2025-02-10"))
   |> should.equal(41)
 }
 
 pub fn to_ordinal_day_normal_year_3_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2025-03-29"))
+  ordinal_day_test(day.from_gtempo_literal("2025-03-29"))
   |> should.equal(88)
 }
 
 pub fn to_ordinal_day_normal_year_4_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2023-04-27"))
+  ordinal_day_test(day.from_gtempo_literal("2023-04-27"))
   |> should.equal(117)
 }
 
 pub fn to_ordinal_day_normal_year_5_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2025-05-14"))
+  ordinal_day_test(day.from_gtempo_literal("2025-05-14"))
   |> should.equal(134)
 }
 
 pub fn to_ordinal_day_normal_year_6_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2025-06-01"))
+  ordinal_day_test(day.from_gtempo_literal("2025-06-01"))
   |> should.equal(152)
 }
 
 pub fn to_ordinal_day_normal_year_7_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2023-07-02"))
+  ordinal_day_test(day.from_gtempo_literal("2023-07-02"))
   |> should.equal(183)
 }
 
 pub fn to_ordinal_day_normal_year_8_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2025-08-12"))
+  ordinal_day_test(day.from_gtempo_literal("2025-08-12"))
   |> should.equal(224)
 }
 
 pub fn to_ordinal_day_normal_year_9_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2025-09-30"))
+  ordinal_day_test(day.from_gtempo_literal("2025-09-30"))
   |> should.equal(273)
 }
 
 pub fn to_ordinal_day_normal_year_10_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2025-10-10"))
+  ordinal_day_test(day.from_gtempo_literal("2025-10-10"))
   |> should.equal(283)
 }
 
 pub fn to_ordinal_day_normal_year_11_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2023-11-29"))
+  ordinal_day_test(day.from_gtempo_literal("2023-11-29"))
   |> should.equal(333)
 }
 
 pub fn to_ordinal_day_normal_year_12_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2023-12-01"))
+  ordinal_day_test(day.from_gtempo_literal("2023-12-01"))
   |> should.equal(335)
 }
 
 // leap year -----------------------------------------
 pub fn to_ordinal_day_leap_year_1_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-01-11"))
+  ordinal_day_test(day.from_gtempo_literal("2024-01-11"))
   |> should.equal(11)
 }
 
 pub fn to_ordinal_day_leap_year_2_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-02-29"))
+  ordinal_day_test(day.from_gtempo_literal("2024-02-29"))
   |> should.equal(60)
 }
 
 pub fn to_ordinal_day_leap_year_3_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-03-08"))
+  ordinal_day_test(day.from_gtempo_literal("2024-03-08"))
   |> should.equal(68)
 }
 
 pub fn to_ordinal_day_leap_year_4_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-04-16"))
+  ordinal_day_test(day.from_gtempo_literal("2024-04-16"))
   |> should.equal(107)
 }
 
 pub fn to_ordinal_day_leap_year_5_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-05-07"))
+  ordinal_day_test(day.from_gtempo_literal("2024-05-07"))
   |> should.equal(128)
 }
 
 pub fn to_ordinal_day_leap_year_6_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-06-28"))
+  ordinal_day_test(day.from_gtempo_literal("2024-06-28"))
   |> should.equal(180)
 }
 
 pub fn to_ordinal_day_leap_year_7_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-07-11"))
+  ordinal_day_test(day.from_gtempo_literal("2024-07-11"))
   |> should.equal(193)
 }
 
 pub fn to_ordinal_day_leap_year_8_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-08-20"))
+  ordinal_day_test(day.from_gtempo_literal("2024-08-20"))
   |> should.equal(233)
 }
 
 pub fn to_ordinal_day_leap_year_9_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-09-13"))
+  ordinal_day_test(day.from_gtempo_literal("2024-09-13"))
   |> should.equal(257)
 }
 
 pub fn to_ordinal_day_leap_year_10_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-10-30"))
+  ordinal_day_test(day.from_gtempo_literal("2024-10-30"))
   |> should.equal(304)
 }
 
 pub fn to_ordinal_day_leap_year_11_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-11-19"))
+  ordinal_day_test(day.from_gtempo_literal("2024-11-19"))
   |> should.equal(324)
 }
 
 pub fn to_ordinal_day_leap_year_12_test() {
-  iso_date.to_ordinal_day(day.from_gtempo_literal("2024-12-12"))
+  ordinal_day_test(day.from_gtempo_literal("2024-12-12"))
   |> should.equal(347)
 }
 
@@ -216,12 +225,14 @@ pub fn to_ordinal_day_leap_year_12_test() {
 
 pub fn to_day_of_week_number_1_test() {
   day.from_gtempo_literal("2025-03-29")
+  |> iso_date.from_day
   |> iso_date.to_day_of_week_number()
   |> should.equal(6)
 }
 
 pub fn to_day_of_week_number_2_test() {
   day.from_gtempo_literal("2025-03-30")
+  |> iso_date.from_day
   |> iso_date.to_day_of_week_number()
   |> should.equal(7)
 }

@@ -10,7 +10,7 @@ import day.{type Day}
 /// See the Wikipedia article on ISO week dates for
 /// more information - https://en.wikipedia.org/wiki/ISO_week_date
 pub opaque type ISOWeekDate {
-  ISOWeekDate(day_no: Int, iso_week: ISOWeek)
+  ISOWeekDate(day_no: Int, iso_week: ISOWeek, day: Day)
 }
 
 // ----------------------------------------------------
@@ -34,15 +34,18 @@ pub fn unsafe_from_values(
   ISOWeekDate(
     day_no:,
     iso_week: iso_week.unsafe_from_values(week_no:, year:, interval:),
+    day:,
   )
 }
 
 /// A constructor that gets an entire ISOWeekDate
 /// from one Day.
 pub fn from_day(day: Day) -> ISOWeekDate {
+  let date = iso_date.from_day(day)
   ISOWeekDate(
-    day_no: iso_date.to_day_of_week_number(day),
+    day_no: iso_date.to_day_of_week_number(date),
     iso_week: iso_week.from_day(day),
+    day:,
   )
 }
 

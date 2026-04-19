@@ -3,7 +3,6 @@ import day.{type Day}
 import gleam/list
 import gleam/result
 import interval/day_interval.{type DayInterval}
-import tempo/date.{Sun} as gtempo_date
 
 /// A type-enforced representation of a week
 /// in ISO 8601 dates.
@@ -22,7 +21,7 @@ pub fn unsafe_from_values(
 
 /// Creates a ISOWeek that surrounds a particular Day.
 pub fn from_day(day: Day) -> ISOWeek {
-  let monday = iso_date.most_recent_monday_behind(day)
+  let monday = most_recent_monday_behind(day)
 
   let tuple = tuple_from_day(day)
 
@@ -77,23 +76,23 @@ fn inside_week_acc(
     False -> {
       let dow =
         current_day
-        |> day.to_gtempo_date
-        |> gtempo_date.to_day_of_week
-      case { dow == Sun } {
+        |> iso_date.from_day
+        |> iso_date.to_day_of_week
+      case { dow == iso_date.Sunday } {
         False -> {
           // search for Sunday BACKWARDS.
           inside_week_acc(
             current_day: current_day
-              |> day.to_gtempo_date
-              |> gtempo_date.prior_day_of_week(day_of_week: Sun)
-              |> day.from_gtempo_date,
+              |> iso_date.from_day
+              |> iso_date.prev_day_of_week(iso_date.Sunday)
+              |> iso_date.to_day(),
             end_day:,
             interval:,
             acc:,
           )
         }
         True -> {
-          let monday = iso_date.most_recent_monday_behind(current_day)
+          let monday = most_recent_monday_behind(current_day)
 
           case day_interval.is_around_day(interval, monday) {
             False -> acc
@@ -127,8 +126,8 @@ pub fn list_from_around_interval(interval: DayInterval) -> List(ISOWeek) {
 
   let interval_start_dow =
     interval_start
-    |> day.to_gtempo_date
-    |> gtempo_date.to_day_of_week
+    |> iso_date.from_day
+    |> iso_date.to_day_of_week
 
   let interval_final =
     interval
@@ -136,28 +135,28 @@ pub fn list_from_around_interval(interval: DayInterval) -> List(ISOWeek) {
 
   let interval_final_dow =
     interval_final
-    |> day.to_gtempo_date
-    |> gtempo_date.to_day_of_week
+    |> iso_date.from_day
+    |> iso_date.to_day_of_week
 
   // ---------------------------------
 
   let earliest_monday = case interval_start_dow {
-    gtempo_date.Mon -> interval_start
+    iso_date.Monday -> interval_start
     _ -> {
       interval_start
-      |> day.to_gtempo_date
-      |> gtempo_date.prior_day_of_week(gtempo_date.Mon)
-      |> day.from_gtempo_date
+      |> iso_date.from_day
+      |> iso_date.prev_day_of_week(iso_date.Monday)
+      |> iso_date.to_day
     }
   }
 
   let latest_sunday = case interval_final_dow {
-    gtempo_date.Sun -> interval_final
+    iso_date.Sunday -> interval_final
     _ -> {
       interval_final
-      |> day.to_gtempo_date
-      |> gtempo_date.next_day_of_week(gtempo_date.Sun)
-      |> day.from_gtempo_date
+      |> iso_date.from_day
+      |> iso_date.next_day_of_week(iso_date.Sunday)
+      |> iso_date.to_day
     }
   }
 
@@ -281,14 +280,28 @@ pub fn compare_reverse(a: ISOWeek, to b: ISOWeek) {
 // ---------------------------------------------------
 // ---------------------------------------------------
 
+/// Returns the most recent Monday behind the Day, unless 
+/// the given Day is Monday, in which case that will be 
+/// returned instead.
+fn most_recent_monday_behind(day: Day) -> Day {
+  let date = iso_date.from_day(day)
+  case iso_date.to_day_of_week(date) {
+    iso_date.Monday -> day
+    _ ->
+      date
+      |> iso_date.prev_day_of_week(iso_date.Monday)
+      |> fn(x) { x.day }
+  }
+}
+
 /// Creates a week no / year tuple from a Day.
 /// 
 /// For construction.
 fn tuple_from_day(day: Day) -> #(Int, Int) {
   let year =
     day
-    |> day.to_gtempo_date
-    |> gtempo_date.get_year
+    |> iso_date.from_day
+    |> iso_date.to_year
 
   let week_no = day_to_week_no(day)
 
@@ -299,11 +312,11 @@ fn tuple_from_day(day: Day) -> #(Int, Int) {
     52 | 53 -> {
       let day_of_week =
         day
-        |> day.to_gtempo_date
-        |> gtempo_date.to_day_of_week
+        |> iso_date.from_day
+        |> iso_date.to_day_of_week
 
       case day_of_week {
-        gtempo_date.Mon | gtempo_date.Tue | gtempo_date.Wed ->
+        iso_date.Monday | iso_date.Tuesday | iso_date.Wednesday ->
           case last_dow_in_same_year(day) {
             False -> #(1, year + 1)
             True -> #(week_no, year)
@@ -320,12 +333,9 @@ fn tuple_from_day(day: Day) -> #(Int, Int) {
 /// crossing week, and getting that date's week
 /// number.
 fn last_week_no_of_year(day: Day) -> Int {
-  let start = iso_date.most_recent_monday_behind(day)
+  let start = most_recent_monday_behind(day)
 
-  day_interval.new(
-    start:,
-    final: day.add(iso_date.most_recent_monday_behind(day), 6),
-  )
+  day_interval.new(start:, final: day.add(most_recent_monday_behind(day), 6))
   |> day_interval.to_list
   |> list.map(day_to_week_no)
   |> list.first()
@@ -338,8 +348,9 @@ fn last_week_no_of_year(day: Day) -> Int {
 /// If the resulting number is 0, it means it
 /// belongs in the previous year's final week date.
 fn day_to_week_no(day: Day) -> Int {
-  let day_of_week = iso_date.to_day_of_week_number(day)
-  let day_of_year = iso_date.to_ordinal_day(day)
+  let date = iso_date.from_day(day)
+  let day_of_week = iso_date.to_day_of_week_number(date)
+  let day_of_year = iso_date.to_ordinal_day(date)
 
   { day_of_year - day_of_week + 10 } / 7
 }
@@ -349,12 +360,12 @@ fn day_to_week_no(day: Day) -> Int {
 fn last_dow_in_same_year(day: Day) -> Bool {
   let last_dow =
     day
-    |> day.to_gtempo_date
-    |> gtempo_date.last_of_month
-    |> gtempo_date.to_day_of_week
+    |> iso_date.from_day
+    |> iso_date.last_of_month
+    |> iso_date.to_day_of_week
 
   case last_dow {
-    gtempo_date.Mon | gtempo_date.Tue | gtempo_date.Wed -> False
+    iso_date.Monday | iso_date.Tuesday | iso_date.Wednesday -> False
     _ -> True
   }
 }
