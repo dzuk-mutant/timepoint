@@ -1,11 +1,13 @@
 import day.{type Day}
+import duration_extra
 import gleam/int
 import gleam/result
 import gleam/time/calendar.{type Month}
 import gleam/time/duration
 import gleam/time/timestamp
 
-/// Contains the details of the ISO Date, plus the Day.
+/// Contains the details of the ISO Date, plus the
+/// Day, preserving it for chained usage.
 pub type ISODate {
   ISODate(year: Int, month: Month, day_number: Int, day: Day)
 }
@@ -29,18 +31,25 @@ pub type DayOfWeek {
 // ----------------------------------------------------
 // ----------------------------------------------------
 // ----------------------------------------------------
+
 /// Gets a Date from a Day.
 pub fn from_day(day: Day) -> ISODate {
-  let epoch_seconds = day.to_unix_days(day)
-
-  let placeholder_timestamp = timestamp.from_unix_seconds(epoch_seconds)
-
-  let date =
-    placeholder_timestamp
+  let gleam_date =
+    day
+    |> day.to_unix_days
+    |> duration_extra.days
+    |> duration.to_seconds_and_nanoseconds
+    |> fn(x) { x.0 }
+    |> timestamp.from_unix_seconds
     |> timestamp.to_calendar(duration.minutes(0))
     |> fn(c) { c.0 }
 
-  ISODate(year: date.year, month: date.month, day_number: date.day, day:)
+  ISODate(
+    year: gleam_date.year,
+    month: gleam_date.month,
+    day_number: gleam_date.day,
+    day:,
+  )
 }
 
 /// Convenience function that gives the Day.
@@ -107,6 +116,13 @@ pub fn to_day_of_week(date: ISODate) -> DayOfWeek {
   }
 }
 
+/// Returns day of week number, to ISO standards.
+/// 
+/// (The first day is Monday, which equals 1.)
+pub fn to_day_of_week_number(date: ISODate) -> Int {
+  dow_to_int(to_day_of_week(date))
+}
+
 /// Gets a number representing the Ordinal Day of a year out of a Day.
 pub fn to_ordinal_day(date: ISODate) -> Int {
   let start_of_month = case date.month, calendar.is_leap_year(date.year) {
@@ -154,13 +170,6 @@ pub fn to_month_number(date: ISODate) -> Int {
   }
 }
 
-/// Returns day of week number, to ISO standards.
-/// 
-/// (The first day is Monday, which equals 1.)
-pub fn to_day_of_week_number(date: ISODate) -> Int {
-  dow_to_int(to_day_of_week(date))
-}
-
 // ----------------------------------------------------
 // ----------------------------------------------------
 // ----------------------------------------------------
@@ -172,10 +181,7 @@ pub fn to_day_of_week_number(date: ISODate) -> Int {
 // ----------------------------------------------------
 
 pub fn next_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
-  let existing_dow_num =
-    date
-    |> to_day_of_week_number
-
+  let existing_dow_num = to_day_of_week_number(date)
   let target_dow_num = dow_to_int(day_of_week)
 
   let diff = {
@@ -195,10 +201,7 @@ pub fn next_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
 }
 
 pub fn prev_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
-  let existing_dow_num =
-    date
-    |> to_day_of_week_number
-
+  let existing_dow_num = to_day_of_week_number(date)
   let target_dow_num = dow_to_int(day_of_week)
 
   let diff = {
