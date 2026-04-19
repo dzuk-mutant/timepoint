@@ -113,7 +113,7 @@ pub fn from_moment(moment: Moment) -> Day {
     |> timestamp.add(offset_shift)
 
   // duration from epoch
-  timestamp.difference(shifted_timestamp, timestamp.from_unix_seconds(0))
+  timestamp.difference(timestamp.from_unix_seconds(0), shifted_timestamp)
   |> duration_extra.as_days
   |> from_unix_days
 }

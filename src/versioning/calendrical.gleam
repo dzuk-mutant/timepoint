@@ -445,8 +445,8 @@ fn variants_are_contiguous(calendrical: Calendrical(v)) -> Bool {
   |> list.map(fn(pair) {
     // remember this runs in reverse chronological order.
     day_interval.is_contiguous(
-      cal_past_variant.to_day_interval(pair.0),
-      ahead_of: cal_past_variant.to_day_interval(pair.1),
+      cal_past_variant.to_day_interval(pair.1),
+      before: cal_past_variant.to_day_interval(pair.0),
     )
   })
   |> list.contains(False)

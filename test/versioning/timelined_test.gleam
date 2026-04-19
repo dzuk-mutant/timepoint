@@ -109,7 +109,7 @@ fn example_1() {
 pub fn json_o_1_test() {
   example_1()
   |> json_o(
-    expected: "{\"current\":{\"start\":{\"unix_time\":1740441600000,\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"unix_time\":1738454400000,\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"unix_time\":1739923200000,\"offset\":0},\"end_excluding\":{\"unix_time\":1740441600000,\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"unix_time\":1739836800000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739923200000,\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"unix_time\":1738454400000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739836800000,\"offset\":0}},\"value\":\"whatever\"}]}",
+    expected: "{\"current\":{\"start\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0}},\"value\":\"whatever\"}]}",
   )
 }
 
@@ -129,7 +129,7 @@ fn example_2() {
 pub fn json_o_2_test() {
   example_2()
   |> json_o(
-    expected: "{\"current\":{\"start\":{\"unix_time\":1738454400000,\"offset\":0},\"value\":\"whatever\"},\"history_start\":{\"unix_time\":1738454400000,\"offset\":0},\"history\":[]}",
+    expected: "{\"current\":{\"start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"value\":\"whatever\"},\"history_start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"history\":[]}",
   )
 }
 
@@ -140,36 +140,36 @@ pub fn json_io_2_test() {
 
 /// Non-contiguous history
 pub fn json_erroneous_decode_1_test() {
-  "{\"current\":{\"start\":{\"unix_time\":1740441600000,\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"unix_time\":1738454400000,\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"unix_time\":1739923200000,\"offset\":0},\"end_excluding\":{\"unix_time\":1740441600000,\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"unix_time\":1739836800000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739900000000,\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"unix_time\":1738454400000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739836800000,\"offset\":0}},\"value\":\"whatever\"}]}"
+  "{\"current\":{\"start\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739837800,\"unix_ns\":0},\"offset\":0}},\"value\":\"whatever\"}]}"
   |> json_erroneous_decode()
 }
 
 /// Non-contiguous history
 pub fn json_erroneous_decode_2_test() {
-  "{\"current\":{\"start\":{\"unix_time\":1740441600000,\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"unix_time\":1738454400000,\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"unix_time\":1739923200000,\"offset\":0},\"end_excluding\":{\"unix_time\":1740441600000,\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"unix_time\":1739836800000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739923200000,\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"unix_time\":1738454400000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739830000000,\"offset\":0}},\"value\":\"whatever\"}]}"
+  "{\"current\":{\"start\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739921200,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0}},\"value\":\"whatever\"}]}"
   |> json_erroneous_decode()
 }
 
 /// I just go crazy with the history order.
 pub fn json_erroneous_decode_3_test() {
-  "{\"current\":{\"start\":{\"unix_time\":1740441600000,\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"unix_time\":1738454400000,\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"unix_time\":1739923200000,\"offset\":0},\"end_excluding\":{\"unix_time\":1740000100000,\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"unix_time\":173900,\"offset\":0},\"end_excluding\":{\"unix_time\":1739923200000,\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"unix_time\":173800,\"offset\":0},\"end_excluding\":{\"unix_time\":1739836800000,\"offset\":0}},\"value\":\"whatever\"}]}"
+  "{\"current\":{\"start\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739830800,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1749923200,\"unix_ns\":0},\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0}},\"value\":\"whatever\"}]}"
   |> json_erroneous_decode()
 }
 
 /// Current is not contiguous with history.
 pub fn json_erroneous_decode_4_test() {
-  "{\"current\":{\"start\":{\"unix_time\":1740430000000,\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"unix_time\":1738454400000,\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"unix_time\":1739923200000,\"offset\":0},\"end_excluding\":{\"unix_time\":1740441600000,\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"unix_time\":1739836800000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739923200000,\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"unix_time\":1738454400000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739836800000,\"offset\":0}},\"value\":\"whatever\"}]}"
+  "{\"current\":{\"start\":{\"timestamp\":{\"unix_s\":1740441800,\"unix_ns\":0},\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0}},\"value\":\"whatever\"}]}"
   |> json_erroneous_decode()
 }
 
 /// Start date doesn't match first variant.
 pub fn json_erroneous_decode_5_test() {
-  "{\"current\":{\"start\":{\"unix_time\":1740441600000,\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"unix_time\":000011111,\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"unix_time\":1739923200000,\"offset\":0},\"end_excluding\":{\"unix_time\":1740441600000,\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"unix_time\":1739836800000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739923200000,\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"unix_time\":1738454400000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739836800000,\"offset\":0}},\"value\":\"whatever\"}]}"
+  "{\"current\":{\"start\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"timestamp\":{\"unix_s\":1738444400,\"unix_ns\":0},\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1740441600,\"unix_ns\":0},\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739923200,\"unix_ns\":0},\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1738454400,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739836800,\"unix_ns\":0},\"offset\":0}},\"value\":\"whatever\"}]}"
   |> json_erroneous_decode()
 }
 
 pub fn json_correct_decode_1_test() {
-  "{\"current\":{\"start\":{\"unix_time\":1740441600000,\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"unix_time\":1738454400000,\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"unix_time\":1739923200000,\"offset\":0},\"end_excluding\":{\"unix_time\":1740441600000,\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"unix_time\":1739836800000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739923200000,\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"unix_time\":1738454400000,\"offset\":0},\"end_excluding\":{\"unix_time\":1739836800000,\"offset\":0}},\"value\":\"whatever\"}]}"
+  "{\"current\":{\"start\":{\"timestamp\":{\"unix_s\":1740441600000,\"unix_ns\":0},\"offset\":0},\"value\":\"🎸🥁\"},\"history_start\":{\"timestamp\":{\"unix_s\":1738454400000,\"unix_ns\":0},\"offset\":0},\"history\":[{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739923200000,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1740441600000,\"unix_ns\":0},\"offset\":0}},\"value\":\"Fort Greene Park\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1739836800000,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739923200000,\"unix_ns\":0},\"offset\":0}},\"value\":\"I'm listening to Battles\"},{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1738454400000,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1739836800000,\"unix_ns\":0},\"offset\":0}},\"value\":\"whatever\"}]}"
   |> json_correct_decode()
 }
 

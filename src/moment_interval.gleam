@@ -382,14 +382,13 @@ pub fn is_overlapped_by_day_interval(
 /// ```
 /// correct:
 /// 
-/// 1----1
-///      2----2
+/// a----a
+///      b----b
+/// 
+/// (end_excluding of a == start of b)
 /// 
 /// ```
 /// 
-pub fn is_contiguous(
-  prev: MomentInterval,
-  ahead_of next: MomentInterval,
-) -> Bool {
-  prev.end_excluding == next.start
+pub fn is_contiguous(a: MomentInterval, before b: MomentInterval) -> Bool {
+  a.end_excluding == b.start
 }

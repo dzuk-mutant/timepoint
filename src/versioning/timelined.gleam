@@ -479,7 +479,7 @@ fn variants_are_contiguous(timelined: Timelined(v)) -> Bool {
     // remember this runs in reverse chronological order.
     moment_interval.is_contiguous(
       tl_past_variant.to_moment_interval(pair.1),
-      ahead_of: tl_past_variant.to_moment_interval(pair.0),
+      before: tl_past_variant.to_moment_interval(pair.0),
     )
   })
   |> list.contains(False)

@@ -48,7 +48,7 @@ pub fn example_1_output_test() {
       value: "33333",
     ),
     fn(x) { x |> json.string },
-    "{\"start\":{\"unix_time\":1741392000000,\"offset\":0},\"value\":\"33333\"}",
+    "{\"start\":{\"timestamp\":{\"unix_s\":1741392000,\"unix_ns\":0},\"offset\":0},\"value\":\"33333\"}",
   )
 }
 

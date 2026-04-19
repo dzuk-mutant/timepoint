@@ -17,6 +17,10 @@ import timestamp_extra
 /// an Offset, it can't tell you what solar day an event happened in,
 /// and it can't be used to deduce a calendar date/time.
 /// 
+/// While gleam/time offers the ability to produce a calendar date by 
+/// adding an offset to a Timestamp, there are many cases where it's useful
+/// to carry an offset with a Timestamp as a type.
+/// 
 /// Moments keep the best parts of Timestamp while adding the minimum
 /// possible information to derive Days, dates and times.
 ///
@@ -30,7 +34,7 @@ import timestamp_extra
 /// 
 /// Because Offsets don't tell us when something happened, only a
 /// contextualision detail, Moments are compared to each other
-/// in terms of their Timestamp,
+/// exactly the same as Timestamps.
 /// 
 pub opaque type Moment {
   Moment(timestamp: Timestamp, offset: Offset)

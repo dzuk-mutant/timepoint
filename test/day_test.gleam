@@ -172,8 +172,7 @@ fn from_moment(input input: String, output output: String) {
   input
   |> moment.from_gtempo_literal
   |> day.from_moment
-  |> day.to_gtempo_date
-  |> gtempo_date.to_string
+  |> day.to_string
   |> should.equal(output)
 }
 

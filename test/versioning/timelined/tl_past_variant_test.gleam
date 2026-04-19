@@ -39,7 +39,7 @@ pub fn json_o_1_test() {
     value: "boop",
   )
   |> json_o(
-    "{\"interval\":{\"start\":{\"unix_time\":1740096000000,\"offset\":0},\"end_excluding\":{\"unix_time\":1740268800000,\"offset\":0}},\"value\":\"boop\"}",
+    "{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1740096000,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1740268800,\"unix_ns\":0},\"offset\":0}},\"value\":\"boop\"}",
   )
 }
 
@@ -59,7 +59,7 @@ pub fn json_o_2_test() {
     value: "weeeeew",
   )
   |> json_o(
-    "{\"interval\":{\"start\":{\"unix_time\":1003622400000,\"offset\":0},\"end_excluding\":{\"unix_time\":1003795200000,\"offset\":0}},\"value\":\"weeeeew\"}",
+    "{\"interval\":{\"start\":{\"timestamp\":{\"unix_s\":1003622400,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1003795200,\"unix_ns\":0},\"offset\":0}},\"value\":\"weeeeew\"}",
   )
 }
 

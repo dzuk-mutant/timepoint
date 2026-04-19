@@ -1286,14 +1286,18 @@ pub fn is_overlapped_13_test() {
 ///   (False)
 /// 
 pub fn is_contiguous_1_test() {
-  day_interval.new(
-    start: day.from_gtempo_literal("2016-08-01"),
-    final: day.from_gtempo_literal("2016-09-23"),
-  )
-  |> day_interval.is_contiguous(ahead_of: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
-  ))
+  let a =
+    day_interval.new(
+      start: day.from_gtempo_literal("2015-08-01"),
+      final: day.from_gtempo_literal("2015-09-23"),
+    )
+  let b =
+    day_interval.new(
+      start: day.from_gtempo_literal("2016-08-01"),
+      final: day.from_gtempo_literal("2016-09-23"),
+    )
+
+  day_interval.is_contiguous(a, before: b)
   |> should.equal(False)
 }
 
@@ -1304,14 +1308,18 @@ pub fn is_contiguous_1_test() {
 ///   (True)
 /// 
 pub fn is_contiguous_2_test() {
-  day_interval.new(
-    start: day.from_gtempo_literal("2015-09-24"),
-    final: day.from_gtempo_literal("2016-09-23"),
-  )
-  |> day_interval.is_contiguous(ahead_of: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
-  ))
+  let a =
+    day_interval.new(
+      start: day.from_gtempo_literal("2015-08-01"),
+      final: day.from_gtempo_literal("2015-09-23"),
+    )
+  let b =
+    day_interval.new(
+      start: day.from_gtempo_literal("2015-09-24"),
+      final: day.from_gtempo_literal("2016-09-23"),
+    )
+
+  day_interval.is_contiguous(a, before: b)
   |> should.equal(True)
 }
 
@@ -1322,14 +1330,17 @@ pub fn is_contiguous_2_test() {
 ///   (False)
 /// 
 pub fn is_contiguous_3_test() {
-  day_interval.new(
-    start: day.from_gtempo_literal("2015-09-23"),
-    final: day.from_gtempo_literal("2016-09-23"),
-  )
-  |> day_interval.is_contiguous(ahead_of: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
-  ))
+  let a =
+    day_interval.new(
+      start: day.from_gtempo_literal("2015-08-01"),
+      final: day.from_gtempo_literal("2015-09-23"),
+    )
+  let b =
+    day_interval.new(
+      start: day.from_gtempo_literal("2015-09-23"),
+      final: day.from_gtempo_literal("2016-09-23"),
+    )
+  day_interval.is_contiguous(a, before: b)
   |> should.equal(False)
 }
 
@@ -1340,13 +1351,18 @@ pub fn is_contiguous_3_test() {
 ///   (False)
 /// 
 pub fn is_contiguous_4_test() {
-  day_interval.new(
-    start: day.from_gtempo_literal("2015-09-13"),
-    final: day.from_gtempo_literal("2016-09-23"),
-  )
-  |> day_interval.is_contiguous(ahead_of: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
-  ))
+  let a =
+    day_interval.new(
+      start: day.from_gtempo_literal("2015-08-01"),
+      final: day.from_gtempo_literal("2015-09-23"),
+    )
+
+  let b =
+    day_interval.new(
+      start: day.from_gtempo_literal("2015-09-13"),
+      final: day.from_gtempo_literal("2016-09-23"),
+    )
+
+  day_interval.is_contiguous(a, before: b)
   |> should.equal(False)
 }

@@ -49,7 +49,7 @@ fn example_1() {
 pub fn example_1_output_test() {
   json_output(
     interval: example_1(),
-    expected_output: "{\"start\":{\"unix_time\":1741478400000,\"offset\":0},\"end_excluding\":{\"unix_time\":1741564800000,\"offset\":0}}",
+    expected_output: "{\"start\":{\"timestamp\":{\"unix_s\":1741478400,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1741564800,\"unix_ns\":0},\"offset\":0}}",
   )
 }
 
@@ -67,7 +67,7 @@ fn example_2() {
 pub fn example_2_output_test() {
   json_output(
     interval: example_2(),
-    expected_output: "{\"start\":{\"unix_time\":598233600000,\"offset\":0},\"end_excluding\":{\"unix_time\":598320000000,\"offset\":0}}",
+    expected_output: "{\"start\":{\"timestamp\":{\"unix_s\":598233600,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":598320000,\"unix_ns\":0},\"offset\":0}}",
   )
 }
 
@@ -85,7 +85,7 @@ fn example_3() {
 pub fn example_3_output_test() {
   json_output(
     interval: example_3(),
-    expected_output: "{\"start\":{\"unix_time\":1962403200000,\"offset\":0},\"end_excluding\":{\"unix_time\":1994544000000,\"offset\":0}}",
+    expected_output: "{\"start\":{\"timestamp\":{\"unix_s\":1962403200,\"unix_ns\":0},\"offset\":0},\"end_excluding\":{\"timestamp\":{\"unix_s\":1994544000,\"unix_ns\":0},\"offset\":0}}",
   )
 }
 
@@ -1347,75 +1347,95 @@ pub fn is_overlapping_day_interval_13_test() {
 // -----------------------------------------------
 
 ///
-///    t---------t
-///                   d------d            
+///    a-------a
+///                   b------b            
 /// 
 ///   (False)
 /// 
 pub fn is_contiguous_1_test() {
-  moment_interval.new(
-    start: moment.from_gtempo_literal("2015-08-01T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
-  )
-  |> moment_interval.is_contiguous(ahead_of: moment_interval.new(
-    start: moment.from_gtempo_literal("2016-08-01T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2016-09-23T00:00:00.000Z"),
-  ))
+  let a =
+    moment_interval.new(
+      start: moment.from_gtempo_literal("2015-08-01T00:00:00.000Z"),
+      end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
+    )
+
+  let b =
+    moment_interval.new(
+      start: moment.from_gtempo_literal("2016-08-01T00:00:00.000Z"),
+      end_excluding: moment.from_gtempo_literal("2016-09-23T00:00:00.000Z"),
+    )
+
+  moment_interval.is_contiguous(a, before: b)
   |> should.equal(False)
 }
 
 ///
-///    t---------t
-///               d------d            
+///    a---------a
+///               b------b            
 /// 
 ///   (False)
 /// 
 pub fn is_contiguous_2_test() {
-  moment_interval.new(
-    start: moment.from_gtempo_literal("2015-08-01T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
-  )
-  |> moment_interval.is_contiguous(ahead_of: moment_interval.new(
-    // one microsecond ahead
-    start: moment.from_gtempo_literal("2015-09-23T00:00:00.001Z"),
-    end_excluding: moment.from_gtempo_literal("2016-09-23T00:00:00.000Z"),
-  ))
+  let a =
+    moment_interval.new(
+      // one microsecond ahead
+      start: moment.from_gtempo_literal("2015-07-23T00:00:00.001Z"),
+      end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
+    )
+
+  let b =
+    moment_interval.new(
+      start: moment.from_gtempo_literal("2015-09-24T00:00:00.000Z"),
+      end_excluding: moment.from_gtempo_literal("2015-09-26T00:00:00.000Z"),
+    )
+
+  moment_interval.is_contiguous(a, before: b)
   |> should.equal(False)
 }
 
 ///
-///    t---------t
-///              d------d            
+///    a---------a
+///              b------b            
 /// 
 ///   (True)
 /// 
 pub fn is_contiguous_3_test() {
-  moment_interval.new(
-    start: moment.from_gtempo_literal("2015-08-01T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
-  )
-  |> moment_interval.is_contiguous(ahead_of: moment_interval.new(
-    start: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2016-09-23T00:00:00.000Z"),
-  ))
+  let a =
+    moment_interval.new(
+      start: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
+      end_excluding: moment.from_gtempo_literal("2015-09-24T00:00:00.000Z"),
+    )
+
+  let b =
+    moment_interval.new(
+      start: moment.from_gtempo_literal("2015-09-24T00:00:00.000Z"),
+      end_excluding: moment.from_gtempo_literal("2015-09-29T00:00:00.000Z"),
+    )
+
+  moment_interval.is_contiguous(a, before: b)
   |> should.equal(True)
 }
 
 ///
-///    t---------t
-///            d------d            
+///    a---------a
+///            b------b            
 /// 
 ///   (False)
 /// 
 pub fn is_contiguous_4_test() {
-  moment_interval.new(
-    start: moment.from_gtempo_literal("2015-08-01T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
-  )
-  |> moment_interval.is_contiguous(ahead_of: moment_interval.new(
-    // 2h behind
-    start: moment.from_gtempo_literal("2015-09-22T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2016-09-23T00:00:00.000Z"),
-  ))
+  let a =
+    moment_interval.new(
+      // 2h behind
+      start: moment.from_gtempo_literal("2015-09-22T00:00:00.000Z"),
+      end_excluding: moment.from_gtempo_literal("2016-09-23T00:00:00.000Z"),
+    )
+
+  let b =
+    moment_interval.new(
+      start: moment.from_gtempo_literal("2015-08-01T00:00:00.000Z"),
+      end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
+    )
+
+  moment_interval.is_contiguous(a, before: b)
   |> should.equal(False)
 }

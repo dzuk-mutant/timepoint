@@ -1,9 +1,9 @@
+import day.{type Day}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/list
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
-import day.{type Day}
 import moment.{type Moment}
 
 /// A type that represents a span of Days.
@@ -374,8 +374,8 @@ pub fn is_overlapped(a: DayInterval, by b: DayInterval) {
 /// 
 /// ```
 /// 
-pub fn is_contiguous(prev: DayInterval, ahead_of next: DayInterval) -> Bool {
-  day.difference(next.final, from: prev.start) == 1
+pub fn is_contiguous(a: DayInterval, before b: DayInterval) -> Bool {
+  day.difference(a.final, from: b.start) == 1
 }
 
 // -----------------------------------------------

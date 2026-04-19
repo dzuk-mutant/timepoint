@@ -105,7 +105,7 @@ pub fn to_gtempo(input: Moment, expected_output: DateTime) {
 pub fn to_gtempo_1_test() {
   to_gtempo(
     moment.from_timestamp(
-      timestamp.from_unix_seconds(1_741_392_000_000),
+      timestamp.from_unix_seconds(1_741_392_000),
       with: offset.from_minutes(0),
     ),
     gtempo_datetime.literal("2025-03-08T00:00:00.000Z"),
@@ -115,7 +115,7 @@ pub fn to_gtempo_1_test() {
 pub fn to_gtempo_2_test() {
   to_gtempo(
     moment.from_timestamp(
-      timestamp.from_unix_seconds(813_479_756_000),
+      timestamp.from_unix_seconds(813_479_756),
       with: offset.from_minutes(0),
     ),
     gtempo_datetime.literal("1995-10-12T06:35:56.000Z"),
@@ -125,7 +125,7 @@ pub fn to_gtempo_2_test() {
 pub fn to_gtempo_3_test() {
   to_gtempo(
     moment.from_timestamp(
-      timestamp.from_unix_seconds(1_267_912_800_000),
+      timestamp.from_unix_seconds(1_267_912_800),
       with: offset.from_minutes(60),
     ),
     gtempo_datetime.literal("2010-03-06T23:00:00.000+01:00"),
@@ -583,29 +583,29 @@ pub fn example_3_input_output_test() {
 pub fn example_1_output_test() {
   output(
     moment.from_timestamp(
-      timestamp.from_unix_seconds(1_741_392_000_000),
+      timestamp.from_unix_seconds(1_741_392_000),
       with: offset.from_minutes(0),
     ),
-    "{\"unix_time\":1741392000000,\"offset\":0}",
+    "{\"timestamp\":{\"unix_s\":1741392000,\"unix_ns\":0},\"offset\":0}",
   )
 }
 
 pub fn example_2_output_test() {
   output(
     moment.from_timestamp(
-      timestamp.from_unix_seconds(813_479_756_000),
+      timestamp.from_unix_seconds(813_479_756),
       with: offset.from_minutes(-240),
     ),
-    "{\"unix_time\":813479756000,\"offset\":-240}",
+    "{\"timestamp\":{\"unix_s\":813479756,\"unix_ns\":0},\"offset\":-240}",
   )
 }
 
 pub fn example_3_output_test() {
   output(
     moment.from_timestamp(
-      timestamp.from_unix_seconds(1_267_912_800_000),
+      timestamp.from_unix_seconds(1_267_912_800),
       with: offset.from_minutes(640),
     ),
-    "{\"unix_time\":1267912800000,\"offset\":640}",
+    "{\"timestamp\":{\"unix_s\":1267912800,\"unix_ns\":0},\"offset\":640}",
   )
 }
