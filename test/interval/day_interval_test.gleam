@@ -1,3 +1,4 @@
+import calendar/iso_date
 import day
 import gleam/json
 import gleam/list
@@ -10,18 +11,18 @@ import interval/day_interval.{
 import moment
 
 pub fn new_single_1_test() {
-  day_interval.new_single(day.from_gtempo_literal("2025-03-03"))
+  day_interval.new_single(day.testing_iso8601("2025-03-03"))
   |> should.equal(day_interval.new(
-    start: day.from_gtempo_literal("2025-03-03"),
-    final: day.from_gtempo_literal("2025-03-03"),
+    start: day.testing_iso8601("2025-03-03"),
+    final: day.testing_iso8601("2025-03-03"),
   ))
 }
 
 pub fn new_single_2_test() {
-  day_interval.new_single(day.from_gtempo_literal("2013-10-30"))
+  day_interval.new_single(day.testing_iso8601("2013-10-30"))
   |> should.equal(day_interval.new(
-    start: day.from_gtempo_literal("2013-10-30"),
-    final: day.from_gtempo_literal("2013-10-30"),
+    start: day.testing_iso8601("2013-10-30"),
+    final: day.testing_iso8601("2013-10-30"),
   ))
 }
 
@@ -57,8 +58,8 @@ fn json_output_input(input_and_expected_output: DayInterval) {
 
 fn example_1() {
   day_interval.new(
-    start: day.from_gtempo_literal("2025-03-09"),
-    final: day.from_gtempo_literal("2025-03-10"),
+    start: day.testing_iso8601("2025-03-09"),
+    final: day.testing_iso8601("2025-03-10"),
   )
 }
 
@@ -67,7 +68,7 @@ pub fn example_1_output_input_test() {
 }
 
 fn example_2() {
-  day_interval.new_single(day.from_gtempo_literal("1988-12-16"))
+  day_interval.new_single(day.testing_iso8601("1988-12-16"))
 }
 
 pub fn example_2_output_test() {
@@ -83,8 +84,8 @@ pub fn example_2_output_input_test() {
 
 fn example_3() {
   day_interval.new(
-    start: day.from_gtempo_literal("2032-03-09"),
-    final: day.from_gtempo_literal("2033-03-16"),
+    start: day.testing_iso8601("2032-03-09"),
+    final: day.testing_iso8601("2033-03-16"),
   )
 }
 
@@ -126,10 +127,10 @@ pub fn json_i_erroneous_1_test() {
 /// 
 pub fn truncate_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("1999-05-01"),
-    final: day.from_gtempo_literal("1999-06-23"),
+    start: day.testing_iso8601("1999-05-01"),
+    final: day.testing_iso8601("1999-06-23"),
   )
-  |> day_interval.truncate(behind: day.from_gtempo_literal("2000-01-01"))
+  |> day_interval.truncate(behind: day.testing_iso8601("2000-01-01"))
   |> should.equal(Error(day_interval.FinalIsLaterThanOriginal))
 }
 
@@ -142,14 +143,14 @@ pub fn truncate_1_test() {
 /// 
 pub fn truncate_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("1999-05-01"),
-    final: day.from_gtempo_literal("1999-06-23"),
+    start: day.testing_iso8601("1999-05-01"),
+    final: day.testing_iso8601("1999-06-23"),
   )
-  |> day_interval.truncate(behind: day.from_gtempo_literal("1999-06-24"))
+  |> day_interval.truncate(behind: day.testing_iso8601("1999-06-24"))
   |> should.equal(
     Ok(day_interval.new(
-      start: day.from_gtempo_literal("1999-05-01"),
-      final: day.from_gtempo_literal("1999-06-23"),
+      start: day.testing_iso8601("1999-05-01"),
+      final: day.testing_iso8601("1999-06-23"),
     )),
   )
 }
@@ -163,14 +164,14 @@ pub fn truncate_2_test() {
 /// 
 pub fn truncate_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("1999-05-01"),
-    final: day.from_gtempo_literal("1999-06-23"),
+    start: day.testing_iso8601("1999-05-01"),
+    final: day.testing_iso8601("1999-06-23"),
   )
-  |> day_interval.truncate(behind: day.from_gtempo_literal("1999-06-02"))
+  |> day_interval.truncate(behind: day.testing_iso8601("1999-06-02"))
   |> should.equal(
     Ok(day_interval.new(
-      start: day.from_gtempo_literal("1999-05-01"),
-      final: day.from_gtempo_literal("1999-06-01"),
+      start: day.testing_iso8601("1999-05-01"),
+      final: day.testing_iso8601("1999-06-01"),
     )),
   )
 }
@@ -184,14 +185,14 @@ pub fn truncate_3_test() {
 /// 
 pub fn truncate_4_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("1999-05-01"),
-    final: day.from_gtempo_literal("1999-06-23"),
+    start: day.testing_iso8601("1999-05-01"),
+    final: day.testing_iso8601("1999-06-23"),
   )
-  |> day_interval.truncate(behind: day.from_gtempo_literal("1999-05-02"))
+  |> day_interval.truncate(behind: day.testing_iso8601("1999-05-02"))
   |> should.equal(
     Ok(day_interval.new(
-      start: day.from_gtempo_literal("1999-05-01"),
-      final: day.from_gtempo_literal("1999-05-01"),
+      start: day.testing_iso8601("1999-05-01"),
+      final: day.testing_iso8601("1999-05-01"),
     )),
   )
 }
@@ -204,10 +205,10 @@ pub fn truncate_4_test() {
 /// 
 pub fn truncate_5_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("1999-05-01"),
-    final: day.from_gtempo_literal("1999-06-23"),
+    start: day.testing_iso8601("1999-05-01"),
+    final: day.testing_iso8601("1999-06-23"),
   )
-  |> day_interval.truncate(behind: day.from_gtempo_literal("1998-02-02"))
+  |> day_interval.truncate(behind: day.testing_iso8601("1998-02-02"))
   |> should.equal(Error(day_interval.FinalIsEarlierThanStart))
 }
 
@@ -221,8 +222,8 @@ pub fn truncate_5_test() {
 
 pub fn length_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2025-03-05"),
-    final: day.from_gtempo_literal("2025-03-05"),
+    start: day.testing_iso8601("2025-03-05"),
+    final: day.testing_iso8601("2025-03-05"),
   )
   |> day_interval.length()
   |> should.equal(1)
@@ -230,8 +231,8 @@ pub fn length_1_test() {
 
 pub fn length_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2025-03-05"),
-    final: day.from_gtempo_literal("2025-03-15"),
+    start: day.testing_iso8601("2025-03-05"),
+    final: day.testing_iso8601("2025-03-15"),
   )
   |> day_interval.length()
   |> should.equal(11)
@@ -239,8 +240,8 @@ pub fn length_2_test() {
 
 pub fn length_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2026-01-01"),
-    final: day.from_gtempo_literal("2026-01-02"),
+    start: day.testing_iso8601("2026-01-01"),
+    final: day.testing_iso8601("2026-01-02"),
   )
   |> day_interval.length()
   |> should.equal(2)
@@ -256,21 +257,21 @@ pub fn length_3_test() {
 
 pub fn to_list_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2025-03-05"),
-    final: day.from_gtempo_literal("2025-03-05"),
+    start: day.testing_iso8601("2025-03-05"),
+    final: day.testing_iso8601("2025-03-05"),
   )
   |> day_interval.to_list()
-  |> list.map(day.to_string)
+  |> list.map(fn(x) { x |> iso_date.from_day |> iso_date.to_string })
   |> should.equal(["2025-03-05"])
 }
 
 pub fn to_list_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2025-03-05"),
-    final: day.from_gtempo_literal("2025-03-09"),
+    start: day.testing_iso8601("2025-03-05"),
+    final: day.testing_iso8601("2025-03-09"),
   )
   |> day_interval.to_list()
-  |> list.map(day.to_string)
+  |> list.map(fn(x) { x |> iso_date.from_day |> iso_date.to_string })
   |> should.equal([
     "2025-03-05", "2025-03-06", "2025-03-07", "2025-03-08", "2025-03-09",
   ])
@@ -278,11 +279,11 @@ pub fn to_list_2_test() {
 
 pub fn to_list_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2024-10-05"),
-    final: day.from_gtempo_literal("2024-10-10"),
+    start: day.testing_iso8601("2024-10-05"),
+    final: day.testing_iso8601("2024-10-10"),
   )
   |> day_interval.to_list()
-  |> list.map(day.to_string)
+  |> list.map(fn(x) { x |> iso_date.from_day |> iso_date.to_string })
   |> should.equal([
     "2024-10-05", "2024-10-06", "2024-10-07", "2024-10-08", "2024-10-09",
     "2024-10-10",
@@ -291,11 +292,11 @@ pub fn to_list_3_test() {
 
 pub fn to_list_4_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("1989-12-30"),
-    final: day.from_gtempo_literal("1990-01-07"),
+    start: day.testing_iso8601("1989-12-30"),
+    final: day.testing_iso8601("1990-01-07"),
   )
   |> day_interval.to_list()
-  |> list.map(day.to_string)
+  |> list.map(fn(x) { x |> iso_date.from_day |> iso_date.to_string })
   |> should.equal([
     "1989-12-30", "1989-12-31", "1990-01-01", "1990-01-02", "1990-01-03",
     "1990-01-04", "1990-01-05", "1990-01-06", "1990-01-07",
@@ -318,10 +319,10 @@ pub fn to_list_4_test() {
 /// 
 pub fn to_collision_with_day_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_day(day.from_gtempo_literal("2040-01-01"))
+  |> day_interval.to_collision_with_day(day.testing_iso8601("2040-01-01"))
   |> should.equal(PointAfterFinal)
 }
 
@@ -333,10 +334,10 @@ pub fn to_collision_with_day_1_test() {
 /// 
 pub fn to_collision_with_day_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_day(day.from_gtempo_literal("2036-09-24"))
+  |> day_interval.to_collision_with_day(day.testing_iso8601("2036-09-24"))
   |> should.equal(PointAfterFinal)
 }
 
@@ -348,10 +349,10 @@ pub fn to_collision_with_day_2_test() {
 /// 
 pub fn to_collision_with_day_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_day(day.from_gtempo_literal("2036-09-23"))
+  |> day_interval.to_collision_with_day(day.testing_iso8601("2036-09-23"))
   |> should.equal(PointAtFinal)
 }
 
@@ -363,10 +364,10 @@ pub fn to_collision_with_day_3_test() {
 /// 
 pub fn to_collision_with_day_4_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_day(day.from_gtempo_literal("2036-08-22"))
+  |> day_interval.to_collision_with_day(day.testing_iso8601("2036-08-22"))
   |> should.equal(PointInside)
 }
 
@@ -378,10 +379,10 @@ pub fn to_collision_with_day_4_test() {
 /// 
 pub fn to_collision_with_day_5_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_day(day.from_gtempo_literal("2036-08-01"))
+  |> day_interval.to_collision_with_day(day.testing_iso8601("2036-08-01"))
   |> should.equal(PointAtStart)
 }
 
@@ -393,10 +394,10 @@ pub fn to_collision_with_day_5_test() {
 /// 
 pub fn to_collision_with_day_6_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_day(day.from_gtempo_literal("2036-07-31"))
+  |> day_interval.to_collision_with_day(day.testing_iso8601("2036-07-31"))
   |> should.equal(PointBeforeStart)
 }
 
@@ -408,10 +409,10 @@ pub fn to_collision_with_day_6_test() {
 /// 
 pub fn to_collision_with_day_7_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_day(day.from_gtempo_literal("2030-11-11"))
+  |> day_interval.to_collision_with_day(day.testing_iso8601("2030-11-11"))
   |> should.equal(PointBeforeStart)
 }
 
@@ -431,8 +432,8 @@ pub fn to_collision_with_day_7_test() {
 /// 
 pub fn to_collision_with_moment_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
     "2040-01-01T00:00:00.000Z",
@@ -448,8 +449,8 @@ pub fn to_collision_with_moment_1_test() {
 /// 
 pub fn to_collision_with_moment_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
     "2036-09-24T00:00:00.000Z",
@@ -465,8 +466,8 @@ pub fn to_collision_with_moment_2_test() {
 /// 
 pub fn to_collision_with_moment_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
     "2036-09-23T23:59:59.999+00:00",
@@ -482,8 +483,8 @@ pub fn to_collision_with_moment_3_test() {
 /// 
 pub fn to_collision_with_moment_4_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
     "2036-08-22T00:00:00.000Z",
@@ -499,8 +500,8 @@ pub fn to_collision_with_moment_4_test() {
 /// 
 pub fn to_collision_with_moment_5_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
     "2036-08-01T00:00:00.000Z",
@@ -516,8 +517,8 @@ pub fn to_collision_with_moment_5_test() {
 /// 
 pub fn to_collision_with_moment_6_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
     "2036-07-31T23:59:59.999+00:00",
@@ -533,8 +534,8 @@ pub fn to_collision_with_moment_6_test() {
 /// 
 pub fn to_collision_with_moment_7_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
     "2030-11-11T00:00:00.000Z",
@@ -558,10 +559,10 @@ pub fn to_collision_with_moment_7_test() {
 /// 
 pub fn is_around_day_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_day(day.from_gtempo_literal("2040-01-01"))
+  |> day_interval.is_around_day(day.testing_iso8601("2040-01-01"))
   |> should.equal(False)
 }
 
@@ -573,10 +574,10 @@ pub fn is_around_day_1_test() {
 /// 
 pub fn is_around_day_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_day(day.from_gtempo_literal("2036-09-24"))
+  |> day_interval.is_around_day(day.testing_iso8601("2036-09-24"))
   |> should.equal(False)
 }
 
@@ -588,10 +589,10 @@ pub fn is_around_day_2_test() {
 /// 
 pub fn is_around_day_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_day(day.from_gtempo_literal("2036-09-23"))
+  |> day_interval.is_around_day(day.testing_iso8601("2036-09-23"))
   |> should.equal(True)
 }
 
@@ -603,10 +604,10 @@ pub fn is_around_day_3_test() {
 /// 
 pub fn is_around_day_4_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_day(day.from_gtempo_literal("2036-08-22"))
+  |> day_interval.is_around_day(day.testing_iso8601("2036-08-22"))
   |> should.equal(True)
 }
 
@@ -618,10 +619,10 @@ pub fn is_around_day_4_test() {
 /// 
 pub fn is_around_day_5_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_day(day.from_gtempo_literal("2036-08-01"))
+  |> day_interval.is_around_day(day.testing_iso8601("2036-08-01"))
   |> should.equal(True)
 }
 
@@ -633,10 +634,10 @@ pub fn is_around_day_5_test() {
 /// 
 pub fn is_around_day_6_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_day(day.from_gtempo_literal("2036-07-31"))
+  |> day_interval.is_around_day(day.testing_iso8601("2036-07-31"))
   |> should.equal(False)
 }
 
@@ -648,10 +649,10 @@ pub fn is_around_day_6_test() {
 /// 
 pub fn is_around_day_7_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_day(day.from_gtempo_literal("2030-11-11"))
+  |> day_interval.is_around_day(day.testing_iso8601("2030-11-11"))
   |> should.equal(False)
 }
 
@@ -671,8 +672,8 @@ pub fn is_around_day_7_test() {
 /// 
 pub fn is_around_moment_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.is_around_moment(moment.from_gtempo_literal(
     "2040-01-01T00:00:00.000Z",
@@ -688,8 +689,8 @@ pub fn is_around_moment_1_test() {
 /// 
 pub fn is_around_moment_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.is_around_moment(moment.from_gtempo_literal(
     "2036-09-24T00:00:00.000Z",
@@ -705,8 +706,8 @@ pub fn is_around_moment_2_test() {
 /// 
 pub fn is_around_moment_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.is_around_moment(moment.from_gtempo_literal(
     "2036-09-23T23:59:59.999+00:00",
@@ -722,8 +723,8 @@ pub fn is_around_moment_3_test() {
 /// 
 pub fn is_around_moment_4_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.is_around_moment(moment.from_gtempo_literal(
     "2036-08-22T00:00:00.000Z",
@@ -739,8 +740,8 @@ pub fn is_around_moment_4_test() {
 /// 
 pub fn is_around_moment_5_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.is_around_moment(moment.from_gtempo_literal(
     "2036-08-01T00:00:00.000Z",
@@ -756,8 +757,8 @@ pub fn is_around_moment_5_test() {
 /// 
 pub fn is_around_moment_6_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.is_around_moment(moment.from_gtempo_literal(
     "2036-07-31T23:59:59.999+00:00",
@@ -773,8 +774,8 @@ pub fn is_around_moment_6_test() {
 /// 
 pub fn is_around_moment_7_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2036-08-01"),
-    final: day.from_gtempo_literal("2036-09-23"),
+    start: day.testing_iso8601("2036-08-01"),
+    final: day.testing_iso8601("2036-09-23"),
   )
   |> day_interval.is_around_moment(moment.from_gtempo_literal(
     "2030-11-11T00:00:00.000Z",
@@ -798,12 +799,12 @@ pub fn is_around_moment_7_test() {
 /// 
 pub fn is_inside_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2016-08-01"),
-    final: day.from_gtempo_literal("2016-09-23"),
+    start: day.testing_iso8601("2016-08-01"),
+    final: day.testing_iso8601("2016-09-23"),
   ))
   |> should.equal(False)
 }
@@ -816,12 +817,12 @@ pub fn is_inside_1_test() {
 /// 
 pub fn is_inside_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-09-23"),
-    final: day.from_gtempo_literal("2016-10-23"),
+    start: day.testing_iso8601("2015-09-23"),
+    final: day.testing_iso8601("2016-10-23"),
   ))
   |> should.equal(False)
 }
@@ -834,12 +835,12 @@ pub fn is_inside_2_test() {
 /// 
 pub fn is_inside_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-09-01"),
-    final: day.from_gtempo_literal("2016-10-23"),
+    start: day.testing_iso8601("2015-09-01"),
+    final: day.testing_iso8601("2016-10-23"),
   ))
   |> should.equal(False)
 }
@@ -852,12 +853,12 @@ pub fn is_inside_3_test() {
 /// 
 pub fn is_inside_4_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-01-01"),
-    final: day.from_gtempo_literal("2015-11-23"),
+    start: day.testing_iso8601("2015-01-01"),
+    final: day.testing_iso8601("2015-11-23"),
   ))
   |> should.equal(True)
 }
@@ -870,12 +871,12 @@ pub fn is_inside_4_test() {
 /// 
 pub fn is_inside_5_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(True)
 }
@@ -888,12 +889,12 @@ pub fn is_inside_5_test() {
 /// 
 pub fn is_inside_6_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-08-22"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-08-22"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(False)
 }
@@ -906,12 +907,12 @@ pub fn is_inside_6_test() {
 /// 
 pub fn is_inside_7_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-08-14"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-14"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(False)
 }
@@ -924,12 +925,12 @@ pub fn is_inside_7_test() {
 /// 
 pub fn is_inside_8_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-07-14"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-07-14"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(True)
 }
@@ -942,12 +943,12 @@ pub fn is_inside_8_test() {
 /// 
 pub fn is_inside_9_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(False)
 }
@@ -960,12 +961,12 @@ pub fn is_inside_9_test() {
 /// 
 pub fn is_inside_10_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-10-01"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-10-01"),
   ))
   |> should.equal(True)
 }
@@ -978,12 +979,12 @@ pub fn is_inside_10_test() {
 /// 
 pub fn is_inside_11_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(False)
 }
@@ -996,12 +997,12 @@ pub fn is_inside_11_test() {
 /// 
 pub fn is_inside_12_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-08-01"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-08-01"),
   ))
   |> should.equal(False)
 }
@@ -1014,12 +1015,12 @@ pub fn is_inside_12_test() {
 /// 
 pub fn is_inside_13_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_inside(day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-07-15"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-07-15"),
   ))
   |> should.equal(False)
 }
@@ -1040,12 +1041,12 @@ pub fn is_inside_13_test() {
 /// 
 pub fn is_overlapped_1_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2016-08-01"),
-    final: day.from_gtempo_literal("2016-09-23"),
+    start: day.testing_iso8601("2016-08-01"),
+    final: day.testing_iso8601("2016-09-23"),
   ))
   |> should.equal(False)
 }
@@ -1058,12 +1059,12 @@ pub fn is_overlapped_1_test() {
 /// 
 pub fn is_overlapped_2_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-09-23"),
-    final: day.from_gtempo_literal("2016-10-23"),
+    start: day.testing_iso8601("2015-09-23"),
+    final: day.testing_iso8601("2016-10-23"),
   ))
   |> should.equal(True)
 }
@@ -1076,12 +1077,12 @@ pub fn is_overlapped_2_test() {
 /// 
 pub fn is_overlapped_3_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-09-01"),
-    final: day.from_gtempo_literal("2016-10-23"),
+    start: day.testing_iso8601("2015-09-01"),
+    final: day.testing_iso8601("2016-10-23"),
   ))
   |> should.equal(True)
 }
@@ -1094,12 +1095,12 @@ pub fn is_overlapped_3_test() {
 /// 
 pub fn is_overlapped_4_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-01-01"),
-    final: day.from_gtempo_literal("2015-11-23"),
+    start: day.testing_iso8601("2015-01-01"),
+    final: day.testing_iso8601("2015-11-23"),
   ))
   |> should.equal(True)
 }
@@ -1112,12 +1113,12 @@ pub fn is_overlapped_4_test() {
 /// 
 pub fn is_overlapped_5_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(True)
 }
@@ -1130,12 +1131,12 @@ pub fn is_overlapped_5_test() {
 /// 
 pub fn is_overlapped_6_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-22"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-08-22"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(True)
 }
@@ -1148,12 +1149,12 @@ pub fn is_overlapped_6_test() {
 /// 
 pub fn is_overlapped_7_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-14"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-14"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(True)
 }
@@ -1166,12 +1167,12 @@ pub fn is_overlapped_7_test() {
 /// 
 pub fn is_overlapped_8_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-07-14"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-07-14"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(True)
 }
@@ -1184,12 +1185,12 @@ pub fn is_overlapped_8_test() {
 /// 
 pub fn is_overlapped_9_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(True)
 }
@@ -1202,12 +1203,12 @@ pub fn is_overlapped_9_test() {
 /// 
 pub fn is_overlapped_10_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-10-01"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-10-01"),
   ))
   |> should.equal(True)
 }
@@ -1220,12 +1221,12 @@ pub fn is_overlapped_10_test() {
 /// 
 pub fn is_overlapped_11_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(True)
 }
@@ -1238,12 +1239,12 @@ pub fn is_overlapped_11_test() {
 /// 
 pub fn is_overlapped_12_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-08-01"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-08-01"),
   ))
   |> should.equal(True)
 }
@@ -1256,12 +1257,12 @@ pub fn is_overlapped_12_test() {
 /// 
 pub fn is_overlapped_13_test() {
   day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   )
   |> day_interval.is_overlapped(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-07-15"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-07-15"),
   ))
   |> should.equal(False)
 }
@@ -1283,13 +1284,13 @@ pub fn is_overlapped_13_test() {
 pub fn is_contiguous_1_test() {
   let a =
     day_interval.new(
-      start: day.from_gtempo_literal("2015-08-01"),
-      final: day.from_gtempo_literal("2015-09-23"),
+      start: day.testing_iso8601("2015-08-01"),
+      final: day.testing_iso8601("2015-09-23"),
     )
   let b =
     day_interval.new(
-      start: day.from_gtempo_literal("2016-08-01"),
-      final: day.from_gtempo_literal("2016-09-23"),
+      start: day.testing_iso8601("2016-08-01"),
+      final: day.testing_iso8601("2016-09-23"),
     )
 
   day_interval.is_contiguous(a, before: b)
@@ -1305,13 +1306,13 @@ pub fn is_contiguous_1_test() {
 pub fn is_contiguous_2_test() {
   let a =
     day_interval.new(
-      start: day.from_gtempo_literal("2015-08-01"),
-      final: day.from_gtempo_literal("2015-09-23"),
+      start: day.testing_iso8601("2015-08-01"),
+      final: day.testing_iso8601("2015-09-23"),
     )
   let b =
     day_interval.new(
-      start: day.from_gtempo_literal("2015-09-24"),
-      final: day.from_gtempo_literal("2016-09-23"),
+      start: day.testing_iso8601("2015-09-24"),
+      final: day.testing_iso8601("2016-09-23"),
     )
 
   day_interval.is_contiguous(a, before: b)
@@ -1327,13 +1328,13 @@ pub fn is_contiguous_2_test() {
 pub fn is_contiguous_3_test() {
   let a =
     day_interval.new(
-      start: day.from_gtempo_literal("2015-08-01"),
-      final: day.from_gtempo_literal("2015-09-23"),
+      start: day.testing_iso8601("2015-08-01"),
+      final: day.testing_iso8601("2015-09-23"),
     )
   let b =
     day_interval.new(
-      start: day.from_gtempo_literal("2015-09-23"),
-      final: day.from_gtempo_literal("2016-09-23"),
+      start: day.testing_iso8601("2015-09-23"),
+      final: day.testing_iso8601("2016-09-23"),
     )
   day_interval.is_contiguous(a, before: b)
   |> should.equal(False)
@@ -1348,14 +1349,14 @@ pub fn is_contiguous_3_test() {
 pub fn is_contiguous_4_test() {
   let a =
     day_interval.new(
-      start: day.from_gtempo_literal("2015-08-01"),
-      final: day.from_gtempo_literal("2015-09-23"),
+      start: day.testing_iso8601("2015-08-01"),
+      final: day.testing_iso8601("2015-09-23"),
     )
 
   let b =
     day_interval.new(
-      start: day.from_gtempo_literal("2015-09-13"),
-      final: day.from_gtempo_literal("2016-09-23"),
+      start: day.testing_iso8601("2015-09-13"),
+      final: day.testing_iso8601("2016-09-23"),
     )
 
   day_interval.is_contiguous(a, before: b)

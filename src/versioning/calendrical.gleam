@@ -123,7 +123,7 @@ pub fn decoder(
 ) -> Decoder(Calendrical(v)) {
   let default =
     new(
-      starting_at: day.from_gtempo_literal("2000-01-01"),
+      starting_at: day.testing_iso8601("2000-01-01"),
       equality_fn:,
       with: default_value,
     )

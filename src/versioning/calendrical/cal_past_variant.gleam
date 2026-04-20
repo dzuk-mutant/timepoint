@@ -68,7 +68,7 @@ pub fn decoder(
 ) -> Decoder(CalPastVariant(v)) {
   let default =
     CalPastVariant(
-      interval: day_interval.new_single(day.from_gtempo_literal("2025-03-10")),
+      interval: day_interval.new_single(day.testing_iso8601("2025-03-10")),
       value: default_value,
     )
 

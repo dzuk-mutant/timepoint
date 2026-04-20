@@ -71,20 +71,20 @@ fn json_erroneous_string(string: String) {
 fn example_1() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
 }
 
@@ -103,7 +103,7 @@ pub fn json_io_1_test() {
 fn example_2() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
 }
@@ -201,17 +201,17 @@ pub fn json_erroneous_string_5_test() {
 pub fn insert_new_current_1_test() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.insert_new_current(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> should.equal(
     NoChange(calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )),
   )
@@ -234,32 +234,32 @@ pub fn insert_new_current_2_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     )
 
   existing
   |> calendrical.insert_new_current(
     with: "It's Moby now",
-    starting_at: day.from_gtempo_literal("2025-02-26"),
+    starting_at: day.testing_iso8601("2025-02-26"),
   )
   |> should.equal(NonDestructive(
     existing
     |> calendrical.unsafe_insert_new_current(
       with: "It's Moby now",
-      starting_at: day.from_gtempo_literal("2025-02-26"),
+      starting_at: day.testing_iso8601("2025-02-26"),
     ),
   ))
 }
@@ -280,32 +280,32 @@ pub fn insert_new_current_3_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     )
 
   existing
   |> calendrical.insert_new_current(
     with: "It's Moby now",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
   |> should.equal(WillOverwriteCurrent(
     existing
     |> calendrical.unsafe_insert_new_current(
       with: "It's Moby now",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     ),
   ))
 }
@@ -327,44 +327,44 @@ pub fn insert_new_current_4_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     )
 
   existing
   |> calendrical.insert_new_current(
     with: "It's Moby now",
-    starting_at: day.from_gtempo_literal("2025-02-24"),
+    starting_at: day.testing_iso8601("2025-02-24"),
   )
   |> should.equal(WillOverwriteCurrentAndHistory(
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "It's Moby now",
-      starting_at: day.from_gtempo_literal("2025-02-24"),
+      starting_at: day.testing_iso8601("2025-02-24"),
     ),
   ))
 }
@@ -392,26 +392,26 @@ pub fn insert_new_current_5_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     )
 
   existing
   |> calendrical.insert_new_current(
     with: "It's Moby now",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unwrap_insertion_result()
   |> calendrical.to_list()
@@ -419,16 +419,16 @@ pub fn insert_new_current_5_test() {
     WillOverwriteCurrentAndHistory(
       calendrical.new(
         with: "whatever",
-        starting_at: day.from_gtempo_literal("2025-02-02"),
+        starting_at: day.testing_iso8601("2025-02-02"),
         equality_fn: eq_func,
       )
       |> calendrical.unsafe_insert_new_current(
         with: "I'm listening to Battles",
-        starting_at: day.from_gtempo_literal("2025-02-18"),
+        starting_at: day.testing_iso8601("2025-02-18"),
       )
       |> calendrical.unsafe_insert_new_current(
         with: "It's Moby now",
-        starting_at: day.from_gtempo_literal("2025-02-19"),
+        starting_at: day.testing_iso8601("2025-02-19"),
       ),
     )
     |> calendrical.unwrap_insertion_result()
@@ -453,36 +453,36 @@ pub fn insert_new_current_6_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     )
 
   existing
   |> calendrical.insert_new_current(
     with: "It's Moby now",
-    starting_at: day.from_gtempo_literal("2025-02-16"),
+    starting_at: day.testing_iso8601("2025-02-16"),
   )
   |> should.equal(WillOverwriteCurrentAndHistory(
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "It's Moby now",
-      starting_at: day.from_gtempo_literal("2025-02-16"),
+      starting_at: day.testing_iso8601("2025-02-16"),
     ),
   ))
 }
@@ -504,31 +504,31 @@ pub fn insert_new_current_7_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     )
 
   existing
   |> calendrical.insert_new_current(
     with: "It's Moby now",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
   )
   |> should.equal(
     WillOverwriteCurrentAndHistory(calendrical.new(
       with: "It's Moby now",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )),
   )
@@ -553,26 +553,26 @@ pub fn insert_new_current_8_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     )
 
   existing
   |> calendrical.insert_new_current(
     with: "It's Moby now",
-    starting_at: day.from_gtempo_literal("2025-01-01"),
+    starting_at: day.testing_iso8601("2025-01-01"),
   )
   |> should.equal(InvalidNewCurrentIsEarlierThanHistoricalStart(existing))
 }
@@ -584,12 +584,12 @@ pub fn insert_new_current_8_test() {
 pub fn unsafe_insert_new_current_1_test() {
   calendrical.new(
     with: "test",
-    starting_at: day.from_gtempo_literal("2025-01-04"),
+    starting_at: day.testing_iso8601("2025-01-04"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "test_change",
-    starting_at: day.from_gtempo_literal("2025-01-05"),
+    starting_at: day.testing_iso8601("2025-01-05"),
   )
   |> calendrical.to_current_variant()
   |> cal_current_variant.unwrap()
@@ -599,12 +599,12 @@ pub fn unsafe_insert_new_current_1_test() {
 pub fn unsafe_insert_new_current_2_test() {
   calendrical.new(
     with: "test",
-    starting_at: day.from_gtempo_literal("2025-01-04"),
+    starting_at: day.testing_iso8601("2025-01-04"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "test",
-    starting_at: day.from_gtempo_literal("2025-01-04"),
+    starting_at: day.testing_iso8601("2025-01-04"),
   )
   |> calendrical.to_current_variant()
   |> cal_current_variant.unwrap()
@@ -625,44 +625,44 @@ pub fn unsafe_insert_new_current_2_test() {
 pub fn filter_by_day_interval_1_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-02-15"),
-      final: day.from_gtempo_literal("2025-02-23"),
+      start: day.testing_iso8601("2025-02-15"),
+      final: day.testing_iso8601("2025-02-23"),
     )
   // ----------------------------------------
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
   |> calendrical.slice_by_day_interval(interval)
   |> should.equal(
     CalSlice(interval:, current: None, history: [
       cal_past_variant.new(
         value: "Fort Greene Park",
-        start: day.from_gtempo_literal("2025-02-19"),
-        final: day.from_gtempo_literal("2025-02-24"),
+        start: day.testing_iso8601("2025-02-19"),
+        final: day.testing_iso8601("2025-02-24"),
       ),
       cal_past_variant.new(
         value: "I'm listening to Battles",
-        start: day.from_gtempo_literal("2025-02-18"),
-        final: day.from_gtempo_literal("2025-02-18"),
+        start: day.testing_iso8601("2025-02-18"),
+        final: day.testing_iso8601("2025-02-18"),
       ),
       cal_past_variant.new(
         value: "whatever",
-        start: day.from_gtempo_literal("2025-02-02"),
-        final: day.from_gtempo_literal("2025-02-17"),
+        start: day.testing_iso8601("2025-02-02"),
+        final: day.testing_iso8601("2025-02-17"),
       ),
     ]),
   )
@@ -678,34 +678,34 @@ pub fn filter_by_day_interval_1_test() {
 pub fn filter_by_day_interval_2_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-02-18"),
-      final: day.from_gtempo_literal("2025-02-18"),
+      start: day.testing_iso8601("2025-02-18"),
+      final: day.testing_iso8601("2025-02-18"),
     )
   // ----------------------------------------
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
   |> calendrical.slice_by_day_interval(interval)
   |> should.equal(
     CalSlice(interval:, current: None, history: [
       cal_past_variant.new(
         value: "I'm listening to Battles",
-        start: day.from_gtempo_literal("2025-02-18"),
-        final: day.from_gtempo_literal("2025-02-18"),
+        start: day.testing_iso8601("2025-02-18"),
+        final: day.testing_iso8601("2025-02-18"),
       ),
     ]),
   )
@@ -721,26 +721,26 @@ pub fn filter_by_day_interval_2_test() {
 pub fn filter_by_day_interval_3_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-03-05"),
-      final: day.from_gtempo_literal("2025-03-05"),
+      start: day.testing_iso8601("2025-03-05"),
+      final: day.testing_iso8601("2025-03-05"),
     )
   // ----------------------------------------
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
   |> calendrical.slice_by_day_interval(interval)
   |> should.equal(
@@ -748,7 +748,7 @@ pub fn filter_by_day_interval_3_test() {
       interval:,
       current: Some(cal_current_variant.new(
         value: "🎸🥁",
-        start: day.from_gtempo_literal("2025-02-25"),
+        start: day.testing_iso8601("2025-02-25"),
       )),
       history: [],
     ),
@@ -765,26 +765,26 @@ pub fn filter_by_day_interval_3_test() {
 pub fn filter_by_day_interval_4_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-01-05"),
-      final: day.from_gtempo_literal("2025-01-05"),
+      start: day.testing_iso8601("2025-01-05"),
+      final: day.testing_iso8601("2025-01-05"),
     )
   // ----------------------------------------
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
   |> calendrical.slice_by_day_interval(interval)
   |> should.equal(CalSlice(interval:, current: None, history: []))
@@ -800,26 +800,26 @@ pub fn filter_by_day_interval_4_test() {
 pub fn filter_by_day_interval_5_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-02-20"),
-      final: day.from_gtempo_literal("2025-03-05"),
+      start: day.testing_iso8601("2025-02-20"),
+      final: day.testing_iso8601("2025-03-05"),
     )
   // ----------------------------------------
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
   |> calendrical.slice_by_day_interval(interval)
   |> should.equal(
@@ -827,13 +827,13 @@ pub fn filter_by_day_interval_5_test() {
       interval:,
       current: Some(cal_current_variant.new(
         value: "🎸🥁",
-        start: day.from_gtempo_literal("2025-02-25"),
+        start: day.testing_iso8601("2025-02-25"),
       )),
       history: [
         cal_past_variant.new(
           value: "Fort Greene Park",
-          start: day.from_gtempo_literal("2025-02-19"),
-          final: day.from_gtempo_literal("2025-02-24"),
+          start: day.testing_iso8601("2025-02-19"),
+          final: day.testing_iso8601("2025-02-24"),
         ),
       ],
     ),
@@ -862,27 +862,27 @@ pub fn filter_by_day_interval_5_test() {
 pub fn get_variant_by_day_1_test() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
-  |> calendrical.get_variant_by_day(day.from_gtempo_literal("2032-02-20"))
+  |> calendrical.get_variant_by_day(day.testing_iso8601("2032-02-20"))
   |> should.equal(
     Ok(
       Current(cal_current_variant.new(
         value: "🎸🥁",
-        start: day.from_gtempo_literal("2025-02-25"),
+        start: day.testing_iso8601("2025-02-25"),
       )),
     ),
   )
@@ -899,22 +899,22 @@ pub fn get_variant_by_day_1_test() {
 pub fn get_variant_by_day_2_test() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
-  |> calendrical.get_variant_by_day(day.from_gtempo_literal("2025-02-01"))
+  |> calendrical.get_variant_by_day(day.testing_iso8601("2025-02-01"))
   |> should.equal(Error(Nil))
 }
 
@@ -929,28 +929,28 @@ pub fn get_variant_by_day_2_test() {
 pub fn get_variant_by_day_3_test() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
-  |> calendrical.get_variant_by_day(day.from_gtempo_literal("2025-02-02"))
+  |> calendrical.get_variant_by_day(day.testing_iso8601("2025-02-02"))
   |> should.equal(
     Ok(
       Past(cal_past_variant.new(
         value: "whatever",
-        start: day.from_gtempo_literal("2025-02-02"),
-        final: day.from_gtempo_literal("2025-02-17"),
+        start: day.testing_iso8601("2025-02-02"),
+        final: day.testing_iso8601("2025-02-17"),
       )),
     ),
   )
@@ -967,27 +967,27 @@ pub fn get_variant_by_day_3_test() {
 pub fn get_variant_by_day_4_test() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
-  |> calendrical.get_variant_by_day(day.from_gtempo_literal("2025-02-25"))
+  |> calendrical.get_variant_by_day(day.testing_iso8601("2025-02-25"))
   |> should.equal(
     Ok(
       Current(cal_current_variant.new(
         value: "🎸🥁",
-        start: day.from_gtempo_literal("2025-02-25"),
+        start: day.testing_iso8601("2025-02-25"),
       )),
     ),
   )
@@ -1004,28 +1004,28 @@ pub fn get_variant_by_day_4_test() {
 pub fn get_variant_by_day_5_test() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
-  |> calendrical.get_variant_by_day(day.from_gtempo_literal("2025-02-18"))
+  |> calendrical.get_variant_by_day(day.testing_iso8601("2025-02-18"))
   |> should.equal(
     Ok(
       Past(cal_past_variant.new(
         value: "I'm listening to Battles",
-        start: day.from_gtempo_literal("2025-02-18"),
-        final: day.from_gtempo_literal("2025-02-18"),
+        start: day.testing_iso8601("2025-02-18"),
+        final: day.testing_iso8601("2025-02-18"),
       )),
     ),
   )
@@ -1042,28 +1042,28 @@ pub fn get_variant_by_day_5_test() {
 pub fn get_variant_by_day_6_test() {
   calendrical.new(
     with: "whatever",
-    starting_at: day.from_gtempo_literal("2025-02-02"),
+    starting_at: day.testing_iso8601("2025-02-02"),
     equality_fn: eq_func,
   )
   |> calendrical.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: day.from_gtempo_literal("2025-02-18"),
+    starting_at: day.testing_iso8601("2025-02-18"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: day.from_gtempo_literal("2025-02-19"),
+    starting_at: day.testing_iso8601("2025-02-19"),
   )
   |> calendrical.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: day.from_gtempo_literal("2025-02-25"),
+    starting_at: day.testing_iso8601("2025-02-25"),
   )
-  |> calendrical.get_variant_by_day(day.from_gtempo_literal("2025-02-20"))
+  |> calendrical.get_variant_by_day(day.testing_iso8601("2025-02-20"))
   |> should.equal(
     Ok(
       Past(cal_past_variant.new(
         value: "Fort Greene Park",
-        start: day.from_gtempo_literal("2025-02-19"),
-        final: day.from_gtempo_literal("2025-02-24"),
+        start: day.testing_iso8601("2025-02-19"),
+        final: day.testing_iso8601("2025-02-24"),
       )),
     ),
   )
@@ -1083,7 +1083,7 @@ pub fn get_variant_by_day_6_test() {
 fn init() -> Calendrical(String) {
   calendrical.new(
     with: "test_value_1",
-    starting_at: day.from_gtempo_literal("2025-01-04"),
+    starting_at: day.testing_iso8601("2025-01-04"),
     equality_fn: eq_func,
   )
 }
@@ -1092,7 +1092,7 @@ fn init_2() -> Calendrical(String) {
   init()
   |> calendrical.unsafe_insert_new_current(
     with: "test_value_2",
-    starting_at: day.from_gtempo_literal("2025-01-05"),
+    starting_at: day.testing_iso8601("2025-01-05"),
   )
 }
 
@@ -1100,7 +1100,7 @@ fn init_3() -> Calendrical(String) {
   init_2()
   |> calendrical.unsafe_insert_new_current(
     with: "test_value_3",
-    starting_at: day.from_gtempo_literal("2025-01-06"),
+    starting_at: day.testing_iso8601("2025-01-06"),
   )
 }
 
@@ -1162,38 +1162,38 @@ pub fn to_latest_edit_day_1_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2025-02-02"),
+      starting_at: day.testing_iso8601("2025-02-02"),
       equality_fn: eq_func,
     )
     |> calendrical.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: day.from_gtempo_literal("2025-02-18"),
+      starting_at: day.testing_iso8601("2025-02-18"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: day.from_gtempo_literal("2025-02-19"),
+      starting_at: day.testing_iso8601("2025-02-19"),
     )
     |> calendrical.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: day.from_gtempo_literal("2025-02-25"),
+      starting_at: day.testing_iso8601("2025-02-25"),
     )
 
   existing
   |> calendrical.to_latest_edit_day()
-  |> should.equal(day.from_gtempo_literal("2025-02-25"))
+  |> should.equal(day.testing_iso8601("2025-02-25"))
 }
 
 pub fn to_latest_edit_day_2_test() {
   let existing =
     calendrical.new(
       with: "whatever",
-      starting_at: day.from_gtempo_literal("2026-03-05"),
+      starting_at: day.testing_iso8601("2026-03-05"),
       equality_fn: eq_func,
     )
 
   existing
   |> calendrical.to_latest_edit_day()
-  |> should.equal(day.from_gtempo_literal("2026-03-05"))
+  |> should.equal(day.testing_iso8601("2026-03-05"))
 }
 
 // ----------------------------------------

@@ -3,11 +3,10 @@ import gleam/dynamic/decode.{type Decoder}
 import gleam/int
 import gleam/json.{type Json}
 import gleam/order.{type Order, Eq, Gt, Lt}
+import gleam/result
 import gleam/time/timestamp
 import moment.{type Moment}
 import offset
-import tempo.{type Date}
-import tempo/date as gtempo_date
 
 /// A Day is an abstract representation of a specific day on Earth.
 /// 
@@ -65,30 +64,35 @@ pub fn from_moment(moment: Moment) -> Day {
   |> from_unix_days
 }
 
-// -----------------------------------------------------
-
-/// Converts gtempo Date to a Day.
-pub fn from_gtempo_date(date: Date) -> Day {
-  date
-  |> gtempo_date.to_rata_die
-  |> from_rata_die
-}
-
-/// Converts a gtempo-compatible literal string into a Day.
+/// Creates a Day from an ISO 8601 formatted-string.
 /// 
-/// **This is for testing only.** Will panic if the
-/// input string is wrong.
-pub fn from_gtempo_literal(str: String) -> Day {
-  str
-  |> gtempo_date.literal
-  |> from_gtempo_date
+/// ## Examples
+/// 
+/// ```gleam
+/// day.parse_iso8601("2026-04-20")
+/// |> result.map(day.to_unix_days)
+/// // Ok(20_563)
+/// ```
+pub fn parse_iso8601(string: String) -> Result(Day, Nil) {
+  use ts <- result.try(timestamp.parse_rfc3339(string <> "T00:00:00Z"))
+
+  ts
+  |> moment.from_timestamp(with: offset.from_minutes(0))
+  |> from_moment
+  |> Ok
 }
 
-/// Converts a Day into a gtempo Date.
-pub fn to_gtempo_date(day: Day) -> Date {
-  day
-  |> to_rata_die
-  |> gtempo_date.from_rata_die()
+/// Often when testing date functions, you're creating dates
+/// **a lot** of the time and unwrapping Results is unecessary
+/// for the test case. This is a version of `parse_iso8601` that
+/// simply panics when the input is wrong.
+/// 
+/// Use for testing only.
+pub fn testing_iso8601(string: String) -> Day {
+  case parse_iso8601(string) {
+    Ok(day) -> day
+    Error(_) -> panic as "incorrect testing ISO 8601 string"
+  }
 }
 
 // -----------------------------------------------------
@@ -230,17 +234,4 @@ pub fn decoder_dict_key() -> Decoder(Day) {
         }
     }
   })
-}
-
-// ----------------------------------------------------
-// ----------------------------------------------------
-// --------------------- HELPER ------------------------
-// ----------------------------------------------------
-// ----------------------------------------------------
-
-/// a function designed for testing use only.
-pub fn to_string(day: Day) -> String {
-  day
-  |> to_gtempo_date
-  |> gtempo_date.to_string
 }

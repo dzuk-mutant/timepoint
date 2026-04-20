@@ -32,8 +32,8 @@ pub fn by_day_medley_1_test() {
   )
   // ---- slice
   |> timelined.slice_by_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2024-07-01"),
-    final: day.from_gtempo_literal("2025-08-05"),
+    start: day.testing_iso8601("2024-07-01"),
+    final: day.testing_iso8601("2025-08-05"),
   ))
   // ---- the actual func
   |> tl_slice_by_day.to_any_list()
@@ -80,8 +80,8 @@ pub fn by_day_medley_2_test() {
   )
   // ---- slice
   |> timelined.slice_by_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2024-07-01"),
-    final: day.from_gtempo_literal("2024-08-05"),
+    start: day.testing_iso8601("2024-07-01"),
+    final: day.testing_iso8601("2024-08-05"),
   ))
   // ---- the actual func
   |> tl_slice_by_day.to_any_list()
@@ -114,8 +114,8 @@ pub fn by_day_medley_3_test() {
   )
   // ---- slice
   |> timelined.slice_by_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-07-01"),
-    final: day.from_gtempo_literal("2025-08-05"),
+    start: day.testing_iso8601("2025-07-01"),
+    final: day.testing_iso8601("2025-08-05"),
   ))
   // ---- the actual func
   |> tl_slice_by_day.to_any_list()
@@ -148,12 +148,12 @@ pub fn by_day_medley_4_test() {
   )
   // ---- slice
   |> timelined.slice_by_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2024-07-01"),
-    final: day.from_gtempo_literal("2025-08-05"),
+    start: day.testing_iso8601("2024-07-01"),
+    final: day.testing_iso8601("2025-08-05"),
   ))
   |> tl_slice_by_day.chop(day_interval.new(
-    start: day.from_gtempo_literal("2024-08-30"),
-    final: day.from_gtempo_literal("2024-10-30"),
+    start: day.testing_iso8601("2024-08-30"),
+    final: day.testing_iso8601("2024-10-30"),
   ))
   // ---- the actual func
   |> tl_slice_by_day.to_any_list()
@@ -192,12 +192,12 @@ pub fn by_day_medley_5_test() {
   )
   // ---- slice
   |> timelined.slice_by_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2024-07-01"),
-    final: day.from_gtempo_literal("2025-08-05"),
+    start: day.testing_iso8601("2024-07-01"),
+    final: day.testing_iso8601("2025-08-05"),
   ))
   |> tl_slice_by_day.chop(day_interval.new(
-    start: day.from_gtempo_literal("2020-08-30"),
-    final: day.from_gtempo_literal("2020-10-30"),
+    start: day.testing_iso8601("2020-08-30"),
+    final: day.testing_iso8601("2020-10-30"),
   ))
   // ---- the actual func
   |> tl_slice_by_day.to_any_list()
@@ -225,12 +225,12 @@ pub fn by_day_medley_6_test() {
   )
   // ---- slice
   |> timelined.slice_by_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2024-07-01"),
-    final: day.from_gtempo_literal("2025-08-05"),
+    start: day.testing_iso8601("2024-07-01"),
+    final: day.testing_iso8601("2025-08-05"),
   ))
   |> tl_slice_by_day.chop(day_interval.new(
-    start: day.from_gtempo_literal("2024-08-30"),
-    final: day.from_gtempo_literal("2024-10-30"),
+    start: day.testing_iso8601("2024-08-30"),
+    final: day.testing_iso8601("2024-10-30"),
   ))
   // ---- the actual func
   |> tl_slice_by_day.is_empty()
@@ -258,12 +258,12 @@ pub fn by_day_medley_7_test() {
   )
   // ---- slice
   |> timelined.slice_by_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2024-07-01"),
-    final: day.from_gtempo_literal("2025-08-05"),
+    start: day.testing_iso8601("2024-07-01"),
+    final: day.testing_iso8601("2025-08-05"),
   ))
   |> tl_slice_by_day.chop(day_interval.new(
-    start: day.from_gtempo_literal("2020-08-30"),
-    final: day.from_gtempo_literal("2020-10-30"),
+    start: day.testing_iso8601("2020-08-30"),
+    final: day.testing_iso8601("2020-10-30"),
   ))
   // ---- the actual func
   |> tl_slice_by_day.is_empty()

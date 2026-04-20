@@ -1,66 +1,12 @@
+import calendar/iso_date
 import day.{type Day}
 import gleam/dict
 import gleam/dynamic/decode
 import gleam/json
 import gleam/order.{Eq, Gt, Lt}
+import gleam/result
 import gleeunit/should
 import moment
-import tempo.{type Date}
-import tempo/date as gtempo_date
-
-// ------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------
-// ------------------------ to/from_gtempo -------------------------------------
-// ------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------
-
-pub fn to_from_gtempo(input_and_expected_output: Day) {
-  input_and_expected_output
-  |> day.to_gtempo_date()
-  |> day.from_gtempo_date()
-  |> should.equal(input_and_expected_output)
-}
-
-pub fn to_from_gtempo_1_test() {
-  to_from_gtempo(day.from_unix_days(127))
-}
-
-pub fn to_from_gtempo_2_test() {
-  to_from_gtempo(day.from_unix_days(712_399))
-}
-
-pub fn to_from_gtempo_3_test() {
-  to_from_gtempo(day.from_unix_days(128_745))
-}
-
-pub fn to_from_gtempo_4_test() {
-  to_from_gtempo(day.from_unix_days(500_000))
-}
-
-// -------------------------------------------------------
-
-pub fn to_gtempo(input: Day, expected_output: Date) {
-  input
-  |> day.to_gtempo_date()
-  |> should.equal(expected_output)
-}
-
-pub fn to_gtempo_1_test() {
-  to_gtempo(day.from_rata_die(739_318), gtempo_date.literal("2025-03-08"))
-}
-
-pub fn to_gtempo_2_test() {
-  to_gtempo(day.from_rata_die(728_578), gtempo_date.literal("1995-10-12"))
-}
-
-pub fn to_gtempo_3_test() {
-  to_gtempo(day.from_rata_die(733_837), gtempo_date.literal("2010-03-06"))
-}
 
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
@@ -150,9 +96,9 @@ pub fn to_from_unix_days_5_test() {
 // ------------------------------------------------------------------------------
 
 pub fn epoch_sanity_check_1_test() {
-  day.from_unix_days(0)
-  |> day.to_string
-  |> should.equal("1970-01-01")
+  day.testing_iso8601("1970-01-01")
+  |> day.to_unix_days
+  |> should.equal(0)
 }
 
 // ------------------------------------------------------------------------------
@@ -172,7 +118,8 @@ fn from_moment(input input: String, output output: String) {
   input
   |> moment.from_gtempo_literal
   |> day.from_moment
-  |> day.to_string
+  |> iso_date.from_day
+  |> iso_date.to_string
   |> should.equal(output)
 }
 
@@ -202,6 +149,59 @@ pub fn from_moment_6_test() {
 
 pub fn from_moment_7_test() {
   from_moment(input: "1992-09-11T00:00:00.000-11:30", output: "1992-09-11")
+}
+
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// ---------------------------- parse_iso8601 ----------------------------------
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+
+fn parse_iso8601_run(str: String) -> Result(Int, Nil) {
+  str
+  |> day.parse_iso8601
+  |> result.map(day.to_unix_days)
+}
+
+pub fn parse_iso8601_1_test() {
+  "2026-04-20"
+  |> parse_iso8601_run
+  |> should.equal(Ok(20_563))
+}
+
+pub fn parse_iso8601_2_test() {
+  "2012-12-23"
+  |> parse_iso8601_run
+  |> should.equal(Ok(15_697))
+}
+
+pub fn parse_iso8601_3_test() {
+  "2004-10-01"
+  |> parse_iso8601_run
+  |> should.equal(Ok(12_692))
+}
+
+pub fn parse_iso8601_4_test() {
+  "2006-06-06"
+  |> parse_iso8601_run
+  |> should.equal(Ok(13_305))
+}
+
+pub fn parse_iso8601_5_test() {
+  "2013-10-30"
+  |> parse_iso8601_run
+  |> should.equal(Ok(16_008))
+}
+
+pub fn parse_iso8601_6_test() {
+  "1998-02-02"
+  |> parse_iso8601_run
+  |> should.equal(Ok(10_259))
 }
 
 // -----------------------------------------------------
@@ -292,24 +292,24 @@ pub fn compare_6_test() {
 
 pub fn order_reverse_1_test() {
   day.compare_reverse(
-    day.from_gtempo_literal("2034-06-08"),
-    day.from_gtempo_literal("2034-07-07"),
+    day.testing_iso8601("2034-06-08"),
+    day.testing_iso8601("2034-07-07"),
   )
   |> should.equal(order.Gt)
 }
 
 pub fn order_reverse_2_test() {
   day.compare_reverse(
-    day.from_gtempo_literal("2025-03-04"),
-    day.from_gtempo_literal("2022-01-01"),
+    day.testing_iso8601("2025-03-04"),
+    day.testing_iso8601("2022-01-01"),
   )
   |> should.equal(order.Lt)
 }
 
 pub fn order_reverse_3_test() {
   day.compare_reverse(
-    day.from_gtempo_literal("2034-06-08"),
-    day.from_gtempo_literal("2034-06-08"),
+    day.testing_iso8601("2034-06-08"),
+    day.testing_iso8601("2034-06-08"),
   )
   |> should.equal(order.Eq)
 }
@@ -471,7 +471,7 @@ pub fn example_3_output_test() {
 
 pub fn testing_date_keys_test() {
   let date_key_decoder = day.decoder_dict_key()
-  let buh = dict.from_list([#(day.from_gtempo_literal("2001-01-01"), "beep")])
+  let buh = dict.from_list([#(day.testing_iso8601("2001-01-01"), "beep")])
 
   buh
   |> json.dict(day.to_json_dict_key, json.string)

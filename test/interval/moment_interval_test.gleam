@@ -258,7 +258,7 @@ pub fn is_around_day_1_test() {
     start: moment.from_gtempo_literal("2036-08-01T00:00:00.000Z"),
     end_excluding: moment.from_gtempo_literal("2036-09-23T00:00:00.000Z"),
   )
-  |> moment_interval.is_around_day(day.from_gtempo_literal("2040-01-01"))
+  |> moment_interval.is_around_day(day.testing_iso8601("2040-01-01"))
   |> should.equal(False)
 }
 
@@ -273,7 +273,7 @@ pub fn is_around_day_2_test() {
     start: moment.from_gtempo_literal("2036-08-01T00:00:00.000Z"),
     end_excluding: moment.from_gtempo_literal("2036-09-23T00:00:00.000Z"),
   )
-  |> moment_interval.is_around_day(day.from_gtempo_literal("2036-09-24"))
+  |> moment_interval.is_around_day(day.testing_iso8601("2036-09-24"))
   |> should.equal(False)
 }
 
@@ -288,7 +288,7 @@ pub fn is_around_day_3_test() {
     start: moment.from_gtempo_literal("2036-08-01T00:00:00.000Z"),
     end_excluding: moment.from_gtempo_literal("2036-09-23T00:00:00.000Z"),
   )
-  |> moment_interval.is_around_day(day.from_gtempo_literal("2036-09-22"))
+  |> moment_interval.is_around_day(day.testing_iso8601("2036-09-22"))
   |> should.equal(True)
 }
 
@@ -303,7 +303,7 @@ pub fn is_around_day_3x_test() {
     start: moment.from_gtempo_literal("2036-08-01T00:00:00.000Z"),
     end_excluding: moment.from_gtempo_literal("2036-09-23T00:00:00.000Z"),
   )
-  |> moment_interval.is_around_day(day.from_gtempo_literal("2036-09-23"))
+  |> moment_interval.is_around_day(day.testing_iso8601("2036-09-23"))
   |> should.equal(False)
 }
 
@@ -318,7 +318,7 @@ pub fn is_around_day_4_test() {
     start: moment.from_gtempo_literal("2036-08-01T00:00:00.000Z"),
     end_excluding: moment.from_gtempo_literal("2036-09-23T00:00:00.000Z"),
   )
-  |> moment_interval.is_around_day(day.from_gtempo_literal("2036-08-22"))
+  |> moment_interval.is_around_day(day.testing_iso8601("2036-08-22"))
   |> should.equal(True)
 }
 
@@ -333,7 +333,7 @@ pub fn is_around_day_5_test() {
     start: moment.from_gtempo_literal("2036-08-01T00:00:00.000Z"),
     end_excluding: moment.from_gtempo_literal("2036-09-23T00:00:00.000Z"),
   )
-  |> moment_interval.is_around_day(day.from_gtempo_literal("2036-08-01"))
+  |> moment_interval.is_around_day(day.testing_iso8601("2036-08-01"))
   |> should.equal(True)
 }
 
@@ -348,7 +348,7 @@ pub fn is_around_day_6_test() {
     start: moment.from_gtempo_literal("2036-08-01T00:00:00.000Z"),
     end_excluding: moment.from_gtempo_literal("2036-09-23T00:00:00.000Z"),
   )
-  |> moment_interval.is_around_day(day.from_gtempo_literal("2036-07-31"))
+  |> moment_interval.is_around_day(day.testing_iso8601("2036-07-31"))
   |> should.equal(False)
 }
 
@@ -363,7 +363,7 @@ pub fn is_around_day_7_test() {
     start: moment.from_gtempo_literal("2036-08-01T00:00:00.000Z"),
     end_excluding: moment.from_gtempo_literal("2036-09-23T00:00:00.000Z"),
   )
-  |> moment_interval.is_around_day(day.from_gtempo_literal("2030-11-11"))
+  |> moment_interval.is_around_day(day.testing_iso8601("2030-11-11"))
   |> should.equal(False)
 }
 
@@ -1057,8 +1057,8 @@ pub fn is_overlapped_by_day_interval_1_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2016-08-01"),
-    final: day.from_gtempo_literal("2016-09-23"),
+    start: day.testing_iso8601("2016-08-01"),
+    final: day.testing_iso8601("2016-09-23"),
   ))
   |> should.equal(False)
 }
@@ -1076,8 +1076,8 @@ pub fn is_overlapping_day_interval_2_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-09-23"),
-    final: day.from_gtempo_literal("2016-10-23"),
+    start: day.testing_iso8601("2015-09-23"),
+    final: day.testing_iso8601("2016-10-23"),
   ))
   |> should.equal(False)
 }
@@ -1095,8 +1095,8 @@ pub fn is_overlapping_day_interval_2x_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-09-23"),
-    final: day.from_gtempo_literal("2016-10-23"),
+    start: day.testing_iso8601("2015-09-23"),
+    final: day.testing_iso8601("2016-10-23"),
   ))
   |> should.equal(False)
 }
@@ -1113,8 +1113,8 @@ pub fn is_overlapping_day_interval_3_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-09-01"),
-    final: day.from_gtempo_literal("2016-10-23"),
+    start: day.testing_iso8601("2015-09-01"),
+    final: day.testing_iso8601("2016-10-23"),
   ))
   |> should.equal(True)
 }
@@ -1131,8 +1131,8 @@ pub fn is_overlapping_day_interval_4_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-01-01"),
-    final: day.from_gtempo_literal("2015-11-23"),
+    start: day.testing_iso8601("2015-01-01"),
+    final: day.testing_iso8601("2015-11-23"),
   ))
   |> should.equal(True)
 }
@@ -1149,8 +1149,8 @@ pub fn is_overlapping_day_interval_5_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(True)
 }
@@ -1167,8 +1167,8 @@ pub fn is_overlapping_day_interval_6_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-22"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-08-22"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(True)
 }
@@ -1185,8 +1185,8 @@ pub fn is_overlapping_day_interval_7_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-14"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-08-14"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(True)
 }
@@ -1203,8 +1203,8 @@ pub fn is_overlapping_day_interval_8_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-07-14"),
-    final: day.from_gtempo_literal("2015-09-23"),
+    start: day.testing_iso8601("2015-07-14"),
+    final: day.testing_iso8601("2015-09-23"),
   ))
   |> should.equal(True)
 }
@@ -1221,8 +1221,8 @@ pub fn is_overlapping_day_interval_9_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(True)
 }
@@ -1239,8 +1239,8 @@ pub fn is_overlapping_day_interval_10_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-08-01"),
-    final: day.from_gtempo_literal("2015-10-01"),
+    start: day.testing_iso8601("2015-08-01"),
+    final: day.testing_iso8601("2015-10-01"),
   ))
   |> should.equal(True)
 }
@@ -1257,8 +1257,8 @@ pub fn is_overlapping_day_interval_11_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-09-01"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-09-01"),
   ))
   |> should.equal(True)
 }
@@ -1276,8 +1276,8 @@ pub fn is_overlapping_day_interval_12_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-08-01"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-08-01"),
   ))
   |> should.equal(True)
 }
@@ -1295,8 +1295,8 @@ pub fn is_overlapping_day_interval_12a_test() {
     end_excluding: moment.from_gtempo_literal("2025-02-04T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2025-02-03"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-03"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -1314,8 +1314,8 @@ pub fn is_overlapping_day_interval_12x_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-07-31"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-07-31"),
   ))
   |> should.equal(False)
 }
@@ -1332,8 +1332,8 @@ pub fn is_overlapping_day_interval_13_test() {
     end_excluding: moment.from_gtempo_literal("2015-09-23T00:00:00.000Z"),
   )
   |> moment_interval.is_overlapped_by_day_interval(by: day_interval.new(
-    start: day.from_gtempo_literal("2015-05-09"),
-    final: day.from_gtempo_literal("2015-07-15"),
+    start: day.testing_iso8601("2015-05-09"),
+    final: day.testing_iso8601("2015-07-15"),
   ))
   |> should.equal(False)
 }

@@ -35,8 +35,8 @@ fn json_io(expected_input_and_output: CalPastVariant(String)) {
 
 pub fn json_o_1_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-21"),
-    final: day.from_gtempo_literal("2025-02-23"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-23"),
     value: "boop",
   )
   |> json_o(
@@ -46,8 +46,8 @@ pub fn json_o_1_test() {
 
 pub fn json_io_1_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-21"),
-    final: day.from_gtempo_literal("2025-02-23"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-23"),
     value: "boop",
   )
   |> json_io
@@ -55,8 +55,8 @@ pub fn json_io_1_test() {
 
 pub fn json_o_2_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2001-10-21"),
-    final: day.from_gtempo_literal("2001-10-23"),
+    start: day.testing_iso8601("2001-10-21"),
+    final: day.testing_iso8601("2001-10-23"),
     value: "boop",
   )
   |> json_o(
@@ -66,8 +66,8 @@ pub fn json_o_2_test() {
 
 pub fn json_io_2_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2001-10-21"),
-    final: day.from_gtempo_literal("2001-10-23"),
+    start: day.testing_iso8601("2001-10-21"),
+    final: day.testing_iso8601("2001-10-23"),
     value: "boop",
   )
   |> json_io
@@ -81,8 +81,8 @@ pub fn json_io_2_test() {
 
 pub fn variant_unwrap_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-21"),
-    final: day.from_gtempo_literal("2025-02-23"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-23"),
     value: "boop",
   )
   |> cal_past_variant.unwrap()
@@ -98,23 +98,23 @@ pub fn variant_unwrap_test() {
 /// Start and final are in the right order.
 pub fn new_1_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-24"),
-    final: day.from_gtempo_literal("2025-03-01"),
+    start: day.testing_iso8601("2025-02-24"),
+    final: day.testing_iso8601("2025-03-01"),
     value: "boop",
   )
   |> cal_past_variant.to_start_day()
-  |> should.equal(day.from_gtempo_literal("2025-02-24"))
+  |> should.equal(day.testing_iso8601("2025-02-24"))
 }
 
 /// Start and final are in the right order.
 pub fn new_2_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-24"),
-    final: day.from_gtempo_literal("2025-03-01"),
+    start: day.testing_iso8601("2025-02-24"),
+    final: day.testing_iso8601("2025-03-01"),
     value: "boop",
   )
   |> cal_past_variant.to_final_day()
-  |> should.equal(day.from_gtempo_literal("2025-03-01"))
+  |> should.equal(day.testing_iso8601("2025-03-01"))
 }
 
 /// Start and final are in the wrong order.
@@ -123,12 +123,12 @@ pub fn new_2_test() {
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn new_unsafe_use_1_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-24"),
-    final: day.from_gtempo_literal("2025-03-01"),
+    start: day.testing_iso8601("2025-03-24"),
+    final: day.testing_iso8601("2025-03-01"),
     value: "boop",
   )
   |> cal_past_variant.to_start_day()
-  |> should.equal(day.from_gtempo_literal("2025-03-24"))
+  |> should.equal(day.testing_iso8601("2025-03-24"))
 }
 
 /// Start and final are in the wrong order.
@@ -137,12 +137,12 @@ pub fn new_unsafe_use_1_test() {
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn new_unsafe_use_2_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-24"),
-    final: day.from_gtempo_literal("2025-03-01"),
+    start: day.testing_iso8601("2025-03-24"),
+    final: day.testing_iso8601("2025-03-01"),
     value: "boop",
   )
   |> cal_past_variant.to_final_day()
-  |> should.equal(day.from_gtempo_literal("2025-03-01"))
+  |> should.equal(day.testing_iso8601("2025-03-01"))
 }
 
 // ----------------------------------------
@@ -154,27 +154,27 @@ pub fn new_unsafe_use_2_test() {
 /// Start and final are in the right order.
 pub fn from_day_start_1_test() {
   cal_current_variant.new(
-    start: day.from_gtempo_literal("2025-02-24"),
+    start: day.testing_iso8601("2025-02-24"),
     value: "boop",
   )
-  |> cal_past_variant.from_current_variant(
-    end_excluding: day.from_gtempo_literal("2025-03-02"),
-  )
+  |> cal_past_variant.from_current_variant(end_excluding: day.testing_iso8601(
+    "2025-03-02",
+  ))
   |> cal_past_variant.to_start_day()
-  |> should.equal(day.from_gtempo_literal("2025-02-24"))
+  |> should.equal(day.testing_iso8601("2025-02-24"))
 }
 
 /// Start and final are in the right order.
 pub fn from_day_start_2_test() {
   cal_current_variant.new(
-    start: day.from_gtempo_literal("2025-02-24"),
+    start: day.testing_iso8601("2025-02-24"),
     value: "boop",
   )
-  |> cal_past_variant.from_current_variant(
-    end_excluding: day.from_gtempo_literal("2025-03-02"),
-  )
+  |> cal_past_variant.from_current_variant(end_excluding: day.testing_iso8601(
+    "2025-03-02",
+  ))
   |> cal_past_variant.to_final_day()
-  |> should.equal(day.from_gtempo_literal("2025-03-01"))
+  |> should.equal(day.testing_iso8601("2025-03-01"))
 }
 
 /// Start and final are in the wrong order.
@@ -183,14 +183,14 @@ pub fn from_day_start_2_test() {
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn from_day_unsafe_use_1_test() {
   cal_current_variant.new(
-    start: day.from_gtempo_literal("2025-03-01"),
+    start: day.testing_iso8601("2025-03-01"),
     value: "boop",
   )
-  |> cal_past_variant.from_current_variant(
-    end_excluding: day.from_gtempo_literal("2025-02-25"),
-  )
+  |> cal_past_variant.from_current_variant(end_excluding: day.testing_iso8601(
+    "2025-02-25",
+  ))
   |> cal_past_variant.to_start_day()
-  |> should.equal(day.from_gtempo_literal("2025-03-01"))
+  |> should.equal(day.testing_iso8601("2025-03-01"))
 }
 
 /// Start and final are in the wrong order.
@@ -199,14 +199,14 @@ pub fn from_day_unsafe_use_1_test() {
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn from_day_unsafe_use_2_test() {
   cal_current_variant.new(
-    start: day.from_gtempo_literal("2025-03-01"),
+    start: day.testing_iso8601("2025-03-01"),
     value: "boop",
   )
-  |> cal_past_variant.from_current_variant(
-    end_excluding: day.from_gtempo_literal("2025-02-25"),
-  )
+  |> cal_past_variant.from_current_variant(end_excluding: day.testing_iso8601(
+    "2025-02-25",
+  ))
   |> cal_past_variant.to_final_day()
-  |> should.equal(day.from_gtempo_literal("2025-02-24"))
+  |> should.equal(day.testing_iso8601("2025-02-24"))
 }
 
 // ----------------------------------------
@@ -221,15 +221,15 @@ pub fn from_day_unsafe_use_2_test() {
 ///     (Ok)
 pub fn truncate_1_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-01"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-01"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.truncate(behind: day.from_gtempo_literal("2025-03-21"))
+  |> cal_past_variant.truncate(behind: day.testing_iso8601("2025-03-21"))
   |> should.equal(
     Ok(cal_past_variant.new(
-      start: day.from_gtempo_literal("2025-03-01"),
-      final: day.from_gtempo_literal("2025-03-20"),
+      start: day.testing_iso8601("2025-03-01"),
+      final: day.testing_iso8601("2025-03-20"),
       value: "boop",
     )),
   )
@@ -241,15 +241,15 @@ pub fn truncate_1_test() {
 ///     (Ok)
 pub fn truncate_2_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-01"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-01"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.truncate(behind: day.from_gtempo_literal("2025-03-21"))
+  |> cal_past_variant.truncate(behind: day.testing_iso8601("2025-03-21"))
   |> should.equal(
     Ok(cal_past_variant.new(
-      start: day.from_gtempo_literal("2025-03-01"),
-      final: day.from_gtempo_literal("2025-03-20"),
+      start: day.testing_iso8601("2025-03-01"),
+      final: day.testing_iso8601("2025-03-20"),
       value: "boop",
     )),
   )
@@ -261,15 +261,15 @@ pub fn truncate_2_test() {
 ///     (Ok)
 pub fn truncate_3_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-01"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-01"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.truncate(behind: day.from_gtempo_literal("2025-03-02"))
+  |> cal_past_variant.truncate(behind: day.testing_iso8601("2025-03-02"))
   |> should.equal(
     Ok(cal_past_variant.new(
-      start: day.from_gtempo_literal("2025-03-01"),
-      final: day.from_gtempo_literal("2025-03-01"),
+      start: day.testing_iso8601("2025-03-01"),
+      final: day.testing_iso8601("2025-03-01"),
       value: "boop",
     )),
   )
@@ -281,11 +281,11 @@ pub fn truncate_3_test() {
 ///     (Error)
 pub fn truncate_4_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.truncate(behind: day.from_gtempo_literal("2025-03-02"))
+  |> cal_past_variant.truncate(behind: day.testing_iso8601("2025-03-02"))
   |> should.equal(Error(day_interval.FinalIsEarlierThanStart))
 }
 
@@ -295,11 +295,11 @@ pub fn truncate_4_test() {
 ///     (Error)
 pub fn truncate_5_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.truncate(behind: day.from_gtempo_literal("2025-02-01"))
+  |> cal_past_variant.truncate(behind: day.testing_iso8601("2025-02-01"))
   |> should.equal(Error(day_interval.FinalIsEarlierThanStart))
 }
 
@@ -315,13 +315,13 @@ pub fn truncate_5_test() {
 ///    (False)
 pub fn is_around_day_interval_1_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-02"),
-    final: day.from_gtempo_literal("2025-02-04"),
+    start: day.testing_iso8601("2025-02-02"),
+    final: day.testing_iso8601("2025-02-04"),
     value: "boop",
   )
   |> cal_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-21"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(False)
 }
@@ -332,13 +332,13 @@ pub fn is_around_day_interval_1_test() {
 ///    (True)
 pub fn is_around_day_interval_2_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-02"),
-    final: day.from_gtempo_literal("2025-02-04"),
+    start: day.testing_iso8601("2025-02-02"),
+    final: day.testing_iso8601("2025-02-04"),
     value: "boop",
   )
   |> cal_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-04"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-04"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -349,13 +349,13 @@ pub fn is_around_day_interval_2_test() {
 ///    (True)
 pub fn is_around_day_interval_3_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-02"),
-    final: day.from_gtempo_literal("2025-02-10"),
+    start: day.testing_iso8601("2025-02-02"),
+    final: day.testing_iso8601("2025-02-10"),
     value: "boop",
   )
   |> cal_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-03"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-03"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -366,13 +366,13 @@ pub fn is_around_day_interval_3_test() {
 ///    (True)
 pub fn is_around_day_interval_4_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-02"),
-    final: day.from_gtempo_literal("2025-03-31"),
+    start: day.testing_iso8601("2025-02-02"),
+    final: day.testing_iso8601("2025-03-31"),
     value: "boop",
   )
   |> cal_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-04-20"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-04-20"),
   ))
   |> should.equal(True)
 }
@@ -383,13 +383,13 @@ pub fn is_around_day_interval_4_test() {
 ///    (True)
 pub fn is_around_day_interval_5_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-01-01"),
-    final: day.from_gtempo_literal("2025-05-01"),
+    start: day.testing_iso8601("2025-01-01"),
+    final: day.testing_iso8601("2025-05-01"),
     value: "boop",
   )
   |> cal_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-02"),
-    final: day.from_gtempo_literal("2025-03-20"),
+    start: day.testing_iso8601("2025-02-02"),
+    final: day.testing_iso8601("2025-03-20"),
   ))
   |> should.equal(True)
 }
@@ -400,13 +400,13 @@ pub fn is_around_day_interval_5_test() {
 ///    (True)
 pub fn is_around_day_interval_6_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-02"),
-    final: day.from_gtempo_literal("2025-04-01"),
+    start: day.testing_iso8601("2025-02-02"),
+    final: day.testing_iso8601("2025-04-01"),
     value: "boop",
   )
   |> cal_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-02-20"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-02-20"),
   ))
   |> should.equal(True)
 }
@@ -417,13 +417,13 @@ pub fn is_around_day_interval_6_test() {
 ///    (True)
 pub fn is_around_day_interval_7_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-02-01"),
-    final: day.from_gtempo_literal("2025-04-01"),
+    start: day.testing_iso8601("2025-02-01"),
+    final: day.testing_iso8601("2025-04-01"),
     value: "boop",
   )
   |> cal_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-02-01"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-02-01"),
   ))
   |> should.equal(True)
 }
@@ -434,13 +434,13 @@ pub fn is_around_day_interval_7_test() {
 ///    (False)
 pub fn is_around_day_interval_8_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-01-01"),
-    final: day.from_gtempo_literal("2025-01-11"),
+    start: day.testing_iso8601("2025-01-01"),
+    final: day.testing_iso8601("2025-01-11"),
     value: "boop",
   )
   |> cal_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-04-01"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-04-01"),
   ))
   |> should.equal(False)
 }
@@ -457,11 +457,11 @@ pub fn is_around_day_interval_8_test() {
 ///     (False)
 pub fn is_effective_on_day_1_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-04-20"))
+  |> cal_past_variant.is_effective_on_day(day.testing_iso8601("2025-04-20"))
   |> should.equal(False)
 }
 
@@ -471,11 +471,11 @@ pub fn is_effective_on_day_1_test() {
 ///     (True)
 pub fn is_effective_on_day_2_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-03-24"))
+  |> cal_past_variant.is_effective_on_day(day.testing_iso8601("2025-03-24"))
   |> should.equal(True)
 }
 
@@ -485,11 +485,11 @@ pub fn is_effective_on_day_2_test() {
 ///     (True)
 pub fn is_effective_on_day_3_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-03-15"))
+  |> cal_past_variant.is_effective_on_day(day.testing_iso8601("2025-03-15"))
   |> should.equal(True)
 }
 
@@ -499,11 +499,11 @@ pub fn is_effective_on_day_3_test() {
 ///     (True)
 pub fn is_effective_on_day_4_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-03-02"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-03-02"),
     value: "boop",
   )
-  |> cal_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-03-02"))
+  |> cal_past_variant.is_effective_on_day(day.testing_iso8601("2025-03-02"))
   |> should.equal(True)
 }
 
@@ -513,11 +513,11 @@ pub fn is_effective_on_day_4_test() {
 ///     (True)
 pub fn is_effective_on_day_5_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-03-02"))
+  |> cal_past_variant.is_effective_on_day(day.testing_iso8601("2025-03-02"))
   |> should.equal(True)
 }
 
@@ -527,10 +527,10 @@ pub fn is_effective_on_day_5_test() {
 ///     (False)
 pub fn is_effective_on_day_6_test() {
   cal_past_variant.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-03-24"),
     value: "boop",
   )
-  |> cal_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-02-02"))
+  |> cal_past_variant.is_effective_on_day(day.testing_iso8601("2025-02-02"))
   |> should.equal(False)
 }

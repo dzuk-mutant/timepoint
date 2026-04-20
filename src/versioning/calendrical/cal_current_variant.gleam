@@ -47,7 +47,7 @@ pub fn decoder(
 ) -> Decoder(CalCurrentVariant(v)) {
   let default =
     CalCurrentVariant(
-      start: day.from_gtempo_literal("2025-03-10"),
+      start: day.testing_iso8601("2025-03-10"),
       value: default_value,
     )
 

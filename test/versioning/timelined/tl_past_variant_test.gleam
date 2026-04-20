@@ -473,8 +473,8 @@ pub fn is_effective_in_day_interval_1_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-21"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(False)
 }
@@ -490,8 +490,8 @@ pub fn is_effective_in_day_interval_2_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-04"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-04"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(False)
 }
@@ -507,8 +507,8 @@ pub fn is_effective_in_day_interval_2x_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-03"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-03"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -524,8 +524,8 @@ pub fn is_effective_in_day_interval_2xx_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-04"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-04"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(False)
 }
@@ -541,8 +541,8 @@ pub fn is_effective_in_day_interval_3_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-03"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-03"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -558,8 +558,8 @@ pub fn is_effective_in_day_interval_4_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-04-20"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-04-20"),
   ))
   |> should.equal(True)
 }
@@ -575,8 +575,8 @@ pub fn is_effective_in_day_interval_5_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-02"),
-    final: day.from_gtempo_literal("2025-03-20"),
+    start: day.testing_iso8601("2025-02-02"),
+    final: day.testing_iso8601("2025-03-20"),
   ))
   |> should.equal(True)
 }
@@ -592,8 +592,8 @@ pub fn is_effective_in_day_interval_6_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-02-20"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-02-20"),
   ))
   |> should.equal(True)
 }
@@ -609,8 +609,8 @@ pub fn is_effective_in_day_interval_7_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-02-01"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-02-01"),
   ))
   |> should.equal(True)
 }
@@ -627,8 +627,8 @@ pub fn is_effective_in_day_interval_7x_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-01-31"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-01-31"),
   ))
   |> should.equal(True)
 }
@@ -644,8 +644,8 @@ pub fn is_effective_in_day_interval_8_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-03-02"),
-    final: day.from_gtempo_literal("2025-04-01"),
+    start: day.testing_iso8601("2025-03-02"),
+    final: day.testing_iso8601("2025-04-01"),
   ))
   |> should.equal(False)
 }
@@ -662,8 +662,8 @@ pub fn is_effective_in_day_interval_t1_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-04"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-04"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(False)
 }
@@ -680,8 +680,8 @@ pub fn is_effective_in_day_interval_t2_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-02-04"),
-    final: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-04"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(False)
 }
@@ -698,8 +698,8 @@ pub fn is_effective_in_day_interval_t3_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-02-01"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-02-01"),
   ))
   |> should.equal(False)
 }
@@ -716,8 +716,8 @@ pub fn is_effective_in_day_interval_t4_test() {
     value: "boop",
   )
   |> tl_past_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025-01-02"),
-    final: day.from_gtempo_literal("2025-02-01"),
+    start: day.testing_iso8601("2025-01-02"),
+    final: day.testing_iso8601("2025-02-01"),
   ))
   |> should.equal(True)
 }
@@ -736,7 +736,7 @@ pub fn is_effective_on_day_1_test() {
     end_excluding: moment.from_gtempo_literal("2025-01-11T00:00:00.000Z"),
     value: "boop",
   )
-  |> tl_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-03-25"))
+  |> tl_past_variant.is_effective_on_day(day.testing_iso8601("2025-03-25"))
   |> should.equal(False)
 }
 
@@ -750,7 +750,7 @@ pub fn is_effective_on_day_2_test() {
     end_excluding: moment.from_gtempo_literal("2025-01-11T00:00:00.000Z"),
     value: "boop",
   )
-  |> tl_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-01-11"))
+  |> tl_past_variant.is_effective_on_day(day.testing_iso8601("2025-01-11"))
   |> should.equal(False)
 }
 
@@ -764,7 +764,7 @@ pub fn is_effective_on_day_2x_test() {
     end_excluding: moment.from_gtempo_literal("2025-01-11T00:00:00.000Z"),
     value: "boop",
   )
-  |> tl_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-01-11"))
+  |> tl_past_variant.is_effective_on_day(day.testing_iso8601("2025-01-11"))
   |> should.equal(False)
 }
 
@@ -778,7 +778,7 @@ pub fn is_effective_on_day_3_test() {
     end_excluding: moment.from_gtempo_literal("2025-01-11T00:00:00.000Z"),
     value: "boop",
   )
-  |> tl_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-01-05"))
+  |> tl_past_variant.is_effective_on_day(day.testing_iso8601("2025-01-05"))
   |> should.equal(True)
 }
 
@@ -792,7 +792,7 @@ pub fn is_effective_on_day_4_test() {
     end_excluding: moment.from_gtempo_literal("2025-01-11T00:00:00.000Z"),
     value: "boop",
   )
-  |> tl_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-01-01"))
+  |> tl_past_variant.is_effective_on_day(day.testing_iso8601("2025-01-01"))
   |> should.equal(True)
 }
 
@@ -806,6 +806,6 @@ pub fn is_effective_on_day_5_test() {
     end_excluding: moment.from_gtempo_literal("2025-08-11T00:00:00.000Z"),
     value: "boop",
   )
-  |> tl_past_variant.is_effective_on_day(day.from_gtempo_literal("2025-01-01"))
+  |> tl_past_variant.is_effective_on_day(day.testing_iso8601("2025-01-01"))
   |> should.equal(False)
 }

@@ -1,6 +1,7 @@
 import day.{type Day}
 import duration_extra
 import gleam/int
+import gleam/string
 import gleam/time/calendar.{type Month}
 import gleam/time/duration
 import gleam/time/timestamp
@@ -64,6 +65,24 @@ pub fn from_day(day: Day) -> ISODate {
 /// ```
 pub fn to_day(date: ISODate) -> Day {
   date.day
+}
+
+/// Returns an ISO 8601-formatted string.
+/// 
+/// ## Examples
+/// ```gleam
+/// day.parse_iso8601("2026-04-19")
+/// |> result.unwrap(day.from_unix_days(0))
+/// |> iso_date.from_day
+/// |> iso_date.to_string
+/// // "2026-04-19"
+/// ```
+pub fn to_string(date: ISODate) -> String {
+  string.pad_start(to_year(date) |> int.to_string, to: 4, with: "0")
+  <> "-"
+  <> string.pad_start(to_month_number(date) |> int.to_string, to: 2, with: "0")
+  <> "-"
+  <> string.pad_start(to_day_number(date) |> int.to_string, to: 2, with: "0")
 }
 
 // ----------------------------------------------------

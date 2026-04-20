@@ -844,8 +844,8 @@ pub fn slice_by_moment_interval_5_test() {
 pub fn filter_by_day_interval_1_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-02-15"),
-      final: day.from_gtempo_literal("2025-02-23"),
+      start: day.testing_iso8601("2025-02-15"),
+      final: day.testing_iso8601("2025-02-23"),
     )
   // -----------------------------------------------------
   timelined.new(
@@ -897,8 +897,8 @@ pub fn filter_by_day_interval_1_test() {
 pub fn filter_by_day_interval_2_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-02-18"),
-      final: day.from_gtempo_literal("2025-02-18"),
+      start: day.testing_iso8601("2025-02-18"),
+      final: day.testing_iso8601("2025-02-18"),
     )
   // -----------------------------------------------------
   timelined.new(
@@ -940,8 +940,8 @@ pub fn filter_by_day_interval_2_test() {
 pub fn filter_by_day_interval_3_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-03-05"),
-      final: day.from_gtempo_literal("2025-03-05"),
+      start: day.testing_iso8601("2025-03-05"),
+      final: day.testing_iso8601("2025-03-05"),
     )
   //---------------------------------------------
   timelined.new(
@@ -984,8 +984,8 @@ pub fn filter_by_day_interval_3_test() {
 pub fn filter_by_day_interval_4_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-01-05"),
-      final: day.from_gtempo_literal("2025-01-05"),
+      start: day.testing_iso8601("2025-01-05"),
+      final: day.testing_iso8601("2025-01-05"),
     )
   // -----------------------------------------------------
   timelined.new(
@@ -1019,8 +1019,8 @@ pub fn filter_by_day_interval_4_test() {
 pub fn filter_by_day_interval_5_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-02-20"),
-      final: day.from_gtempo_literal("2025-03-05"),
+      start: day.testing_iso8601("2025-02-20"),
+      final: day.testing_iso8601("2025-03-05"),
     )
   // -----------------------------------------------------
   timelined.new(
@@ -1069,8 +1069,8 @@ pub fn filter_by_day_interval_5_test() {
 pub fn filter_by_day_interval_t1_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-02-20"),
-      final: day.from_gtempo_literal("2025-02-25"),
+      start: day.testing_iso8601("2025-02-20"),
+      final: day.testing_iso8601("2025-02-25"),
     )
   // -----------------------------------------------------
   timelined.new(
@@ -1119,8 +1119,8 @@ pub fn filter_by_day_interval_t1_test() {
 pub fn filter_by_day_interval_t2_test() {
   let interval =
     day_interval.new(
-      start: day.from_gtempo_literal("2025-02-20"),
-      final: day.from_gtempo_literal("2025-02-24"),
+      start: day.testing_iso8601("2025-02-20"),
+      final: day.testing_iso8601("2025-02-24"),
     )
   // -----------------------------------------------------
   timelined.new(
@@ -1190,12 +1190,12 @@ pub fn filter_by_day_1_test() {
     with: "🎸🥁",
     starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
   )
-  |> timelined.filter_by_day(day.from_gtempo_literal("2025-02-20"))
+  |> timelined.filter_by_day(day.testing_iso8601("2025-02-20"))
   |> should.equal(
     tl_slice_by_day.new(
       interval: day_interval.new(
-        start: day.from_gtempo_literal("2025-02-20"),
-        final: day.from_gtempo_literal("2025-02-20"),
+        start: day.testing_iso8601("2025-02-20"),
+        final: day.testing_iso8601("2025-02-20"),
       ),
       current: None,
       history: [
@@ -1234,12 +1234,12 @@ pub fn filter_by_day_2_test() {
     with: "🎸🥁",
     starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
   )
-  |> timelined.filter_by_day(day.from_gtempo_literal("2025-02-18"))
+  |> timelined.filter_by_day(day.testing_iso8601("2025-02-18"))
   |> should.equal(
     tl_slice_by_day.new(
       interval: day_interval.new(
-        start: day.from_gtempo_literal("2025-02-18"),
-        final: day.from_gtempo_literal("2025-02-18"),
+        start: day.testing_iso8601("2025-02-18"),
+        final: day.testing_iso8601("2025-02-18"),
       ),
       current: None,
       history: [

@@ -32,7 +32,7 @@ pub fn json_io(
 
 pub fn json_o_1_test() {
   cal_current_variant.new(
-    start: day.from_gtempo_literal("2025-03-08"),
+    start: day.testing_iso8601("2025-03-08"),
     value: "33333",
   )
   |> json_o(expected: "{\"start\":20155,\"value\":\"33333\"}")
@@ -40,7 +40,7 @@ pub fn json_o_1_test() {
 
 pub fn json_io_1_test() {
   cal_current_variant.new(
-    start: day.from_gtempo_literal("2025-03-08"),
+    start: day.testing_iso8601("2025-03-08"),
     value: "33333",
   )
   |> json_io(decode.string)
@@ -52,7 +52,7 @@ pub fn json_io_1_test() {
 pub fn unwrap_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-02-02"),
+    start: day.testing_iso8601("2025-02-02"),
   )
   |> cal_current_variant.unwrap
   |> should.equal("boop")
@@ -64,10 +64,10 @@ pub fn unwrap_test() {
 pub fn to_start_day_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-02-02"),
+    start: day.testing_iso8601("2025-02-02"),
   )
   |> cal_current_variant.to_start_day
-  |> should.equal(day.from_gtempo_literal("2025-02-02"))
+  |> should.equal(day.testing_iso8601("2025-02-02"))
 }
 
 // ================================================
@@ -81,11 +81,11 @@ pub fn to_start_day_test() {
 pub fn is_effective_in_day_interval_1_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-02-02"),
+    start: day.testing_iso8601("2025-02-02"),
   )
   |> cal_current_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025.02.21"),
-    final: day.from_gtempo_literal("2025.02.25"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -97,11 +97,11 @@ pub fn is_effective_in_day_interval_1_test() {
 pub fn is_effective_in_day_interval_2_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-02-21"),
+    start: day.testing_iso8601("2025-02-21"),
   )
   |> cal_current_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025.02.21"),
-    final: day.from_gtempo_literal("2025.02.25"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -113,11 +113,11 @@ pub fn is_effective_in_day_interval_2_test() {
 pub fn is_effective_in_day_interval_3_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-02-22"),
+    start: day.testing_iso8601("2025-02-22"),
   )
   |> cal_current_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025.02.21"),
-    final: day.from_gtempo_literal("2025.02.25"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -129,11 +129,11 @@ pub fn is_effective_in_day_interval_3_test() {
 pub fn is_effective_in_day_interval_4_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-02-25"),
+    start: day.testing_iso8601("2025-02-25"),
   )
   |> cal_current_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025.02.21"),
-    final: day.from_gtempo_literal("2025.02.25"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(True)
 }
@@ -145,11 +145,11 @@ pub fn is_effective_in_day_interval_4_test() {
 pub fn is_effective_in_day_interval_5_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-24"),
   )
   |> cal_current_variant.is_effective_in_day_interval(day_interval.new(
-    start: day.from_gtempo_literal("2025.02.21"),
-    final: day.from_gtempo_literal("2025.02.25"),
+    start: day.testing_iso8601("2025-02-21"),
+    final: day.testing_iso8601("2025-02-25"),
   ))
   |> should.equal(False)
 }
@@ -165,11 +165,9 @@ pub fn is_effective_in_day_interval_5_test() {
 pub fn is_effective_on_day_1_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-24"),
   )
-  |> cal_current_variant.is_effective_on_day(day.from_gtempo_literal(
-    "2025-03-25",
-  ))
+  |> cal_current_variant.is_effective_on_day(day.testing_iso8601("2025-03-25"))
   |> should.equal(True)
 }
 
@@ -180,11 +178,9 @@ pub fn is_effective_on_day_1_test() {
 pub fn is_effective_on_day_2_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-24"),
   )
-  |> cal_current_variant.is_effective_on_day(day.from_gtempo_literal(
-    "2025-03-24",
-  ))
+  |> cal_current_variant.is_effective_on_day(day.testing_iso8601("2025-03-24"))
   |> should.equal(True)
 }
 
@@ -195,11 +191,9 @@ pub fn is_effective_on_day_2_test() {
 pub fn is_effective_on_day_3_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-24"),
   )
-  |> cal_current_variant.is_effective_on_day(day.from_gtempo_literal(
-    "2025-03-21",
-  ))
+  |> cal_current_variant.is_effective_on_day(day.testing_iso8601("2025-03-21"))
   |> should.equal(False)
 }
 
@@ -214,9 +208,9 @@ pub fn is_effective_on_day_3_test() {
 pub fn overlaps_1_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-24"),
   )
-  |> cal_current_variant.overlaps(day.from_gtempo_literal("2025-03-25"))
+  |> cal_current_variant.overlaps(day.testing_iso8601("2025-03-25"))
   |> should.equal(True)
 }
 
@@ -227,9 +221,9 @@ pub fn overlaps_1_test() {
 pub fn overlaps_2_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-24"),
   )
-  |> cal_current_variant.overlaps(day.from_gtempo_literal("2025-03-24"))
+  |> cal_current_variant.overlaps(day.testing_iso8601("2025-03-24"))
   |> should.equal(True)
 }
 
@@ -240,8 +234,8 @@ pub fn overlaps_2_test() {
 pub fn overlaps_3_test() {
   cal_current_variant.new(
     value: "boop",
-    start: day.from_gtempo_literal("2025-03-24"),
+    start: day.testing_iso8601("2025-03-24"),
   )
-  |> cal_current_variant.overlaps(day.from_gtempo_literal("2025-03-21"))
+  |> cal_current_variant.overlaps(day.testing_iso8601("2025-03-21"))
   |> should.equal(False)
 }

@@ -9,7 +9,7 @@ import gleeunit/should
 // ----------------------------------------------------
 
 pub fn from_date_1_test() {
-  let day = day.from_gtempo_literal("2016-11-05")
+  let day = day.testing_iso8601("2016-11-05")
 
   day
   |> iso_week_date.from_day
@@ -22,7 +22,7 @@ pub fn from_date_1_test() {
 }
 
 pub fn from_date_2_test() {
-  let day = day.from_gtempo_literal("2024-09-11")
+  let day = day.testing_iso8601("2024-09-11")
 
   day
   |> iso_week_date.from_day
@@ -35,7 +35,7 @@ pub fn from_date_2_test() {
 }
 
 pub fn from_date_3_test() {
-  let day = day.from_gtempo_literal("1991-04-14")
+  let day = day.testing_iso8601("1991-04-14")
 
   day
   |> iso_week_date.from_day
@@ -48,7 +48,7 @@ pub fn from_date_3_test() {
 }
 
 pub fn from_date_4_test() {
-  let day = day.from_gtempo_literal("1999-07-15")
+  let day = day.testing_iso8601("1999-07-15")
 
   day
   |> iso_week_date.from_day
@@ -61,7 +61,7 @@ pub fn from_date_4_test() {
 }
 
 pub fn from_date_5_test() {
-  let day = day.from_gtempo_literal("2013-10-30")
+  let day = day.testing_iso8601("2013-10-30")
 
   day
   |> iso_week_date.from_day
@@ -76,7 +76,7 @@ pub fn from_date_5_test() {
 // border case 1 -------------------------------------
 
 pub fn from_date_year_border_1_1_test() {
-  let day = day.from_gtempo_literal("2024-12-30")
+  let day = day.testing_iso8601("2024-12-30")
 
   day
   |> iso_week_date.from_day
@@ -89,7 +89,7 @@ pub fn from_date_year_border_1_1_test() {
 }
 
 pub fn from_date_year_border_1_2_test() {
-  let day = day.from_gtempo_literal("2024-12-31")
+  let day = day.testing_iso8601("2024-12-31")
 
   day
   |> iso_week_date.from_day
@@ -102,7 +102,7 @@ pub fn from_date_year_border_1_2_test() {
 }
 
 pub fn from_date_year_border_1_3_test() {
-  let day = day.from_gtempo_literal("2025-01-01")
+  let day = day.testing_iso8601("2025-01-01")
 
   day
   |> iso_week_date.from_day
@@ -117,7 +117,7 @@ pub fn from_date_year_border_1_3_test() {
 // border case 2 -------------------------------------
 
 pub fn from_date_year_border_2_1_test() {
-  let day = day.from_gtempo_literal("2005-01-01")
+  let day = day.testing_iso8601("2005-01-01")
 
   day
   |> iso_week_date.from_day
@@ -130,7 +130,7 @@ pub fn from_date_year_border_2_1_test() {
 }
 
 pub fn from_date_year_border_2_2_test() {
-  let day = day.from_gtempo_literal("2005-01-02")
+  let day = day.testing_iso8601("2005-01-02")
 
   day
   |> iso_week_date.from_day
@@ -145,7 +145,7 @@ pub fn from_date_year_border_2_2_test() {
 // border case 3 -------------------------------------
 
 pub fn from_date_year_border_3_1_test() {
-  let day = day.from_gtempo_literal("2005-12-31")
+  let day = day.testing_iso8601("2005-12-31")
 
   day
   |> iso_week_date.from_day
@@ -158,7 +158,7 @@ pub fn from_date_year_border_3_1_test() {
 }
 
 pub fn from_date_year_border_3_2_test() {
-  let day = day.from_gtempo_literal("2006-01-01")
+  let day = day.testing_iso8601("2006-01-01")
 
   day
   |> iso_week_date.from_day
@@ -171,7 +171,7 @@ pub fn from_date_year_border_3_2_test() {
 }
 
 pub fn from_date_year_border_3_3_test() {
-  let day = day.from_gtempo_literal("2006-01-02")
+  let day = day.testing_iso8601("2006-01-02")
 
   day
   |> iso_week_date.from_day
@@ -186,7 +186,7 @@ pub fn from_date_year_border_3_3_test() {
 // border case 4 -------------------------------------
 
 pub fn from_date_year_border_4_1_test() {
-  let day = day.from_gtempo_literal("2007-12-30")
+  let day = day.testing_iso8601("2007-12-30")
 
   day
   |> iso_week_date.from_day
@@ -199,7 +199,7 @@ pub fn from_date_year_border_4_1_test() {
 }
 
 pub fn from_date_year_border_4_2_test() {
-  let day = day.from_gtempo_literal("2007-12-31")
+  let day = day.testing_iso8601("2007-12-31")
 
   day
   |> iso_week_date.from_day
@@ -212,7 +212,7 @@ pub fn from_date_year_border_4_2_test() {
 }
 
 pub fn from_date_year_border_4_3_test() {
-  let day = day.from_gtempo_literal("2008-01-01")
+  let day = day.testing_iso8601("2008-01-01")
 
   day
   |> iso_week_date.from_day
@@ -227,7 +227,7 @@ pub fn from_date_year_border_4_3_test() {
 // border case 5 -------------------------------------
 
 pub fn from_date_year_border_5_1_test() {
-  let day = day.from_gtempo_literal("2008-12-28")
+  let day = day.testing_iso8601("2008-12-28")
 
   day
   |> iso_week_date.from_day
@@ -240,7 +240,7 @@ pub fn from_date_year_border_5_1_test() {
 }
 
 pub fn from_date_year_border_5_2_test() {
-  let day = day.from_gtempo_literal("2008-12-29")
+  let day = day.testing_iso8601("2008-12-29")
 
   day
   |> iso_week_date.from_day
@@ -253,7 +253,7 @@ pub fn from_date_year_border_5_2_test() {
 }
 
 pub fn from_date_year_border_5_3_test() {
-  let day = day.from_gtempo_literal("2008-12-30")
+  let day = day.testing_iso8601("2008-12-30")
 
   day
   |> iso_week_date.from_day
@@ -266,7 +266,7 @@ pub fn from_date_year_border_5_3_test() {
 }
 
 pub fn from_date_year_border_5_4_test() {
-  let day = day.from_gtempo_literal("2008-12-31")
+  let day = day.testing_iso8601("2008-12-31")
 
   day
   |> iso_week_date.from_day
@@ -279,7 +279,7 @@ pub fn from_date_year_border_5_4_test() {
 }
 
 pub fn from_date_year_border_5_5_test() {
-  let day = day.from_gtempo_literal("2009-01-01")
+  let day = day.testing_iso8601("2009-01-01")
 
   day
   |> iso_week_date.from_day
@@ -294,7 +294,7 @@ pub fn from_date_year_border_5_5_test() {
 // border case 6 -------------------------------------
 
 pub fn from_date_year_border_6_1_test() {
-  let day = day.from_gtempo_literal("2009-12-31")
+  let day = day.testing_iso8601("2009-12-31")
 
   day
   |> iso_week_date.from_day
@@ -307,7 +307,7 @@ pub fn from_date_year_border_6_1_test() {
 }
 
 pub fn from_date_year_border_6_2_test() {
-  let day = day.from_gtempo_literal("2010-01-01")
+  let day = day.testing_iso8601("2010-01-01")
 
   day
   |> iso_week_date.from_day
@@ -320,7 +320,7 @@ pub fn from_date_year_border_6_2_test() {
 }
 
 pub fn from_date_year_border_6_3_test() {
-  let day = day.from_gtempo_literal("2010-01-02")
+  let day = day.testing_iso8601("2010-01-02")
 
   day
   |> iso_week_date.from_day
@@ -333,7 +333,7 @@ pub fn from_date_year_border_6_3_test() {
 }
 
 pub fn from_date_year_border_6_4_test() {
-  let day = day.from_gtempo_literal("2010-01-03")
+  let day = day.testing_iso8601("2010-01-03")
 
   day
   |> iso_week_date.from_day
@@ -348,7 +348,7 @@ pub fn from_date_year_border_6_4_test() {
 // border case 7 -------------------------------------
 
 pub fn from_date_year_border_7_1_test() {
-  let day = day.from_gtempo_literal("2023-12-31")
+  let day = day.testing_iso8601("2023-12-31")
 
   day
   |> iso_week_date.from_day
@@ -361,7 +361,7 @@ pub fn from_date_year_border_7_1_test() {
 }
 
 pub fn from_date_year_border_7_2_test() {
-  let day = day.from_gtempo_literal("2024-01-01")
+  let day = day.testing_iso8601("2024-01-01")
 
   day
   |> iso_week_date.from_day
@@ -380,21 +380,21 @@ pub fn from_date_year_border_7_2_test() {
 // ----------------------------------------------------
 
 pub fn to_year_of_week_date_1_test() {
-  day.from_gtempo_literal("2013-10-30")
+  day.testing_iso8601("2013-10-30")
   |> iso_week_date.from_day
   |> iso_week_date.to_year
   |> should.equal(2013)
 }
 
 pub fn to_ordinal_week_1_teat() {
-  day.from_gtempo_literal("2013-10-30")
+  day.testing_iso8601("2013-10-30")
   |> iso_week_date.from_day
   |> iso_week_date.to_week_number
   |> should.equal(44)
 }
 
 pub fn to_normalised_day_of_week_number_1_teat() {
-  day.from_gtempo_literal("2013-10-30")
+  day.testing_iso8601("2013-10-30")
   |> iso_week_date.from_day
   |> iso_week_date.to_day_number
   |> should.equal(3)
