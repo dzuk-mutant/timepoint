@@ -71,7 +71,8 @@ pub fn from_timestamp(timestamp: Timestamp, with offset: Offset) -> Moment {
   Moment(timestamp:, offset:)
 }
 
-/// Returns the UNIX time value of the Moment, without the contextualising offset.
+/// Returns the UNIX time value of the Moment, without the
+/// contextualising offset.
 pub fn to_timestamp(moment: Moment) -> Timestamp {
   moment.timestamp
 }
@@ -79,6 +80,31 @@ pub fn to_timestamp(moment: Moment) -> Timestamp {
 /// Returns the Offset portion of a Moment.
 pub fn to_offset(moment: Moment) -> Offset {
   moment.offset
+}
+
+// ---------------------------------------------------------
+
+/// Creates a Moment from a valid RFC 3339 formatted time string.
+pub fn parse_rfc3339(string: String) -> Result(Moment, Nil) {
+  case timestamp.parse_rfc3339(string) {
+    Ok(ts) -> {
+      todo
+    }
+    Error(_) -> Error(Nil)
+  }
+}
+
+/// Often when testing time functions, you're creating times
+/// **a lot** of the time and unwrapping Results is unecessary
+/// for the test case. This is a version of `parse_rfc3339` that
+/// simply panics when the input is wrong.
+/// 
+/// Use for testing only.
+pub fn testing_rfc3339(string: String) -> Moment {
+  case parse_rfc3339(string) {
+    Ok(moment) -> moment
+    Error(_) -> panic as "incorrect RFC 3339 string for testing"
+  }
 }
 
 /// Converts a gtempo DateTime to a Moment.

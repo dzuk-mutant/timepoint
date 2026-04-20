@@ -91,7 +91,7 @@ pub fn parse_iso8601(string: String) -> Result(Day, Nil) {
 pub fn testing_iso8601(string: String) -> Day {
   case parse_iso8601(string) {
     Ok(day) -> day
-    Error(_) -> panic as "incorrect testing ISO 8601 string"
+    Error(_) -> panic as "incorrect ISO 8601 string for testing"
   }
 }
 
