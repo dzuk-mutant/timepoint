@@ -66,20 +66,6 @@ pub fn to_day(date: ISODate) -> Day {
   date.day
 }
 
-/// Convenience function that gives the year.
-/// 
-/// Useful for piping!
-pub fn to_year(date: ISODate) -> Int {
-  date.year
-}
-
-/// Convenience function that gives the day number (1-31).
-/// 
-/// Useful for piping!
-pub fn to_day_number(date: ISODate) -> Int {
-  date.day_number
-}
-
 // ----------------------------------------------------
 // ----------------------------------------------------
 // ----------------------------------------------------
@@ -90,11 +76,37 @@ pub fn to_day_number(date: ISODate) -> Int {
 // ----------------------------------------------------
 // ----------------------------------------------------
 
-pub fn to_day_of_week_number(date: ISODate) -> Int {
-  case int.modulo(day.to_unix_days(date.day) + 3, 7) {
-    Error(Nil) -> panic as "modulo broke in an unexpected way."
-    Ok(n) -> n + 1
+/// Returns the day number (1-31).
+pub fn to_day_number(date: ISODate) -> Int {
+  date.day_number
+}
+
+/// Returns the month (January - December).
+pub fn to_month(date: ISODate) -> calendar.Month {
+  date.month
+}
+
+/// Returns the month as a number (1 - 12).
+pub fn to_month_number(date: ISODate) -> Int {
+  case date.month {
+    calendar.January -> 1
+    calendar.February -> 2
+    calendar.March -> 3
+    calendar.April -> 4
+    calendar.May -> 5
+    calendar.June -> 6
+    calendar.July -> 7
+    calendar.August -> 8
+    calendar.September -> 9
+    calendar.October -> 10
+    calendar.November -> 11
+    calendar.December -> 12
   }
+}
+
+/// Returns the year. (eg. 2026)
+pub fn to_year(date: ISODate) -> Int {
+  date.year
 }
 
 /// Returns day of week number, to ISO standards.
@@ -106,7 +118,20 @@ pub fn to_day_of_week(date: ISODate) -> DayOfWeek {
   |> int_to_dow
 }
 
-/// Gets a number representing the Ordinal Day of a year out of a Day.
+/// Returns the day of the week as a number, in ISO standards.
+/// 
+/// Monday is 1 and Sunday is 7.
+pub fn to_day_of_week_number(date: ISODate) -> Int {
+  case int.modulo(day.to_unix_days(date.day) + 3, 7) {
+    Error(Nil) -> panic as "modulo broke in an unexpected way."
+    Ok(n) -> n + 1
+  }
+}
+
+/// Returns a number representing the Ordinal Day of a year out of a Day.
+/// 
+/// This is useful if you want to know how many days of the year have
+/// passed, including the given date.
 pub fn to_ordinal_day(date: ISODate) -> Int {
   let start_of_month = case date.month, calendar.is_leap_year(date.year) {
     calendar.January, _ -> 0
@@ -134,23 +159,6 @@ pub fn to_ordinal_day(date: ISODate) -> Int {
   }
 
   start_of_month + date.day_number
-}
-
-pub fn to_month_number(date: ISODate) -> Int {
-  case date.month {
-    calendar.January -> 1
-    calendar.February -> 2
-    calendar.March -> 3
-    calendar.April -> 4
-    calendar.May -> 5
-    calendar.June -> 6
-    calendar.July -> 7
-    calendar.August -> 8
-    calendar.September -> 9
-    calendar.October -> 10
-    calendar.November -> 11
-    calendar.December -> 12
-  }
 }
 
 // ----------------------------------------------------
@@ -186,12 +194,12 @@ pub fn next_day_of_week(date: ISODate, day_of_week: DayOfWeek) -> ISODate {
   let diff = to_day_of_week_number(date) - dow_to_int(day_of_week)
 
   case diff {
-    n if n <= 0 -> {
-      day.add(date.day, 7 + n)
+    n if n >= 0 -> {
+      day.add(date.day, 7 - n)
       |> from_day
     }
     _ -> {
-      day.add(date.day, diff)
+      day.add(date.day, int.negate(diff))
       |> from_day
     }
   }
@@ -203,16 +211,9 @@ pub fn closest_prev_day_of_week(
   date: ISODate,
   day_of_week: DayOfWeek,
 ) -> ISODate {
-  let diff = to_day_of_week_number(date) - dow_to_int(day_of_week)
-
-  case diff {
-    n if n <= 0 -> {
-      date
-    }
-    _ -> {
-      day.subtract(date.day, diff)
-      |> from_day
-    }
+  case to_day_of_week(date) == day_of_week {
+    True -> date
+    False -> prev_day_of_week(date, day_of_week)
   }
 }
 
@@ -222,16 +223,9 @@ pub fn closest_next_day_of_week(
   date: ISODate,
   day_of_week: DayOfWeek,
 ) -> ISODate {
-  let diff = to_day_of_week_number(date) - dow_to_int(day_of_week)
-
-  case diff {
-    n if n <= 0 -> {
-      date
-    }
-    _ -> {
-      day.add(date.day, diff)
-      |> from_day
-    }
+  case to_day_of_week(date) == day_of_week {
+    True -> date
+    False -> next_day_of_week(date, day_of_week)
   }
 }
 
@@ -247,21 +241,6 @@ pub fn last_of_month(date: ISODate) -> ISODate {
 
 // ----------------------------------------------------
 // ----------------------------------------------------
-// ----------------------------------------------------
-// ----------------------------------------------------
-// --------------------- QUERY ------------------------
-// ----------------------------------------------------
-// ----------------------------------------------------
-// ----------------------------------------------------
-// ----------------------------------------------------
-
-// checks if the first date is exactly one day after the second.
-pub fn is_one_day_after(a: Day, from b: Day) {
-  day.difference(b, from: a) == 1
-}
-
-// ----------------------------------------------------
-// ----------------------------------------------------
 // ----------------- INTERNAL HELPER ------------------
 // ----------------------------------------------------
 // ----------------------------------------------------
@@ -273,7 +252,7 @@ fn to_amount_of_days_in_month(date: ISODate) -> Int {
     calendar.February, True -> 29
     calendar.March, _ -> 31
     calendar.April, _ -> 30
-    calendar.May, _ -> 30
+    calendar.May, _ -> 31
     calendar.June, _ -> 30
     calendar.July, _ -> 31
     calendar.August, _ -> 31

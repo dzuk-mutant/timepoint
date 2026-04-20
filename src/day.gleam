@@ -30,15 +30,41 @@ pub opaque type Day {
   Day(unix_days: Int)
 }
 
-/// 1st January 1970
-const unix_epoch_as_rata_die: Int = 719_163
-
 // -----------------------------------------------------
 // -----------------------------------------------------
 // -----------------------------------------------------
 // -------------------- CONVERSION ---------------------
 // -----------------------------------------------------
 // -----------------------------------------------------
+// -----------------------------------------------------
+
+/// Casts a Moment into a Day.
+/// 
+/// ## Examples
+/// 
+/// ```gleam
+/// timestamp.from_unix_seconds(0)
+/// |> moment.from_timestamp(with: offset.from_mins(60))
+/// |> day.from_moment()
+/// |> iso_date.from_day()
+/// ```
+pub fn from_moment(moment: Moment) -> Day {
+  let offset_shift =
+    moment
+    |> moment.to_offset
+    |> offset.to_duration
+
+  let shifted_timestamp =
+    moment
+    |> moment.to_timestamp
+    |> timestamp.add(offset_shift)
+
+  // duration from epoch
+  timestamp.difference(timestamp.from_unix_seconds(0), shifted_timestamp)
+  |> duration_extra.as_days
+  |> from_unix_days
+}
+
 // -----------------------------------------------------
 
 /// Converts gtempo Date to a Day.
@@ -81,6 +107,9 @@ pub fn to_unix_days(day: Day) -> Int {
 
 // -----------------------------------------------------
 
+/// 1st January 1970
+const unix_epoch_as_rata_die: Int = 719_163
+
 /// Creates a Day from an Int representing Rata Die days.
 /// 
 /// Rata die is the number of days from 1st January, 1 CE.
@@ -96,26 +125,6 @@ pub fn from_rata_die(rata_die: Int) -> Day {
 pub fn to_rata_die(day: Day) -> Int {
   day.unix_days
   |> int.add(unix_epoch_as_rata_die)
-}
-
-// -----------------------------------------------------
-
-/// Casts a Moment into a Day.
-pub fn from_moment(moment: Moment) -> Day {
-  let offset_shift =
-    moment
-    |> moment.to_offset
-    |> offset.to_duration
-
-  let shifted_timestamp =
-    moment
-    |> moment.to_timestamp
-    |> timestamp.add(offset_shift)
-
-  // duration from epoch
-  timestamp.difference(timestamp.from_unix_seconds(0), shifted_timestamp)
-  |> duration_extra.as_days
-  |> from_unix_days
 }
 
 // -----------------------------------------------------
