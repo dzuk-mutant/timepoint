@@ -44,7 +44,7 @@ pub fn output_input(
 pub fn example_1_output_test() {
   output(
     tl_current_variant.new(
-      start: moment.from_gtempo_literal("2025-03-08T00:00:00.000Z"),
+      start: moment.testing_rfc3339("2025-03-08T00:00:00.000Z"),
       value: "33333",
     ),
     fn(x) { x |> json.string },
@@ -55,7 +55,7 @@ pub fn example_1_output_test() {
 pub fn example_1_input_output_test() {
   output_input(
     tl_current_variant.new(
-      start: moment.from_gtempo_literal("2025-03-08T00:00:00.000Z"),
+      start: moment.testing_rfc3339("2025-03-08T00:00:00.000Z"),
       value: "33333",
     ),
     fn(x) { x |> json.string },
@@ -69,7 +69,7 @@ pub fn example_1_input_output_test() {
 pub fn unwrap_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
   )
   |> tl_current_variant.unwrap
   |> should.equal("boop")
@@ -81,10 +81,10 @@ pub fn unwrap_test() {
 pub fn to_start_day_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
   )
   |> tl_current_variant.to_start_moment
-  |> should.equal(moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"))
+  |> should.equal(moment.testing_rfc3339("2025-02-02T00:00:00.000Z"))
 }
 
 // ================================================
@@ -98,11 +98,11 @@ pub fn to_start_day_test() {
 pub fn is_effective_in_moment_interval_1_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_moment_interval(moment_interval.new(
-    start: moment.from_gtempo_literal("2025-02-21T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-21T00:00:00.000Z"),
+    end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   ))
   |> should.equal(True)
 }
@@ -114,11 +114,11 @@ pub fn is_effective_in_moment_interval_1_test() {
 pub fn is_effective_in_moment_interval_2_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-21T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-21T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_moment_interval(moment_interval.new(
-    start: moment.from_gtempo_literal("2025-02-21T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-21T00:00:00.000Z"),
+    end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   ))
   |> should.equal(True)
 }
@@ -130,11 +130,11 @@ pub fn is_effective_in_moment_interval_2_test() {
 pub fn is_effective_in_moment_interval_3_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-22T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-22T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_moment_interval(moment_interval.new(
-    start: moment.from_gtempo_literal("2025-02-21T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-21T00:00:00.000Z"),
+    end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   ))
   |> should.equal(True)
 }
@@ -146,11 +146,11 @@ pub fn is_effective_in_moment_interval_3_test() {
 pub fn is_effective_in_moment_interval_4_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_moment_interval(moment_interval.new(
-    start: moment.from_gtempo_literal("2025-02-21T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-21T00:00:00.000Z"),
+    end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   ))
   |> should.equal(False)
 }
@@ -162,11 +162,11 @@ pub fn is_effective_in_moment_interval_4_test() {
 pub fn is_effective_in_moment_interval_5_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-03-24T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-03-24T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_moment_interval(moment_interval.new(
-    start: moment.from_gtempo_literal("2025-02-21T00:00:00.000Z"),
-    end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-21T00:00:00.000Z"),
+    end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   ))
   |> should.equal(False)
 }
@@ -182,7 +182,7 @@ pub fn is_effective_in_moment_interval_5_test() {
 pub fn is_effective_in_day_interval_1_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_day_interval(day_interval.new(
     start: day.testing_iso8601("2025-02-21"),
@@ -198,7 +198,7 @@ pub fn is_effective_in_day_interval_1_test() {
 pub fn is_effective_in_day_interval_2_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-21T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-21T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_day_interval(day_interval.new(
     start: day.testing_iso8601("2025-02-21"),
@@ -214,7 +214,7 @@ pub fn is_effective_in_day_interval_2_test() {
 pub fn is_effective_in_day_interval_3_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-22T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-22T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_day_interval(day_interval.new(
     start: day.testing_iso8601("2025-02-21"),
@@ -230,7 +230,7 @@ pub fn is_effective_in_day_interval_3_test() {
 pub fn is_effective_in_day_interval_4_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_day_interval(day_interval.new(
     start: day.testing_iso8601("2025-02-21"),
@@ -246,7 +246,7 @@ pub fn is_effective_in_day_interval_4_test() {
 pub fn is_effective_in_day_interval_5_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-03-24T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-03-24T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_in_day_interval(day_interval.new(
     start: day.testing_iso8601("2025-02-21"),
@@ -262,7 +262,7 @@ pub fn is_effective_in_day_interval_5_test() {
 pub fn is_effective_in_day_interval_t1_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2026-02-26T00:00:00.001+00:00"),
+    start: moment.testing_rfc3339("2026-02-26T00:00:00.001+00:00"),
   )
   |> tl_current_variant.is_effective_in_day_interval(day_interval.new(
     start: day.testing_iso8601("2025-02-21"),
@@ -278,7 +278,7 @@ pub fn is_effective_in_day_interval_t1_test() {
 pub fn is_effective_in_day_interval_t2_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-02-25T23:59:59.999+00:00"),
+    start: moment.testing_rfc3339("2025-02-25T23:59:59.999+00:00"),
   )
   |> tl_current_variant.is_effective_in_day_interval(day_interval.new(
     start: day.testing_iso8601("2025-02-21"),
@@ -298,7 +298,7 @@ pub fn is_effective_in_day_interval_t2_test() {
 pub fn is_effective_on_day_1_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-03-24T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-03-24T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_on_day(day.testing_iso8601("2025-03-25"))
   |> should.equal(True)
@@ -311,7 +311,7 @@ pub fn is_effective_on_day_1_test() {
 pub fn is_effective_on_day_2_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-03-24T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-03-24T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_on_day(day.testing_iso8601("2025-03-24"))
   |> should.equal(True)
@@ -324,7 +324,7 @@ pub fn is_effective_on_day_2_test() {
 pub fn is_effective_on_day_3_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-03-24T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-03-24T00:00:00.000Z"),
   )
   |> tl_current_variant.is_effective_on_day(day.testing_iso8601("2025-03-21"))
   |> should.equal(False)
@@ -341,9 +341,9 @@ pub fn is_effective_on_day_3_test() {
 pub fn overlaps_1_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-03-24T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-03-24T00:00:00.000Z"),
   )
-  |> tl_current_variant.overlaps(moment.from_gtempo_literal(
+  |> tl_current_variant.overlaps(moment.testing_rfc3339(
     "2025-03-25T00:00:00.000Z",
   ))
   |> should.equal(True)
@@ -356,9 +356,9 @@ pub fn overlaps_1_test() {
 pub fn overlaps_2_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-03-24T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-03-24T00:00:00.000Z"),
   )
-  |> tl_current_variant.overlaps(moment.from_gtempo_literal(
+  |> tl_current_variant.overlaps(moment.testing_rfc3339(
     "2025-03-24T00:00:00.000Z",
   ))
   |> should.equal(True)
@@ -371,9 +371,9 @@ pub fn overlaps_2_test() {
 pub fn overlaps_3_test() {
   tl_current_variant.new(
     value: "boop",
-    start: moment.from_gtempo_literal("2025-03-24T00:00:00.000Z"),
+    start: moment.testing_rfc3339("2025-03-24T00:00:00.000Z"),
   )
-  |> tl_current_variant.overlaps(moment.from_gtempo_literal(
+  |> tl_current_variant.overlaps(moment.testing_rfc3339(
     "2025-03-21T00:00:00.000Z",
   ))
   |> should.equal(False)

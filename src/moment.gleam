@@ -1,14 +1,10 @@
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/order.{type Order, Eq, Gt, Lt}
-import gleam/result
 import gleam/time/duration.{type Duration}
 import gleam/time/timestamp.{type Timestamp}
 import offset.{type Offset}
-import tempo.{type DateTime}
-import tempo/datetime as gtempo_datetime
-import tempo/naive_datetime as tempo_naive_datetime
-import tempo/offset as tempo_offset
+import parse/rfc3339
 import timestamp_extra
 
 /// A type that combines a Timestamp with an Offset.
@@ -86,10 +82,18 @@ pub fn to_offset(moment: Moment) -> Offset {
 
 /// Creates a Moment from a valid RFC 3339 formatted time string.
 pub fn parse_rfc3339(string: String) -> Result(Moment, Nil) {
-  case timestamp.parse_rfc3339(string) {
-    Ok(ts) -> {
-      todo
+  case rfc3339.parse(string) {
+    Ok(intermediate) -> {
+      Moment(
+        timestamp: timestamp.from_unix_seconds_and_nanoseconds(
+          intermediate.seconds,
+          intermediate.nanoseconds,
+        ),
+        offset: intermediate.offset,
+      )
+      |> Ok
     }
+
     Error(_) -> Error(Nil)
   }
 }
@@ -104,49 +108,6 @@ pub fn testing_rfc3339(string: String) -> Moment {
   case parse_rfc3339(string) {
     Ok(moment) -> moment
     Error(_) -> panic as "incorrect RFC 3339 string for testing"
-  }
-}
-
-/// Converts a gtempo DateTime to a Moment.
-pub fn from_gtempo_datetime(datetime: DateTime) -> Moment {
-  Moment(
-    timestamp: datetime
-      |> gtempo_datetime.to_timestamp,
-    offset: datetime
-      |> gtempo_datetime.get_offset
-      |> offset.from_gtempo_offset,
-  )
-}
-
-/// Converts a gtempo-compatible literal string into a Day.
-/// 
-/// TESTING ONLY. Will panic if it's wrong.
-pub fn from_gtempo_literal(str: String) -> Moment {
-  str
-  |> gtempo_datetime.literal
-  |> from_gtempo_datetime
-}
-
-/// Converts a Moment to a gtempo DateTime.
-/// 
-/// Offsets are included in the gtempo output.
-pub fn to_gtempo_datetime(moment: Moment) -> Result(DateTime, Nil) {
-  //
-  // tempo has an unexpected way of handling offsets.
-  case offset.to_gtempo_offset(moment.offset) {
-    Error(_) -> Error(Nil)
-    Ok(offset) -> {
-      let gtempo_offset_as_duration =
-        offset
-        |> tempo_offset.to_duration
-
-      moment.timestamp
-      |> gtempo_datetime.from_timestamp
-      |> gtempo_datetime.add(gtempo_offset_as_duration)
-      |> gtempo_datetime.apply_offset
-      |> tempo_naive_datetime.set_offset(offset)
-      |> Ok
-    }
   }
 }
 
@@ -258,20 +219,4 @@ pub fn decoder() -> Decoder(Moment) {
       Ok(moment) -> Ok(moment)
     }
   })
-}
-
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// --------------------- HELPER ------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-
-/// A helper function for testing.
-pub fn to_string(moment: Moment) -> String {
-  moment
-  |> to_gtempo_datetime
-  |> result.unwrap(gtempo_datetime.literal("2001-01-01T00:00:00.000Z"))
-  |> gtempo_datetime.to_string
 }

@@ -435,7 +435,7 @@ pub fn to_collision_with_moment_1_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
+  |> day_interval.to_collision_with_moment(moment.testing_rfc3339(
     "2040-01-01T00:00:00.000Z",
   ))
   |> should.equal(PointAfterFinal)
@@ -452,7 +452,7 @@ pub fn to_collision_with_moment_2_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
+  |> day_interval.to_collision_with_moment(moment.testing_rfc3339(
     "2036-09-24T00:00:00.000Z",
   ))
   |> should.equal(PointAfterFinal)
@@ -469,7 +469,7 @@ pub fn to_collision_with_moment_3_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
+  |> day_interval.to_collision_with_moment(moment.testing_rfc3339(
     "2036-09-23T23:59:59.999+00:00",
   ))
   |> should.equal(PointAtFinal)
@@ -486,7 +486,7 @@ pub fn to_collision_with_moment_4_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
+  |> day_interval.to_collision_with_moment(moment.testing_rfc3339(
     "2036-08-22T00:00:00.000Z",
   ))
   |> should.equal(PointInside)
@@ -503,7 +503,7 @@ pub fn to_collision_with_moment_5_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
+  |> day_interval.to_collision_with_moment(moment.testing_rfc3339(
     "2036-08-01T00:00:00.000Z",
   ))
   |> should.equal(PointAtStart)
@@ -520,7 +520,7 @@ pub fn to_collision_with_moment_6_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
+  |> day_interval.to_collision_with_moment(moment.testing_rfc3339(
     "2036-07-31T23:59:59.999+00:00",
   ))
   |> should.equal(PointBeforeStart)
@@ -537,7 +537,7 @@ pub fn to_collision_with_moment_7_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.to_collision_with_moment(moment.from_gtempo_literal(
+  |> day_interval.to_collision_with_moment(moment.testing_rfc3339(
     "2030-11-11T00:00:00.000Z",
   ))
   |> should.equal(PointBeforeStart)
@@ -675,7 +675,7 @@ pub fn is_around_moment_1_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_moment(moment.from_gtempo_literal(
+  |> day_interval.is_around_moment(moment.testing_rfc3339(
     "2040-01-01T00:00:00.000Z",
   ))
   |> should.equal(False)
@@ -692,7 +692,7 @@ pub fn is_around_moment_2_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_moment(moment.from_gtempo_literal(
+  |> day_interval.is_around_moment(moment.testing_rfc3339(
     "2036-09-24T00:00:00.000Z",
   ))
   |> should.equal(False)
@@ -709,7 +709,7 @@ pub fn is_around_moment_3_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_moment(moment.from_gtempo_literal(
+  |> day_interval.is_around_moment(moment.testing_rfc3339(
     "2036-09-23T23:59:59.999+00:00",
   ))
   |> should.equal(True)
@@ -726,7 +726,7 @@ pub fn is_around_moment_4_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_moment(moment.from_gtempo_literal(
+  |> day_interval.is_around_moment(moment.testing_rfc3339(
     "2036-08-22T00:00:00.000Z",
   ))
   |> should.equal(True)
@@ -743,7 +743,7 @@ pub fn is_around_moment_5_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_moment(moment.from_gtempo_literal(
+  |> day_interval.is_around_moment(moment.testing_rfc3339(
     "2036-08-01T00:00:00.000Z",
   ))
   |> should.equal(True)
@@ -760,7 +760,7 @@ pub fn is_around_moment_6_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_moment(moment.from_gtempo_literal(
+  |> day_interval.is_around_moment(moment.testing_rfc3339(
     "2036-07-31T23:59:59.999+00:00",
   ))
   |> should.equal(False)
@@ -777,7 +777,7 @@ pub fn is_around_moment_7_test() {
     start: day.testing_iso8601("2036-08-01"),
     final: day.testing_iso8601("2036-09-23"),
   )
-  |> day_interval.is_around_moment(moment.from_gtempo_literal(
+  |> day_interval.is_around_moment(moment.testing_rfc3339(
     "2030-11-11T00:00:00.000Z",
   ))
   |> should.equal(False)

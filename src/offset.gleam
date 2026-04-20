@@ -5,9 +5,6 @@ import gleam/json.{type Json}
 import gleam/order.{type Order}
 import gleam/time/calendar
 import gleam/time/duration.{type Duration}
-import tempo
-import tempo/duration as gtempo_duration
-import tempo/offset as gtempo_offset
 
 /// Offsets are the measure by which time is shifted in timezones.
 /// 
@@ -32,7 +29,7 @@ import tempo/offset as gtempo_offset
 /// particular time zone.
 /// 
 pub opaque type Offset {
-  Offset(minutes: Int)
+  Offset(seconds: Int)
 }
 
 // -----------------------------------------------------
@@ -43,23 +40,22 @@ pub opaque type Offset {
 // -----------------------------------------------------
 // -----------------------------------------------------
 
-/// Converts an Offset into a Duration.
-pub fn to_duration(offset: Offset) -> Duration {
-  offset.minutes
-  |> duration.minutes
+/// Creates an Offset from an Int representing minutes.
+/// 
+/// ## Examples
+/// ```gleam
+/// offset.from_minutes(60)
+/// ```
+pub fn from_seconds(seconds: Int) -> Offset {
+  Offset(seconds:)
 }
 
 /// Converts an Offset into an Int representing minutes.
-pub fn to_minutes(offset: Offset) -> Int {
-  offset.minutes
+pub fn to_seconds(offset: Offset) -> Int {
+  offset.seconds
 }
 
-/// Gets the current offset from the computer that is
-/// executing this function.
-pub fn from_local() -> Offset {
-  calendar.local_offset()
-  |> from_duration
-}
+// ------------------------------------------
 
 /// Creates an Offset from an Int representing minutes.
 /// 
@@ -68,8 +64,15 @@ pub fn from_local() -> Offset {
 /// offset.from_minutes(60)
 /// ```
 pub fn from_minutes(mins: Int) -> Offset {
-  Offset(minutes: mins)
+  Offset(seconds: mins * 60)
 }
+
+/// Converts an Offset into an Int representing minutes.
+pub fn to_minutes(offset: Offset) -> Int {
+  offset.seconds / 60
+}
+
+// ------------------------------------------
 
 /// Creates an Offset from a Duration.
 /// 
@@ -85,20 +88,17 @@ pub fn from_duration(duration: Duration) -> Offset {
   |> from_minutes
 }
 
-/// Creates an Offset from a gtempo offset.
-pub fn from_gtempo_offset(offset: tempo.Offset) -> Offset {
-  Offset(
-    minutes: offset
-    |> gtempo_offset.to_duration
-    |> gtempo_duration.as_minutes,
-  )
+/// Converts an Offset into a Duration.
+pub fn to_duration(offset: Offset) -> Duration {
+  offset.seconds
+  |> duration.seconds
 }
 
-/// Converts an Offset type in this package to one used by gtempo.
-pub fn to_gtempo_offset(offset: Offset) -> Result(tempo.Offset, Nil) {
-  offset.minutes
-  |> gtempo_duration.minutes
-  |> gtempo_offset.from_duration
+/// Gets the current offset from the computer that is
+/// executing this function.
+pub fn from_local() -> Offset {
+  calendar.local_offset()
+  |> from_duration
 }
 
 // -----------------------------------------------------
@@ -127,10 +127,10 @@ pub fn compare(offset_1: Offset, to offset_2: Offset) -> Order {
 // -----------------------------------------------------
 // -----------------------------------------------------
 
-const default: Offset = Offset(minutes: 0)
+const default: Offset = Offset(seconds: 0)
 
 pub fn to_json(offset: Offset) -> Json {
-  offset.minutes
+  offset.seconds
   |> json.int()
 }
 
@@ -138,7 +138,7 @@ pub fn decoder() -> Decoder(Offset) {
   decode.new_primitive_decoder("Offset", fn(offset) {
     case decode.run(offset, decode.int) {
       Error(_) -> Error(default)
-      Ok(mins) -> Ok(from_minutes(mins))
+      Ok(mins) -> Ok(from_seconds(mins))
     }
   })
 }

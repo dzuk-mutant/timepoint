@@ -116,7 +116,7 @@ pub fn epoch_sanity_check_1_test() {
 
 fn from_moment(input input: String, output output: String) {
   input
-  |> moment.from_gtempo_literal
+  |> moment.testing_rfc3339
   |> day.from_moment
   |> iso_date.from_day
   |> iso_date.to_string

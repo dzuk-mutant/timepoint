@@ -70,8 +70,8 @@ pub fn decoder(
   let default =
     TLPastVariant(
       interval: moment_interval.new(
-        start: moment.from_gtempo_literal("2025-03-10T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-04-11T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-03-10T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-04-11T00:00:00.000Z"),
       ),
       value: default_value,
     )

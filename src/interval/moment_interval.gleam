@@ -81,8 +81,8 @@ pub fn to_json(interval: MomentInterval) -> Json {
 pub fn decoder() -> Decoder(MomentInterval) {
   let default =
     MomentInterval(
-      start: moment.from_gtempo_literal("2025-03-10T00:00:00.000Z"),
-      end_excluding: moment.from_gtempo_literal("2025-03-10T00:00:00.000Z"),
+      start: moment.testing_rfc3339("2025-03-10T00:00:00.000Z"),
+      end_excluding: moment.testing_rfc3339("2025-03-10T00:00:00.000Z"),
     )
 
   decode.new_primitive_decoder("RawMomentInterval", fn(interval) {

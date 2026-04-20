@@ -23,6 +23,15 @@ timestamp.from_unix_seconds(0)
 
 ```
 
+
+```gleam
+|> moment.system_time()
+|> day.from_moment()
+|> iso_date.from_day()
+
+```
+
+
 ---
 
 ## More detailed calendar functionality
@@ -64,6 +73,5 @@ Hold and track historical changes to a type over time, with type-enforced interv
 
 # Plans
 
-- Remove code that relies on gtempo for certain functions.
 - Make Interval constructors safe.
 - Come up with neater and more consistent names for `Calendrical`, `Timelined` and related types.

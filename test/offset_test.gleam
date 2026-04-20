@@ -1,11 +1,8 @@
 import gleam/json
 import gleam/order.{Eq, Gt, Lt}
-import gleam/result
 import gleam/time/duration
 import gleeunit/should
 import offset.{type Offset}
-import tempo
-import tempo/offset as tempo_offset
 
 // -----------------------------------------------------
 // -----------------------------------------------------
@@ -14,53 +11,6 @@ import tempo/offset as tempo_offset
 // -----------------------------------------------------
 // -----------------------------------------------------
 // -----------------------------------------------------
-
-pub fn to_from_gtempo(input_and_expected_output: Offset) {
-  input_and_expected_output
-  |> offset.to_gtempo_offset()
-  |> result.unwrap(tempo_offset.literal("+00:00"))
-  |> offset.from_gtempo_offset()
-  |> should.equal(input_and_expected_output)
-}
-
-pub fn to_from_gtempo_1_test() {
-  to_from_gtempo(offset.from_minutes(120))
-}
-
-pub fn to_from_gtempo_2_test() {
-  to_from_gtempo(offset.from_minutes(180))
-}
-
-pub fn to_from_gtempo_3_test() {
-  to_from_gtempo(offset.from_minutes(-210))
-}
-
-pub fn to_from_gtempo_4_test() {
-  to_from_gtempo(offset.from_minutes(-500))
-}
-
-// -------------------------------------------------------
-
-pub fn to_gtempo(input: Offset, expected_output: tempo.Offset) {
-  input
-  |> offset.to_gtempo_offset()
-  |> result.unwrap(tempo_offset.literal("+00:00"))
-  |> should.equal(expected_output)
-}
-
-pub fn to_gtempo_1_test() {
-  to_gtempo(offset.from_minutes(60), tempo_offset.literal("+01:00"))
-}
-
-pub fn to_gtempo_2_test() {
-  to_gtempo(offset.from_minutes(-720), tempo_offset.literal("-12:00"))
-}
-
-pub fn to_gtempo_3_test() {
-  to_gtempo(offset.from_minutes(600), tempo_offset.literal("+10:00"))
-}
-
-// -------------------------------------------------------
 
 pub fn to_from_minutes(input_and_expected_output: Int) {
   input_and_expected_output
@@ -223,11 +173,11 @@ pub fn example_3_input_output_test() {
 }
 
 pub fn example_1_output_test() {
-  output(offset.from_minutes(-510), "-510")
+  output(offset.from_minutes(-510), "-30600")
 }
 
 pub fn example_2_output_test() {
-  output(offset.from_minutes(600), "600")
+  output(offset.from_minutes(600), "36000")
 }
 
 pub fn example_3_output_test() {

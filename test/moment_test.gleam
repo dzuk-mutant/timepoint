@@ -1,13 +1,10 @@
 import gleam/json
 import gleam/order.{Eq, Gt, Lt}
-import gleam/result
 import gleam/time/duration
 import gleam/time/timestamp
 import gleeunit/should
 import moment.{type Moment}
 import offset
-import tempo.{type DateTime}
-import tempo/datetime as gtempo_datetime
 
 // -----------------------------------------------------
 // -----------------------------------------------------
@@ -24,112 +21,6 @@ pub fn to_offset_test() {
   )
   |> moment.to_offset()
   |> should.equal(offset.from_minutes(0))
-}
-
-// -------------------------------------------------------
-
-pub fn to_from_gtempo(input_and_expected_output: Moment) {
-  input_and_expected_output
-  |> moment.to_gtempo_datetime()
-  |> result.unwrap(gtempo_datetime.literal("1990-01-01T00:00:00.000+00:00"))
-  |> moment.from_gtempo_datetime()
-  |> should.equal(input_and_expected_output)
-}
-
-pub fn to_from_gtempo_1_test() {
-  to_from_gtempo(moment.from_timestamp(
-    timestamp.from_unix_seconds(813_479_756_000),
-    with: offset.from_minutes(0),
-  ))
-}
-
-pub fn to_from_gtempo_2_test() {
-  to_from_gtempo(
-    timestamp.from_unix_seconds(1_741_392_000_000)
-    |> moment.from_timestamp(with: offset.from_minutes(0)),
-  )
-}
-
-pub fn to_from_gtempo_3_test() {
-  to_from_gtempo(
-    timestamp.from_unix_seconds(1_267_912_800_000)
-    |> moment.from_timestamp(with: offset.from_minutes(60)),
-  )
-}
-
-pub fn to_from_gtempo_4_test() {
-  to_from_gtempo(moment.from_gtempo_literal("2026-03-08T00:00:00.000Z"))
-}
-
-pub fn to_from_gtempo_5_test() {
-  to_from_gtempo(moment.from_gtempo_literal("2026-03-08T00:00:00.000+12:00"))
-}
-
-pub fn to_from_gtempo_6_test() {
-  to_from_gtempo(moment.from_gtempo_literal("2026-03-08T00:00:00.000+14:00"))
-}
-
-pub fn to_from_gtempo_7_test() {
-  to_from_gtempo(moment.from_gtempo_literal("2026-03-08T23:59:59.999Z"))
-}
-
-pub fn to_from_gtempo_8_test() {
-  to_from_gtempo(moment.from_gtempo_literal("1999-01-23T12:30:00.123+07:00"))
-}
-
-pub fn to_from_gtempo_9_test() {
-  to_from_gtempo(moment.from_gtempo_literal("1996-03-08T10:12:00.000-10:00"))
-}
-
-pub fn to_from_gtempo_10_test() {
-  to_from_gtempo(moment.from_gtempo_literal("1976-12-12T04:56:10.000-01:00"))
-}
-
-pub fn to_from_gtempo_11_test() {
-  to_from_gtempo(moment.from_gtempo_literal("2035-09-11T10:05:11.000-02:30"))
-}
-
-pub fn to_from_gtempo_12_test() {
-  to_from_gtempo(moment.from_gtempo_literal("2015-05-12T01:56:00.000+10:00"))
-}
-
-// -------------------------------------------------------
-
-pub fn to_gtempo(input: Moment, expected_output: DateTime) {
-  input
-  |> moment.to_gtempo_datetime()
-  |> result.unwrap(gtempo_datetime.literal("1990-01-01T00:00:00.000Z"))
-  |> should.equal(expected_output)
-}
-
-pub fn to_gtempo_1_test() {
-  to_gtempo(
-    moment.from_timestamp(
-      timestamp.from_unix_seconds(1_741_392_000),
-      with: offset.from_minutes(0),
-    ),
-    gtempo_datetime.literal("2025-03-08T00:00:00.000Z"),
-  )
-}
-
-pub fn to_gtempo_2_test() {
-  to_gtempo(
-    moment.from_timestamp(
-      timestamp.from_unix_seconds(813_479_756),
-      with: offset.from_minutes(0),
-    ),
-    gtempo_datetime.literal("1995-10-12T06:35:56.000Z"),
-  )
-}
-
-pub fn to_gtempo_3_test() {
-  to_gtempo(
-    moment.from_timestamp(
-      timestamp.from_unix_seconds(1_267_912_800),
-      with: offset.from_minutes(60),
-    ),
-    gtempo_datetime.literal("2010-03-06T23:00:00.000+01:00"),
-  )
 }
 
 // -----------------------------------------------------
@@ -596,7 +487,7 @@ pub fn example_2_output_test() {
       timestamp.from_unix_seconds(813_479_756),
       with: offset.from_minutes(-240),
     ),
-    "{\"timestamp\":{\"unix_s\":813479756,\"unix_ns\":0},\"offset\":-240}",
+    "{\"timestamp\":{\"unix_s\":813479756,\"unix_ns\":0},\"offset\":-14400}",
   )
 }
 
@@ -606,6 +497,6 @@ pub fn example_3_output_test() {
       timestamp.from_unix_seconds(1_267_912_800),
       with: offset.from_minutes(640),
     ),
-    "{\"timestamp\":{\"unix_s\":1267912800,\"unix_ns\":0},\"offset\":640}",
+    "{\"timestamp\":{\"unix_s\":1267912800,\"unix_ns\":0},\"offset\":38400}",
   )
 }

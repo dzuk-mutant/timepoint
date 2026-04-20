@@ -89,20 +89,20 @@ fn json_erroneous_decode(string: String) {
 fn example_1() {
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
 }
 
@@ -121,7 +121,7 @@ pub fn json_io_1_test() {
 fn example_2() {
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
 }
@@ -192,17 +192,17 @@ pub fn json_correct_decode_1_test() {
 pub fn insert_new_current_1_test() {
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.insert_new_current(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> should.equal(
     NoChange(timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )),
   )
@@ -225,32 +225,32 @@ pub fn insert_new_current_2_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     )
 
   existing
   |> timelined.insert_new_current(
     with: "It's Moby now",
-    starting_at: moment.from_gtempo_literal("2025-02-26T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-26T00:00:00.000Z"),
   )
   |> should.equal(NonDestructive(
     existing
     |> timelined.unsafe_insert_new_current(
       with: "It's Moby now",
-      starting_at: moment.from_gtempo_literal("2025-02-26T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-26T00:00:00.000Z"),
     ),
   ))
 }
@@ -271,32 +271,32 @@ pub fn insert_new_current_3_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     )
 
   existing
   |> timelined.insert_new_current(
     with: "It's Moby now",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> should.equal(WillOverwriteCurrent(
     existing
     |> timelined.unsafe_insert_new_current(
       with: "It's Moby now",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     ),
   ))
 }
@@ -318,44 +318,44 @@ pub fn insert_new_current_4_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     )
 
   existing
   |> timelined.insert_new_current(
     with: "It's Moby now",
-    starting_at: moment.from_gtempo_literal("2025-02-24T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-24T00:00:00.000Z"),
   )
   |> should.equal(WillOverwriteCurrentAndHistory(
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "It's Moby now",
-      starting_at: moment.from_gtempo_literal("2025-02-24T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-24T00:00:00.000Z"),
     ),
   ))
 }
@@ -382,26 +382,26 @@ pub fn insert_new_current_5_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     )
 
   existing
   |> timelined.insert_new_current(
     with: "It's Moby now",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unwrap_insertion_result()
   |> timelined.to_list()
@@ -409,16 +409,16 @@ pub fn insert_new_current_5_test() {
     WillOverwriteCurrentAndHistory(
       timelined.new(
         with: "whatever",
-        starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+        starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
         equality_fn: eq_func,
       )
       |> timelined.unsafe_insert_new_current(
         with: "I'm listening to Battles",
-        starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+        starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
       )
       |> timelined.unsafe_insert_new_current(
         with: "It's Moby now",
-        starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+        starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
       ),
     )
     |> timelined.unwrap_insertion_result()
@@ -443,36 +443,36 @@ pub fn insert_new_current_6_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     )
 
   existing
   |> timelined.insert_new_current(
     with: "It's Moby now",
-    starting_at: moment.from_gtempo_literal("2025-02-16T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-16T00:00:00.000Z"),
   )
   |> should.equal(WillOverwriteCurrentAndHistory(
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "It's Moby now",
-      starting_at: moment.from_gtempo_literal("2025-02-16T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-16T00:00:00.000Z"),
     ),
   ))
 }
@@ -494,31 +494,31 @@ pub fn insert_new_current_7_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     )
 
   existing
   |> timelined.insert_new_current(
     with: "It's Moby now",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
   )
   |> should.equal(
     WillOverwriteCurrentAndHistory(timelined.new(
       with: "It's Moby now",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )),
   )
@@ -543,26 +543,26 @@ pub fn insert_new_current_8_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     )
 
   existing
   |> timelined.insert_new_current(
     with: "It's Moby now",
-    starting_at: moment.from_gtempo_literal("2025-01-01T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-01-01T00:00:00.000Z"),
   )
   |> should.equal(InvalidNewCurrentIsEarlierThanHistoricalStart(existing))
 }
@@ -574,12 +574,12 @@ pub fn insert_new_current_8_test() {
 pub fn unsafe_insert_new_current_1_test() {
   timelined.new(
     with: "test",
-    starting_at: moment.from_gtempo_literal("2025-01-04T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-01-04T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "test_change",
-    starting_at: moment.from_gtempo_literal("2025-01-05T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-01-05T00:00:00.000Z"),
   )
   |> timelined.to_current_variant()
   |> tl_current_variant.unwrap()
@@ -589,12 +589,12 @@ pub fn unsafe_insert_new_current_1_test() {
 pub fn unsafe_insert_new_current_2_test() {
   timelined.new(
     with: "test",
-    starting_at: moment.from_gtempo_literal("2025-01-04T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-01-04T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "test",
-    starting_at: moment.from_gtempo_literal("2025-01-04T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-01-04T00:00:00.000Z"),
   )
   |> timelined.to_current_variant()
   |> tl_current_variant.unwrap()
@@ -615,44 +615,44 @@ pub fn unsafe_insert_new_current_2_test() {
 pub fn slice_by_moment_interval_1_test() {
   let interval =
     moment_interval.new(
-      start: moment.from_gtempo_literal("2025-02-15T00:00:00.000Z"),
-      end_excluding: moment.from_gtempo_literal("2025-02-23T00:00:00.000Z"),
+      start: moment.testing_rfc3339("2025-02-15T00:00:00.000Z"),
+      end_excluding: moment.testing_rfc3339("2025-02-23T00:00:00.000Z"),
     )
   // --------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_moment_interval(interval)
   |> should.equal(
     tl_slice_by_moment.new(interval:, current: None, history: [
       tl_past_variant.new(
         value: "Fort Greene Park",
-        start: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
       ),
       tl_past_variant.new(
         value: "I'm listening to Battles",
-        start: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
       ),
       tl_past_variant.new(
         value: "whatever",
-        start: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
       ),
     ]),
   )
@@ -668,34 +668,34 @@ pub fn slice_by_moment_interval_1_test() {
 pub fn slice_by_moment_interval_2_test() {
   let interval =
     moment_interval.new(
-      start: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
-      end_excluding: moment.from_gtempo_literal("2025-02-18T23:59:59.999Z"),
+      start: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
+      end_excluding: moment.testing_rfc3339("2025-02-18T23:59:59.999Z"),
     )
   // --------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_moment_interval(interval)
   |> should.equal(
     tl_slice_by_moment.new(interval:, current: None, history: [
       tl_past_variant.new(
         value: "I'm listening to Battles",
-        start: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
       ),
     ]),
   )
@@ -711,26 +711,26 @@ pub fn slice_by_moment_interval_2_test() {
 pub fn slice_by_moment_interval_3_test() {
   let interval =
     moment_interval.new(
-      start: moment.from_gtempo_literal("2025-03-05T00:00:00.000Z"),
-      end_excluding: moment.from_gtempo_literal("2025-03-05T00:00:00.000Z"),
+      start: moment.testing_rfc3339("2025-03-05T00:00:00.000Z"),
+      end_excluding: moment.testing_rfc3339("2025-03-05T00:00:00.000Z"),
     )
   // --------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_moment_interval(interval)
   |> should.equal(
@@ -738,7 +738,7 @@ pub fn slice_by_moment_interval_3_test() {
       interval:,
       current: Some(tl_current_variant.new(
         value: "🎸🥁",
-        start: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
       )),
       history: [],
     ),
@@ -755,26 +755,26 @@ pub fn slice_by_moment_interval_3_test() {
 pub fn slice_by_moment_interval_4_test() {
   let interval =
     moment_interval.new(
-      start: moment.from_gtempo_literal("2025-01-05T00:00:00.000Z"),
-      end_excluding: moment.from_gtempo_literal("2025-01-05T00:00:00.000Z"),
+      start: moment.testing_rfc3339("2025-01-05T00:00:00.000Z"),
+      end_excluding: moment.testing_rfc3339("2025-01-05T00:00:00.000Z"),
     )
   // -----------------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_moment_interval(interval)
   |> should.equal(tl_slice_by_moment.new(interval:, current: None, history: []))
@@ -790,26 +790,26 @@ pub fn slice_by_moment_interval_4_test() {
 pub fn slice_by_moment_interval_5_test() {
   let interval =
     moment_interval.new(
-      start: moment.from_gtempo_literal("2025-02-20T00:00:00.000Z"),
-      end_excluding: moment.from_gtempo_literal("2025-03-05T00:00:00.000Z"),
+      start: moment.testing_rfc3339("2025-02-20T00:00:00.000Z"),
+      end_excluding: moment.testing_rfc3339("2025-03-05T00:00:00.000Z"),
     )
   // -----------------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_moment_interval(interval)
   |> should.equal(
@@ -817,13 +817,13 @@ pub fn slice_by_moment_interval_5_test() {
       interval:,
       current: Some(tl_current_variant.new(
         value: "🎸🥁",
-        start: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
       )),
       history: [
         tl_past_variant.new(
           value: "Fort Greene Park",
-          start: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
-          end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+          start: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
+          end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
         ),
       ],
     ),
@@ -850,38 +850,38 @@ pub fn filter_by_day_interval_1_test() {
   // -----------------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_day_interval(interval)
   |> should.equal(
     tl_slice_by_day.new(interval:, current: None, history: [
       tl_past_variant.new(
         value: "Fort Greene Park",
-        start: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
       ),
       tl_past_variant.new(
         value: "I'm listening to Battles",
-        start: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
       ),
       tl_past_variant.new(
         value: "whatever",
-        start: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
       ),
     ]),
   )
@@ -903,28 +903,28 @@ pub fn filter_by_day_interval_2_test() {
   // -----------------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_day_interval(interval)
   |> should.equal(
     tl_slice_by_day.new(interval:, current: None, history: [
       tl_past_variant.new(
         value: "I'm listening to Battles",
-        start: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
       ),
     ]),
   )
@@ -946,20 +946,20 @@ pub fn filter_by_day_interval_3_test() {
   //---------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_day_interval(interval)
   |> should.equal(
@@ -967,7 +967,7 @@ pub fn filter_by_day_interval_3_test() {
       interval:,
       current: Some(tl_current_variant.new(
         value: "🎸🥁",
-        start: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
       )),
       history: [],
     ),
@@ -990,20 +990,20 @@ pub fn filter_by_day_interval_4_test() {
   // -----------------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_day_interval(interval)
   |> should.equal(tl_slice_by_day.new(interval:, current: None, history: []))
@@ -1025,20 +1025,20 @@ pub fn filter_by_day_interval_5_test() {
   // -----------------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_day_interval(interval)
   |> should.equal(
@@ -1046,13 +1046,13 @@ pub fn filter_by_day_interval_5_test() {
       interval:,
       current: Some(tl_current_variant.new(
         value: "🎸🥁",
-        start: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+        start: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
       )),
       history: [
         tl_past_variant.new(
           value: "Fort Greene Park",
-          start: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
-          end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+          start: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
+          end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
         ),
       ],
     ),
@@ -1075,20 +1075,20 @@ pub fn filter_by_day_interval_t1_test() {
   // -----------------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T23:59:59.999Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T23:59:59.999Z"),
   )
   |> timelined.slice_by_day_interval(interval)
   |> should.equal(
@@ -1096,13 +1096,13 @@ pub fn filter_by_day_interval_t1_test() {
       interval:,
       current: Some(tl_current_variant.new(
         value: "🎸🥁",
-        start: moment.from_gtempo_literal("2025-02-25T23:59:59.999Z"),
+        start: moment.testing_rfc3339("2025-02-25T23:59:59.999Z"),
       )),
       history: [
         tl_past_variant.new(
           value: "Fort Greene Park",
-          start: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
-          end_excluding: moment.from_gtempo_literal("2025-02-25T23:59:59.999Z"),
+          start: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
+          end_excluding: moment.testing_rfc3339("2025-02-25T23:59:59.999Z"),
         ),
       ],
     ),
@@ -1125,30 +1125,28 @@ pub fn filter_by_day_interval_t2_test() {
   // -----------------------------------------------------
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.slice_by_day_interval(interval)
   |> should.equal(
     tl_slice_by_day.new(interval:, current: None, history: [
       tl_past_variant.new(
         value: "Fort Greene Park",
-        start: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
-        end_excluding: moment.from_gtempo_literal(
-          "2025-02-25T00:00:00.000+00:00",
-        ),
+        start: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
+        end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000+00:00"),
       ),
     ]),
   )
@@ -1175,20 +1173,20 @@ pub fn filter_by_day_interval_t2_test() {
 pub fn filter_by_day_1_test() {
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.filter_by_day(day.testing_iso8601("2025-02-20"))
   |> should.equal(
@@ -1201,8 +1199,8 @@ pub fn filter_by_day_1_test() {
       history: [
         tl_past_variant.new(
           value: "Fort Greene Park",
-          start: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
-          end_excluding: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+          start: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
+          end_excluding: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
         ),
       ],
     ),
@@ -1219,20 +1217,20 @@ pub fn filter_by_day_1_test() {
 pub fn filter_by_day_2_test() {
   timelined.new(
     with: "whatever",
-    starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
     equality_fn: eq_func,
   )
   |> timelined.unsafe_insert_new_current(
     with: "I'm listening to Battles",
-    starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "Fort Greene Park",
-    starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
   )
   |> timelined.unsafe_insert_new_current(
     with: "🎸🥁",
-    starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
   )
   |> timelined.filter_by_day(day.testing_iso8601("2025-02-18"))
   |> should.equal(
@@ -1245,8 +1243,8 @@ pub fn filter_by_day_2_test() {
       history: [
         tl_past_variant.new(
           value: "I'm listening to Battles",
-          start: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
-          end_excluding: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+          start: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
+          end_excluding: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
         ),
       ],
     ),
@@ -1267,7 +1265,7 @@ pub fn filter_by_day_2_test() {
 fn init() -> Timelined(String) {
   timelined.new(
     with: "test_value_1",
-    starting_at: moment.from_gtempo_literal("2025-01-04T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-01-04T00:00:00.000Z"),
     equality_fn: eq_func,
   )
 }
@@ -1276,7 +1274,7 @@ fn init_2() -> Timelined(String) {
   init()
   |> timelined.unsafe_insert_new_current(
     with: "test_value_2",
-    starting_at: moment.from_gtempo_literal("2025-01-05T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-01-05T00:00:00.000Z"),
   )
 }
 
@@ -1284,7 +1282,7 @@ fn init_3() -> Timelined(String) {
   init_2()
   |> timelined.unsafe_insert_new_current(
     with: "test_value_3",
-    starting_at: moment.from_gtempo_literal("2025-01-06T00:00:00.000Z"),
+    starting_at: moment.testing_rfc3339("2025-01-06T00:00:00.000Z"),
   )
 }
 
@@ -1346,38 +1344,38 @@ pub fn to_latest_edit_moment_1_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
     |> timelined.unsafe_insert_new_current(
       with: "I'm listening to Battles",
-      starting_at: moment.from_gtempo_literal("2025-02-18T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-18T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "Fort Greene Park",
-      starting_at: moment.from_gtempo_literal("2025-02-19T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-19T00:00:00.000Z"),
     )
     |> timelined.unsafe_insert_new_current(
       with: "🎸🥁",
-      starting_at: moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-25T00:00:00.000Z"),
     )
 
   existing
   |> timelined.to_latest_edit_moment
-  |> should.equal(moment.from_gtempo_literal("2025-02-25T00:00:00.000Z"))
+  |> should.equal(moment.testing_rfc3339("2025-02-25T00:00:00.000Z"))
 }
 
 pub fn to_latest_edit_moment_2_test() {
   let existing =
     timelined.new(
       with: "whatever",
-      starting_at: moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
       equality_fn: eq_func,
     )
 
   existing
   |> timelined.to_latest_edit_moment
-  |> should.equal(moment.from_gtempo_literal("2025-02-02T00:00:00.000Z"))
+  |> should.equal(moment.testing_rfc3339("2025-02-02T00:00:00.000Z"))
 }
 
 // ----------------------------------------

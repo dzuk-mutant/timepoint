@@ -126,7 +126,7 @@ pub fn decoder(
 ) -> Decoder(Timelined(v)) {
   let default =
     new(
-      starting_at: moment.from_gtempo_literal("2000-01-01T00:00:00.000Z"),
+      starting_at: moment.testing_rfc3339("2000-01-01T00:00:00.000Z"),
       equality_fn:,
       with: default_value,
     )
