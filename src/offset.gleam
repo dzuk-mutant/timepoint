@@ -1,12 +1,4 @@
-import duration_extra
-import gleam/dynamic/decode.{type Decoder}
-import gleam/int
-import gleam/json.{type Json}
-import gleam/order.{type Order}
-import gleam/time/calendar
-import gleam/time/duration.{type Duration}
-
-/// Offsets are the measure by which time is shifted in timezones.
+/// Offsets are the measure by which time is shifted in a time zone.
 /// 
 /// ## On validity
 /// 
@@ -24,9 +16,20 @@ import gleam/time/duration.{type Duration}
 /// ## Time zones
 /// 
 /// A time zone is a region of the Earth that observes certain
-/// kinds of offset patterns. This module does not cover
-/// time zones, just offsets that may happen to be a part of a
-/// particular time zone.
+/// kinds of offset patterns - an offset of +1h could be British Summer Time (BST) or
+/// Central European Time (CET) or other time zones.
+/// 
+/// This module does not cover time zones, just offsets that
+/// may happen to be a part of a particular time zone.
+import duration_extra
+import gleam/dynamic/decode.{type Decoder}
+import gleam/int
+import gleam/json.{type Json}
+import gleam/order.{type Order}
+import gleam/time/calendar
+import gleam/time/duration.{type Duration}
+
+/// A type that holds an Offset.
 /// 
 pub opaque type Offset {
   Offset(seconds: Int)
@@ -40,17 +43,17 @@ pub opaque type Offset {
 // -----------------------------------------------------
 // -----------------------------------------------------
 
-/// Creates an Offset from an Int representing minutes.
+/// Creates an Offset from an Int representing seconds.
 /// 
 /// ## Examples
 /// ```gleam
-/// offset.from_minutes(60)
+/// offset.from_seconds(360)
 /// ```
 pub fn from_seconds(seconds: Int) -> Offset {
   Offset(seconds:)
 }
 
-/// Converts an Offset into an Int representing minutes.
+/// Converts an Offset into an Int representing seconds.
 pub fn to_seconds(offset: Offset) -> Int {
   offset.seconds
 }
@@ -84,8 +87,8 @@ pub fn to_minutes(offset: Offset) -> Int {
 /// ```
 pub fn from_duration(duration: Duration) -> Offset {
   duration
-  |> duration_extra.as_minutes
-  |> from_minutes
+  |> duration_extra.as_seconds
+  |> from_seconds
 }
 
 /// Converts an Offset into a Duration.

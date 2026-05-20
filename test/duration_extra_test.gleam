@@ -27,15 +27,3 @@ pub fn units_3_test() {
   |> duration_extra.as_seconds
   |> should.equal(60)
 }
-
-pub fn units_5_test() {
-  duration_extra.days(1)
-  |> duration_extra.as_beats
-  |> should.equal(1000)
-}
-
-pub fn units_6_test() {
-  duration_extra.beats(1)
-  |> duration_extra.as_centibeats
-  |> should.equal(100)
-}

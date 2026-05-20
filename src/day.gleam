@@ -1,3 +1,8 @@
+/// A Day is like a Timestamp, but for calendar days on Earth.
+/// 
+/// A day represents the amount of days since 1 January 1970, which is the
+/// same Unix epoch that Timestamp uses.
+/// 
 import duration_extra
 import gleam/dynamic/decode.{type Decoder}
 import gleam/int
@@ -8,23 +13,27 @@ import gleam/time/timestamp
 import moment.{type Moment}
 import offset
 
-/// A Day is an abstract representation of a specific day on Earth.
+/// A Day is an abstract representation of a specific calendar day on Earth.
 /// 
 /// This could be...
 /// - A specific solar/calendar day from the perspective of one place
 /// on earth.
-/// - A specific solar/calendar day from the perspective of one person
-/// (eg. if they are travelling and moving across Offsets)
+/// - A specific solar/calendar day from the perspective of one
+/// person. For instance, if they are travelling and moving across time
+/// zone offsets, they experience the same calendar day, even though the
+/// day might be getting longer or shorter.
 /// 
 /// Day is roughly analogous to a Date type in other systems - a
 /// Day carries the same information as `2026-04-19` does, but
 /// with important distinctions:
 /// 
-/// - It's impossible to create an invalid Day.
-/// - There is no specific calendar representation attached.
+/// - It's efficient, unambiguous and impossible to construct an invalid Day.
+/// - There is no specific calendar representation attached, which means
+/// you only need to work with the idiosyncracies of a particular
+/// calendar system later rather than sooner.
 /// 
-/// If you want to work in a specific calendar, you need
-/// to cast the Day into that specific system.
+/// If you want to work in a specific calendar system, you need
+/// to cast a Day into that specific system.
 pub opaque type Day {
   Day(unix_days: Int)
 }
@@ -64,7 +73,7 @@ pub fn from_moment(moment: Moment) -> Day {
   |> from_unix_days
 }
 
-/// Creates a Day from an ISO 8601 formatted-string.
+/// Tries to create a Day from an ISO 8601 formatted-string.
 /// 
 /// ## Examples
 /// 
@@ -88,6 +97,14 @@ pub fn parse_iso8601(string: String) -> Result(Day, Nil) {
 /// simply panics when the input is wrong.
 /// 
 /// Use for testing only.
+/// 
+/// /// ## Examples
+/// 
+/// ```gleam
+/// day.parse_iso8601("2026-04-20")
+/// |> day.to_unix_days
+/// // 20_563
+/// ```
 pub fn testing_iso8601(string: String) -> Day {
   case parse_iso8601(string) {
     Ok(day) -> day
@@ -125,7 +142,7 @@ pub fn from_rata_die(rata_die: Int) -> Day {
 
 /// Converts a Day into an Int representing Rata Die days.
 /// 
-/// Rata die is the number of days from 1st January, 1 CE.
+/// Rata Die is the number of days from 1st January, 1 CE.
 pub fn to_rata_die(day: Day) -> Int {
   day.unix_days
   |> int.add(unix_epoch_as_rata_die)
@@ -141,17 +158,17 @@ pub fn to_rata_die(day: Day) -> Int {
 
 /// Checks if two Days are the same.
 pub fn is_equal(a: Day, to b: Day) -> Bool {
-  to_rata_die(a) == to_rata_die(b)
+  to_unix_days(a) == to_unix_days(b)
 }
 
 /// Compares two Days against each other.
 pub fn compare(a: Day, to b: Day) -> Order {
-  int.compare(to_rata_die(a), with: to_rata_die(b))
+  int.compare(to_unix_days(a), with: to_unix_days(b))
 }
 
 /// Compares two Days against each other in reverse chronological order.
 pub fn compare_reverse(a: Day, to b: Day) -> Order {
-  int.compare(to_rata_die(a), with: to_rata_die(b))
+  int.compare(to_unix_days(a), with: to_unix_days(b))
   |> order.negate
 }
 

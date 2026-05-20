@@ -1,5 +1,3 @@
-import gleam/float
-import gleam/int
 import gleam/time/duration.{type Duration}
 
 pub fn to_seconds_int(duration: Duration) -> Int {
@@ -51,40 +49,4 @@ pub fn days(int: Int) -> Duration {
 /// Rounds the value down (towards zero).
 pub fn as_days(duration: Duration) -> Int {
   to_seconds_int(duration) / day_as_seconds
-}
-
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-
-const beat_as_seconds: Float = 86.4
-
-pub fn beats(int: Int) -> Duration {
-  duration.seconds({ int.to_float(int) *. beat_as_seconds } |> float.truncate)
-}
-
-/// Provides a Duration as hours.
-/// Rounds the value down (towards zero).
-pub fn as_beats(duration: Duration) -> Int {
-  { duration.to_seconds(duration) /. beat_as_seconds }
-  |> float.truncate
-}
-
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-
-const centibeat_as_seconds: Float = 0.864
-
-pub fn centibeats(int: Int) -> Duration {
-  duration.seconds(
-    { int.to_float(int) *. centibeat_as_seconds } |> float.truncate,
-  )
-}
-
-/// Provides a Duration as hours.
-/// Rounds the value down (towards zero).
-pub fn as_centibeats(duration: Duration) -> Int {
-  duration.to_seconds(duration) /. centibeat_as_seconds
-  |> float.truncate
 }
