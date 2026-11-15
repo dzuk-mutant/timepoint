@@ -1,6 +1,7 @@
 name = "timepoint"
-version = "1.0.0"
-target = "javascript"
+version = "0.0.1"
+description = "An extension of gleam_time functionality."
+
 # Fill out these fields if you intend to generate HTML documentation or publish
 # your project to the Hex package manager.
 #
