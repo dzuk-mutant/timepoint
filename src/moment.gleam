@@ -8,31 +8,31 @@ import parse/rfc3339
 import timestamp_extra
 
 /// A type that combines a Timestamp with an Offset.
-/// 
+///
 /// A Timestamp is perfect for a non-ambiguous point in time, but without
 /// an Offset, it can't tell you what Day an event happened in,
 /// therefore it can't be used to deduce a calendar date/time.
-/// 
-/// While gleam/time offers the ability to produce a calendar date by 
+///
+/// While gleam/time offers the ability to produce a calendar date by
 /// adding an offset to a Timestamp, there are many cases where it's useful
 /// to carry an offset with a Timestamp as a type, because of the same
 /// efficiency and validity guarantees that a Timestamp has.
-/// 
+///
 /// Moments keep the best parts of Timestamp while adding the minimum
 /// possible information to derive Days, Dates and Times.
 ///
 /// ```gleam
-/// 
+///
 /// timestamp.from_unix_seconds(1_718_234_444_923)
 /// |> moment.from_timestamp(at: offset.from_minutes(60))
 /// |> day.from_moment
 /// |> iso_date.from_day
 /// ```
-/// 
+///
 /// Because Offsets don't tell us when something happened, only a
 /// contextualision detail, Moments are compared by their
 /// Timestamps only.
-/// 
+///
 pub opaque type Moment {
   Moment(timestamp: Timestamp, offset: Offset)
 }
@@ -46,7 +46,7 @@ pub opaque type Moment {
 // -----------------------------------------------------
 
 /// Returns the Moment representing now on the computer executing this function.
-/// 
+///
 /// ```gleam
 /// moment.system_time()
 /// |> day.from_moment
@@ -57,9 +57,9 @@ pub fn system_time() -> Moment {
 }
 
 /// Returns a Moment from a given Timestamp with Offset.
-/// 
+///
 /// ## Examples
-/// 
+///
 /// ```gleam
 /// timestamp.from_unix_seconds(0)
 /// |> moment.from_timestamp(with: offset.from_mins(60))
@@ -103,7 +103,7 @@ pub fn parse_rfc3339(string: String) -> Result(Moment, Nil) {
 /// **a lot** of the time and unwrapping Results is unecessary
 /// for the test case. This is a version of `parse_rfc3339` that
 /// simply panics when the input is wrong.
-/// 
+///
 /// Use for testing only.
 pub fn testing_rfc3339(string: String) -> Moment {
   case parse_rfc3339(string) {
@@ -175,9 +175,9 @@ pub fn add(moment: Moment, duration duration: Duration) -> Moment {
 /// Subtracts a specified number of milliseconds from the Moment's
 /// UNIX time.
 pub fn subtract(moment: Moment, duration duration: Duration) -> Moment {
-  let timestamp = to_timestamp(moment)
+  let ts = to_timestamp(moment)
 
-  Moment(..moment, timestamp: timestamp.subtract(timestamp, duration))
+  Moment(..moment, timestamp: timestamp_extra.subtract(ts, duration))
 }
 
 // -----------------------------------------------------

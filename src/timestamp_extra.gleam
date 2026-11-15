@@ -1,8 +1,28 @@
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/order.{Eq, Gt, Lt}
+import gleam/time/duration.{type Duration}
 import gleam/time/timestamp.{type Timestamp}
 
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -------------------- CHANGE ---------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+// -----------------------------------------------------
+
+/// Subtracts a duration from a Timestamp.
+pub fn subtract(ts: Timestamp, with dur: Duration) -> Timestamp {
+  let ts_tuple = timestamp.to_unix_seconds_and_nanoseconds(ts)
+
+  let dur_tuple = duration.to_seconds_and_nanoseconds(dur)
+
+  timestamp.from_unix_seconds_and_nanoseconds(
+    seconds: ts_tuple.0 - dur_tuple.0,
+    nanoseconds: ts_tuple.1 - dur_tuple.1,
+  )
+}
 // -----------------------------------------------------
 // -----------------------------------------------------
 // -----------------------------------------------------
