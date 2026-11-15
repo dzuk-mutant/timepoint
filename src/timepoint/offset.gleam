@@ -1,36 +1,37 @@
 /// Offsets are the measure by which time is shifted in a time zone.
-/// 
+///
 /// ## On validity
-/// 
+///
 /// This module constructor assumes the minutes coming in are
 /// within correct bounds, and does not check to see if it does.
-/// 
+///
 /// As of April 2026, the current minimum offset is -12hrs
 /// (-720 minutes) and the maximum is +14hrs (+840 minutes).
 /// These are political constructs, and may not be the same in
 /// the future.
-/// 
+///
 /// If you need to guard against offsets being created that don't
 /// exist currently, you will need to create extra functionality.
-/// 
+///
 /// ## Time zones
-/// 
+///
 /// A time zone is a region of the Earth that observes certain
 /// kinds of offset patterns - an offset of +1h could be British Summer Time (BST) or
 /// Central European Time (CET) or other time zones.
-/// 
+///
 /// This module does not cover time zones, just offsets that
 /// may happen to be a part of a particular time zone.
-import duration_extra
+
 import gleam/dynamic/decode.{type Decoder}
 import gleam/int
 import gleam/json.{type Json}
 import gleam/order.{type Order}
 import gleam/time/calendar
 import gleam/time/duration.{type Duration}
+import timepoint/duration_extra
 
 /// A type that holds an Offset.
-/// 
+///
 pub opaque type Offset {
   Offset(seconds: Int)
 }
@@ -44,7 +45,7 @@ pub opaque type Offset {
 // -----------------------------------------------------
 
 /// Creates an Offset from an Int representing seconds.
-/// 
+///
 /// ## Examples
 /// ```gleam
 /// offset.from_seconds(360)
@@ -61,7 +62,7 @@ pub fn to_seconds(offset: Offset) -> Int {
 // ------------------------------------------
 
 /// Creates an Offset from an Int representing minutes.
-/// 
+///
 /// ## Examples
 /// ```gleam
 /// offset.from_minutes(60)
@@ -78,9 +79,9 @@ pub fn to_minutes(offset: Offset) -> Int {
 // ------------------------------------------
 
 /// Creates an Offset from a Duration.
-/// 
+///
 /// ## Examples
-/// 
+///
 /// ```gleam
 /// duration.minutes(60)
 /// |> offset.from_duration

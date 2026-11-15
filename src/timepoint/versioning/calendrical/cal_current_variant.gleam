@@ -1,11 +1,11 @@
-import day.{type Day}
+import timepoint/day.{type Day}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/order.{Eq, Gt, Lt}
-import interval/day_interval.{type DayInterval}
+import timepoint/interval/day_interval.{type DayInterval}
 
 /// Represents a starting Day for the relevancy or effect of a piece of associated information.
-/// 
+///
 /// The information should be considered 'in effect' as long as the context window is overlapping or after it.
 pub opaque type CalCurrentVariant(v) {
   CalCurrentVariant(start: Day, value: v)
@@ -18,7 +18,7 @@ pub opaque type CalCurrentVariant(v) {
 // ---------------------------------
 
 /// Creates a new CurrentVariant.
-/// 
+///
 /// Will switch the start and end around if they are in reverse order.
 pub fn new(value value: v, start start: Day) -> CalCurrentVariant(v) {
   CalCurrentVariant(value:, start:)
@@ -104,7 +104,7 @@ pub fn to_start_day(variant: CalCurrentVariant(v)) -> Day {
 // ---------------------------------
 
 /// Checks if an CalCurrentVariant lands inside a DayInterval.
-/// 
+///
 /// Will be True if the two intervals overlap, except where the end of the Effect is the same as the Query.
 pub fn is_effective_in_day_interval(
   variant: CalCurrentVariant(v),
@@ -122,7 +122,7 @@ pub fn is_effective_on_day(variant: CalCurrentVariant(v), day: Day) -> Bool {
 }
 
 /// Checks to see if the CalCurrentVariant overlaps a given day.
-/// 
+///
 /// It's an alias of active_on_day, which is probably going to be semantically useful going forward.
 pub fn overlaps(variant: CalCurrentVariant(v), day: Day) -> Bool {
   is_effective_on_day(variant, day)

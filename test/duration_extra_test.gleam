@@ -1,4 +1,4 @@
-import duration_extra
+import timepoint/duration_extra
 import gleam/time/duration
 import gleeunit/should
 

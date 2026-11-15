@@ -1,12 +1,12 @@
-import day
+import timepoint/day
 import gleam/dynamic/decode
 import gleam/json
 import gleeunit/should
-import interval/day_interval
-import interval/moment_interval
-import moment
-import versioning/timelined/tl_current_variant
-import versioning/timelined/tl_past_variant.{type TLPastVariant}
+import timepoint/interval/day_interval
+import timepoint/interval/moment_interval
+import timepoint/moment
+import timepoint/versioning/timelined/tl_current_variant
+import timepoint/versioning/timelined/tl_past_variant.{type TLPastVariant}
 
 // ----------------------------------------
 // ----------------------------------------
@@ -117,7 +117,7 @@ pub fn new_2_test() {
 }
 
 /// Start and end_excluding are in the wrong order.
-/// 
+///
 /// THIS SHOULD NOT BE ALLOWABLE IN THE APPLICATION.
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn new_unsafe_use_1_test() {
@@ -131,7 +131,7 @@ pub fn new_unsafe_use_1_test() {
 }
 
 /// Start and end_excluding are in the wrong order.
-/// 
+///
 /// THIS SHOULD NOT BE ALLOWABLE IN THE APPLICATION.
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn new_unsafe_use_2_test() {
@@ -177,7 +177,7 @@ pub fn from_moment_start_2_test() {
 }
 
 /// Start and end_excluding are in the wrong order.
-/// 
+///
 /// THIS SHOULD NOT BE ALLOWABLE IN THE APPLICATION.
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn from_moment_unsafe_use_1_test() {
@@ -200,7 +200,7 @@ pub fn from_moment_unsafe_use_1_test() {
 
 ///     S--------F
 ///     S----F (new)
-/// 
+///
 ///     (Ok)
 pub fn truncate_1_test() {
   tl_past_variant.new(
@@ -222,7 +222,7 @@ pub fn truncate_1_test() {
 
 ///     S--------F
 ///     S-----------F (new)
-/// 
+///
 ///     (Error - later than it should be.)
 pub fn truncate_2_test() {
   tl_past_variant.new(
@@ -238,7 +238,7 @@ pub fn truncate_2_test() {
 
 ///     S--------F
 ///     S+F (new)
-/// 
+///
 ///     (Error - end is at start)
 pub fn truncate_3_test() {
   tl_past_variant.new(
@@ -254,7 +254,7 @@ pub fn truncate_3_test() {
 
 ///       S--------F
 ///     F-S (new)
-/// 
+///
 ///     (Error)
 pub fn truncate_4_test() {
   tl_past_variant.new(
@@ -270,7 +270,7 @@ pub fn truncate_4_test() {
 
 ///       S--------F
 ///  F----S (new)
-/// 
+///
 ///     (Error)
 pub fn truncate_5_test() {
   tl_past_variant.new(
@@ -290,7 +290,7 @@ pub fn truncate_5_test() {
 
 ///             |------|
 ///  o------o
-/// 
+///
 ///    (False)
 pub fn is_effective_in_moment_interval_1_test() {
   tl_past_variant.new(
@@ -307,7 +307,7 @@ pub fn is_effective_in_moment_interval_1_test() {
 
 ///          |------|
 ///  o------o (just misses by 1ms)
-/// 
+///
 ///    (False)
 pub fn is_effective_in_moment_interval_2_test() {
   tl_past_variant.new(
@@ -324,7 +324,7 @@ pub fn is_effective_in_moment_interval_2_test() {
 
 ///         |------|
 ///  o------o
-/// 
+///
 ///    (False)
 pub fn is_effective_in_moment_interval_2x_test() {
   tl_past_variant.new(
@@ -341,7 +341,7 @@ pub fn is_effective_in_moment_interval_2x_test() {
 
 ///         |------|
 ///    o------o
-/// 
+///
 ///    (True)
 pub fn is_effective_in_moment_interval_3_test() {
   tl_past_variant.new(
@@ -358,7 +358,7 @@ pub fn is_effective_in_moment_interval_3_test() {
 
 ///     |-------------|
 ///        o-------o
-/// 
+///
 ///    (True)
 pub fn is_effective_in_moment_interval_4_test() {
   tl_past_variant.new(
@@ -375,7 +375,7 @@ pub fn is_effective_in_moment_interval_4_test() {
 
 ///       |-------|
 ///    o------------o
-/// 
+///
 ///    (True)
 pub fn is_effective_in_moment_interval_5_test() {
   tl_past_variant.new(
@@ -392,7 +392,7 @@ pub fn is_effective_in_moment_interval_5_test() {
 
 ///     |---------|
 ///          o----------o
-/// 
+///
 ///    (True)
 pub fn is_effective_in_moment_interval_6_test() {
   tl_past_variant.new(
@@ -409,7 +409,7 @@ pub fn is_effective_in_moment_interval_6_test() {
 
 ///     |---------| (just by 1ms)
 ///                o-----o
-/// 
+///
 ///    (False)
 pub fn is_effective_in_moment_interval_7_test() {
   tl_past_variant.new(
@@ -426,7 +426,7 @@ pub fn is_effective_in_moment_interval_7_test() {
 
 ///     |---------|
 ///               o-----o
-/// 
+///
 ///    (False)
 pub fn is_effective_in_moment_interval_7x_test() {
   tl_past_variant.new(
@@ -443,7 +443,7 @@ pub fn is_effective_in_moment_interval_7x_test() {
 
 ///     |---------|
 ///                   o-----o
-/// 
+///
 ///    (False)
 pub fn is_effective_in_moment_interval_8_test() {
   tl_past_variant.new(
@@ -464,7 +464,7 @@ pub fn is_effective_in_moment_interval_8_test() {
 
 ///             |------|
 ///  o------o
-/// 
+///
 ///    (False)
 pub fn is_effective_in_day_interval_1_test() {
   tl_past_variant.new(
@@ -481,7 +481,7 @@ pub fn is_effective_in_day_interval_1_test() {
 
 ///          |------|
 ///  o------o (just off as it goes into the next day)
-/// 
+///
 ///    (False)
 pub fn is_effective_in_day_interval_2_test() {
   tl_past_variant.new(
@@ -498,7 +498,7 @@ pub fn is_effective_in_day_interval_2_test() {
 
 ///         t-------t
 ///  d------d (made it by 1ms)
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_2x_test() {
   tl_past_variant.new(
@@ -515,7 +515,7 @@ pub fn is_effective_in_day_interval_2x_test() {
 
 ///         |-------|
 ///  o------o (directly on end_excluding)
-/// 
+///
 ///    (False)
 pub fn is_effective_in_day_interval_2xx_test() {
   tl_past_variant.new(
@@ -532,7 +532,7 @@ pub fn is_effective_in_day_interval_2xx_test() {
 
 ///         |------|
 ///    o------o
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_3_test() {
   tl_past_variant.new(
@@ -549,7 +549,7 @@ pub fn is_effective_in_day_interval_3_test() {
 
 ///     |-------------|
 ///        o-------o
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_4_test() {
   tl_past_variant.new(
@@ -566,7 +566,7 @@ pub fn is_effective_in_day_interval_4_test() {
 
 ///       |-------|
 ///    o------------o
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_5_test() {
   tl_past_variant.new(
@@ -583,7 +583,7 @@ pub fn is_effective_in_day_interval_5_test() {
 
 ///     |---------|
 ///          o----------o
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_6_test() {
   tl_past_variant.new(
@@ -600,7 +600,7 @@ pub fn is_effective_in_day_interval_6_test() {
 
 ///     d---------d
 ///               t-----t
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_7_test() {
   tl_past_variant.new(
@@ -617,7 +617,7 @@ pub fn is_effective_in_day_interval_7_test() {
 
 ///     |---------|
 ///               o-----o
-/// 
+///
 ///    (on the starting millisecond)
 ///    (True)
 pub fn is_effective_in_day_interval_7x_test() {
@@ -635,7 +635,7 @@ pub fn is_effective_in_day_interval_7x_test() {
 
 ///     |---------|
 ///                   o-----o
-/// 
+///
 ///    (False)
 pub fn is_effective_in_day_interval_8_test() {
   tl_past_variant.new(
@@ -652,9 +652,9 @@ pub fn is_effective_in_day_interval_8_test() {
 
 ///          |------|
 ///  o------o (just misses)
-/// 
+///
 ///    (True)
-/// 
+///
 pub fn is_effective_in_day_interval_t1_test() {
   tl_past_variant.new(
     start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
@@ -670,9 +670,9 @@ pub fn is_effective_in_day_interval_t1_test() {
 
 ///          |-----|
 ///  o------o (just passes)
-/// 
+///
 ///    (False)
-/// 
+///
 pub fn is_effective_in_day_interval_t2_test() {
   tl_past_variant.new(
     start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
@@ -688,9 +688,9 @@ pub fn is_effective_in_day_interval_t2_test() {
 
 ///     |---------| (just misses)
 ///                o-----o
-/// 
+///
 ///    (True)
-/// 
+///
 pub fn is_effective_in_day_interval_t3_test() {
   tl_past_variant.new(
     start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
@@ -706,9 +706,9 @@ pub fn is_effective_in_day_interval_t3_test() {
 
 ///     |---------| (just hits)
 ///               o-----o
-/// 
+///
 ///    (True)
-/// 
+///
 pub fn is_effective_in_day_interval_t4_test() {
   tl_past_variant.new(
     start: moment.testing_rfc3339("2025-02-01T00:00:00.000Z"),
@@ -728,7 +728,7 @@ pub fn is_effective_in_day_interval_t4_test() {
 
 ///             x
 ///   o-----o
-/// 
+///
 ///     (False)
 pub fn is_effective_on_day_1_test() {
   tl_past_variant.new(
@@ -742,7 +742,7 @@ pub fn is_effective_on_day_1_test() {
 
 ///          x  (missed by 1ms)
 ///   o-----o
-/// 
+///
 ///     (False)
 pub fn is_effective_on_day_2_test() {
   tl_past_variant.new(
@@ -756,7 +756,7 @@ pub fn is_effective_on_day_2_test() {
 
 ///         x
 ///   o-----o
-/// 
+///
 ///     (False)
 pub fn is_effective_on_day_2x_test() {
   tl_past_variant.new(
@@ -770,7 +770,7 @@ pub fn is_effective_on_day_2x_test() {
 
 ///       x
 ///   o-----o
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_3_test() {
   tl_past_variant.new(
@@ -784,7 +784,7 @@ pub fn is_effective_on_day_3_test() {
 
 ///   x
 ///   o-----o
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_4_test() {
   tl_past_variant.new(
@@ -798,7 +798,7 @@ pub fn is_effective_on_day_4_test() {
 
 /// x
 ///   o-----o
-/// 
+///
 ///     (False)
 pub fn is_effective_on_day_5_test() {
   tl_past_variant.new(

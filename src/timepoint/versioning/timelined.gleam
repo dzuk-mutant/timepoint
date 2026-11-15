@@ -1,4 +1,4 @@
-import day.{type Day}
+import timepoint/day.{type Day}
 import gleam/bool
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
@@ -6,55 +6,61 @@ import gleam/list
 import gleam/option.{type Option, None, Some}
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
-import interval/day_interval.{type DayInterval}
-import versioning/calendrical/cal_any_variant.{type CalAnyVariant, Current, Past}
-import versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
-import versioning/calendrical/cal_past_variant.{type CalPastVariant}
-import versioning/calendrical/cal_slice.{type CalSlice}
+import gleam/time/duration
+import timepoint/interval/day_interval.{type DayInterval}
+import timepoint/interval/moment_interval.{type MomentInterval}
+import timepoint/moment.{type Moment}
+import timepoint/versioning/timelined/tl_any_variant.{type TLAnyVariant}
+import timepoint/versioning/timelined/tl_current_variant.{type TLCurrentVariant}
+import timepoint/versioning/timelined/tl_past_variant.{type TLPastVariant}
+import timepoint/versioning/timelined/tl_slice_by_day.{type TLSliceByDay}
+import timepoint/versioning/timelined/tl_slice_by_moment.{type TLSliceByMoment}
 
-/// A wrapper for a data type that provides historical 
-/// versioning, timed to calendar days.
-/// 
-/// This type is the ultimate source of truth about 
+/// A wrapper for a data type that provides historical
+/// versioning, timed to absolute Moments.
+///
+/// Historical items are diffed from eachother in milliseconds.
+///
+/// This type is the ultimate source of truth about
 /// historical versioning for its enclosed data type.
-/// 
-/// When this is filtered, it becomes CalSlice.
-/// 
-/// When editing operations are performed, an CalInsertionResult
+///
+/// When this is filtered, it becomes a TLSlice.
+///
+/// When editing operations are performed, a TLInsertionResult
 /// is returned containing a potentially-updated version.
-pub opaque type Calendrical(v) {
-  Calendrical(
-    current: CalCurrentVariant(v),
-    history: List(CalPastVariant(v)),
+pub opaque type Timelined(v) {
+  Timelined(
+    current: TLCurrentVariant(v),
+    history: List(TLPastVariant(v)),
     // The following two are to help preserve the integrity of future edits.
     // Do not edit these in any functions that aren't constructors.
     equality_fn: fn(v, v) -> Bool,
-    history_start: Day,
+    history_start: Moment,
   )
 }
 
 /// Provides contextual detail on what the result of inserting a new current variant is.
-/// 
+///
 /// This is because providing errors per se is not that helpful, but
-/// what is is to inform the program of what it involves so the UI can 
-/// tell the user if its the kind of edit that matters or be able to smoothly 
+/// what is is to inform the program of what it involves so the UI can
+/// tell the user if its the kind of edit that matters or be able to smoothly
 /// move past an invalid operation in chained functions.
-pub type CalInsertionResult(v) {
+pub type TLInsertionResult(v) {
 
-  // Returns the initial Calendrical for function chaining with a type that indicates that something is iffy about the attempt.
+  // Returns the initial Timelined for function chaining with a type that indicates that something is iffy about the attempt.
   // -------------------------------------------------------
   // This is the same as the current one. No change is necessary.
-  NoChange(Calendrical(v))
+  NoChange(Timelined(v))
   // This should not be possible but guards against it.
-  InvalidNewCurrentIsEarlierThanHistoricalStart(Calendrical(v))
+  InvalidNewCurrentIsEarlierThanHistoricalStart(Timelined(v))
   //
   // -------------------------------------------------------
   // Will make a new current and move the existing one to the past.
-  NonDestructive(Calendrical(v))
+  NonDestructive(Timelined(v))
   // Will overwrite the current because they share the same start.
-  WillOverwriteCurrent(Calendrical(v))
+  WillOverwriteCurrent(Timelined(v))
   // Will overwrite at least some of the history.
-  WillOverwriteCurrentAndHistory(Calendrical(v))
+  WillOverwriteCurrentAndHistory(Timelined(v))
 }
 
 // -----------------------------------------------------------------
@@ -69,16 +75,16 @@ pub type CalInsertionResult(v) {
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
 
-/// Creates a new Calendrical with one CalVariant starting at the specified day.
-/// 
-/// You cannot create an empty Calendrical.
+/// Creates a new Timelined with one CalVariant starting at the specified moment.
+///
+/// You cannot create an empty Timelined.
 pub fn new(
   with value: v,
-  starting_at start: Day,
+  starting_at start: Moment,
   equality_fn equality_fn: fn(v, v) -> Bool,
-) -> Calendrical(v) {
-  Calendrical(
-    current: cal_current_variant.new(value:, start:),
+) -> Timelined(v) {
+  Timelined(
+    current: tl_current_variant.new(value:, start:),
     history: [],
     equality_fn:,
     history_start: start,
@@ -98,19 +104,16 @@ pub fn new(
 // -----------------------------------------------------------------
 
 pub fn to_json(
-  calendrical: Calendrical(v),
+  timelined: Timelined(v),
   value_encoder value_encoder: fn(v) -> Json,
 ) -> Json {
   json.object([
-    #(
-      "current",
-      cal_current_variant.to_json(calendrical.current, value_encoder:),
-    ),
-    #("history_start", day.to_json(calendrical.history_start)),
+    #("current", tl_current_variant.to_json(timelined.current, value_encoder:)),
+    #("history_start", moment.to_json(timelined.history_start)),
     #(
       "history",
-      json.array(calendrical.history, of: fn(x) {
-        cal_past_variant.to_json(x, value_encoder:)
+      json.array(timelined.history, of: fn(x) {
+        tl_past_variant.to_json(x, value_encoder:)
       }),
     ),
   ])
@@ -120,27 +123,27 @@ pub fn decoder(
   default_value default_value: v,
   value_decoder value_decoder: Decoder(v),
   equality_fn equality_fn: fn(v, v) -> Bool,
-) -> Decoder(Calendrical(v)) {
+) -> Decoder(Timelined(v)) {
   let default =
     new(
-      starting_at: day.testing_iso8601("2000-01-01"),
+      starting_at: moment.testing_rfc3339("2000-01-01T00:00:00.000Z"),
       equality_fn:,
       with: default_value,
     )
-  decode.new_primitive_decoder("Calendrical", fn(calendrical) {
-    let date_decoder = day.decoder()
-    let cal_past_decoder =
-      cal_past_variant.decoder(default_value:, value_decoder:)
-    let cal_current_decoder =
-      cal_current_variant.decoder(default_value:, value_decoder:)
+  decode.new_primitive_decoder("Timelined", fn(timelined) {
+    let moment_decoder = moment.decoder()
+    let tl_past_decoder =
+      tl_past_variant.decoder(default_value:, value_decoder:)
+    let tl_current_decoder =
+      tl_current_variant.decoder(default_value:, value_decoder:)
 
-    let calendrical_decoder = {
-      use history_start <- decode.field("history_start", date_decoder)
-      use current <- decode.field("current", cal_current_decoder)
-      use history <- decode.field("history", decode.list(of: cal_past_decoder))
+    let timelined_decoder = {
+      use history_start <- decode.field("history_start", moment_decoder)
+      use current <- decode.field("current", tl_current_decoder)
+      use history <- decode.field("history", decode.list(of: tl_past_decoder))
 
       let tentative_calendrical =
-        Calendrical(history_start:, current:, history:, equality_fn:)
+        Timelined(history_start:, current:, history:, equality_fn:)
 
       // The previous decoding step made sure that the types of each data
       // point is correct but not whether the whole structure is sound.
@@ -172,7 +175,7 @@ pub fn decoder(
       }
     }
 
-    case decode.run(calendrical, calendrical_decoder) {
+    case decode.run(timelined, timelined_decoder) {
       Error(_) -> Error(default)
       Ok(habit) -> Ok(habit)
     }
@@ -191,38 +194,41 @@ pub fn decoder(
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
 
-/// A function that edits a Calendrical by inserting a new Current Variant.
-/// 
-/// It returns the resulting Calendrical inside an EditResult, providing advance warning and context as to what kind of edit it will be. 
+/// A function that edits a Timelined by inserting a new Current Variant.
+///
+/// It returns the resulting Timelined inside an EditResult, providing advance warning and context as to what kind of edit it will be.
 pub fn insert_new_current(
-  existing: Calendrical(v),
+  existing: Timelined(v),
   with new_current_value: v,
-  starting_at new_start_day: Day,
-) -> CalInsertionResult(v) {
+  starting_at new_start_moment: Moment,
+) -> TLInsertionResult(v) {
   let existing_current_value =
     existing.current
-    |> cal_current_variant.unwrap()
+    |> tl_current_variant.unwrap()
 
-  let existing_current_start_day =
+  let existing_current_start_moment =
     existing.current
-    |> cal_current_variant.to_start_day()
+    |> tl_current_variant.to_start_moment()
 
   // Is this actually an edit?
   case existing.equality_fn(existing_current_value, new_current_value) {
     True -> NoChange(existing)
     False -> {
       let new_current =
-        cal_current_variant.new(value: new_current_value, start: new_start_day)
+        tl_current_variant.new(
+          value: new_current_value,
+          start: new_start_moment,
+        )
 
       // Can this not overwrite the existing current?
-      case day.compare(new_start_day, existing_current_start_day) {
+      case moment.compare(new_start_moment, existing_current_start_moment) {
         Gt ->
           // - New Current
           // - Cap off and append the Existing Current to history.
-          Calendrical(..existing, current: new_current, history: [
-            cal_past_variant.from_current_variant(
+          Timelined(..existing, current: new_current, history: [
+            tl_past_variant.from_current_variant(
               existing.current,
-              end_excluding: new_start_day,
+              end_excluding: new_start_moment,
             ),
             ..existing.history
           ])
@@ -231,17 +237,17 @@ pub fn insert_new_current(
         Eq ->
           // - Replace the Current.
           // - (Existing Current is "deleted")
-          Calendrical(..existing, current: new_current)
+          Timelined(..existing, current: new_current)
           |> WillOverwriteCurrent
         Lt ->
-          // Does this new current go earlier than the start day of the entire structure's history?
-          case day.compare(new_start_day, existing.history_start) {
+          // Does this new current go earlier than the start time of the entire structure's history?
+          case moment.compare(new_start_moment, existing.history_start) {
             Gt | Eq ->
               // - Replace the Current.
               // - (Existing Current as "deleted")
               // - Filter out and/or truncate the history based on what's in the new current's path.
 
-              Calendrical(
+              Timelined(
                 ..existing,
                 current: new_current,
                 history: cut_and_truncate_history(existing, new_current),
@@ -255,10 +261,10 @@ pub fn insert_new_current(
   }
 }
 
-/// Takes an CalInsertionResult and simply unwraps the new Changeable.
-/// 
+/// Takes an TLInsertionResult and simply unwraps the new Changeable.
+///
 /// Mostly useful for testing and debugging.
-pub fn unwrap_insertion_result(result: CalInsertionResult(v)) -> Calendrical(v) {
+pub fn unwrap_insertion_result(result: TLInsertionResult(v)) -> Timelined(v) {
   case result {
     NoChange(v) -> v
     NonDestructive(v) -> v
@@ -269,14 +275,18 @@ pub fn unwrap_insertion_result(result: CalInsertionResult(v)) -> Calendrical(v) 
 }
 
 /// A version of insert_new_current without any wrapper types saying how the edit will go.
-/// 
+///
 /// Mostly useful for testing and debugging.
 pub fn unsafe_insert_new_current(
-  calendrical: Calendrical(v),
+  timelined: Timelined(v),
   with new_current_value: v,
-  starting_at new_start_day: Day,
-) -> Calendrical(v) {
-  insert_new_current(calendrical, new_current_value, starting_at: new_start_day)
+  starting_at new_start_moment: Moment,
+) -> Timelined(v) {
+  insert_new_current(
+    timelined,
+    new_current_value,
+    starting_at: new_start_moment,
+  )
   |> unwrap_insertion_result()
 }
 
@@ -292,57 +302,82 @@ pub fn unsafe_insert_new_current(
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
 
-/// The CalSlice will be empty if
-/// the day range is before the start
-/// day of the Calendrical.
-/// 
-pub fn slice_by_day_interval(
-  calendrical: Calendrical(v),
-  interval: DayInterval,
-) -> CalSlice(v) {
+/// Returns a TLSliceByMoment, containing any variants that were in
+/// effect within the given MomentInterval.
+///
+/// If the beginning of the MomentWindow is before the start
+/// of the Timelined, it will return an empty structure.
+pub fn slice_by_moment_interval(
+  timelined: Timelined(v),
+  interval: MomentInterval,
+) -> TLSliceByMoment(v) {
   let current = case
-    cal_current_variant.is_effective_in_day_interval(
-      calendrical.current,
+    tl_current_variant.is_effective_in_moment_interval(
+      timelined.current,
       interval,
     )
   {
-    True -> Some(calendrical.current)
+    True -> Some(timelined.current)
     False -> None
   }
 
   let history =
-    calendrical
+    timelined
     |> to_history_list()
     |> list.filter(keeping: fn(x) {
-      cal_past_variant.is_effective_in_day_interval(x, interval)
+      tl_past_variant.is_effective_in_moment_interval(x, interval)
     })
 
-  cal_slice.new(interval:, current:, history:)
+  tl_slice_by_moment.new(interval:, current:, history:)
 }
 
-/// Will return a Result(Nil) if the given day is before the
-/// start day of the Calendrical.
-pub fn get_variant_by_day(
-  calendrical: Calendrical(v),
-  day: Day,
-) -> Result(CalAnyVariant(v), Nil) {
-  case day.is_earlier(day, than: calendrical.history_start) {
-    True -> Error(Nil)
-    False ->
-      case cal_current_variant.is_effective_on_day(calendrical.current, day) {
-        True -> Ok(Current(calendrical.current))
-        False -> {
-          calendrical
-          |> to_history_list()
-          |> list.find_map(fn(x) {
-            case cal_past_variant.is_effective_on_day(x, day) {
-              True -> Ok(Past(x))
-              False -> Error(Nil)
-            }
-          })
-        }
-      }
+/// Returns a TLSliceByDay, containing any variants that were in
+/// effect within the given DayInterval.
+///
+/// /// If the beginning of the DayInterval is before the start
+/// of the Timelined, it will return Result(Nil).
+pub fn slice_by_day_interval(
+  timelined: Timelined(v),
+  interval: DayInterval,
+) -> TLSliceByDay(v) {
+  let current = case
+    tl_current_variant.is_effective_in_day_interval(timelined.current, interval)
+  {
+    True -> Some(timelined.current)
+    False -> None
   }
+
+  let history =
+    timelined
+    |> to_history_list()
+    |> list.filter(keeping: fn(x) {
+      tl_past_variant.is_effective_in_day_interval(x, interval)
+    })
+
+  tl_slice_by_day.new(interval:, current:, history:)
+}
+
+/// Returns a TimelinedSlice, containing any variants that were in effect on the given Day.
+pub fn filter_by_day(timelined: Timelined(v), query_day: Day) -> TLSliceByDay(v) {
+  let current = case
+    tl_current_variant.is_effective_on_day(timelined.current, query_day)
+  {
+    True -> Some(timelined.current)
+    False -> None
+  }
+
+  let history =
+    timelined
+    |> to_history_list()
+    |> list.filter(keeping: fn(x) {
+      tl_past_variant.is_effective_on_day(x, query_day)
+    })
+
+  tl_slice_by_day.new(
+    interval: day_interval.new(start: query_day, final: query_day),
+    current:,
+    history:,
+  )
 }
 
 // -----------------------------------------------------------------
@@ -358,30 +393,30 @@ pub fn get_variant_by_day(
 // -----------------------------------------------------------------
 
 /// Gets the current variant.
-pub fn to_current_variant(calendrical: Calendrical(v)) -> CalCurrentVariant(v) {
-  calendrical.current
+pub fn to_current_variant(timelined: Timelined(v)) -> TLCurrentVariant(v) {
+  timelined.current
 }
 
-pub fn to_history_list(calendrical: Calendrical(v)) -> List(CalPastVariant(v)) {
-  calendrical.history
+pub fn to_history_list(timelined: Timelined(v)) -> List(TLPastVariant(v)) {
+  timelined.history
 }
 
-// Converts the entire Calendrical to a list of CalAnyVariants.
-pub fn to_list(calendrical: Calendrical(v)) -> List(CalAnyVariant(v)) {
+// Converts the entire Timelined to a list of CalAnyVariants.
+pub fn to_list(timelined: Timelined(v)) -> List(TLAnyVariant(v)) {
   let history =
-    calendrical.history
-    |> list.map(cal_any_variant.Past)
+    timelined.history
+    |> list.map(tl_any_variant.Past)
 
-  let current = calendrical.current |> cal_any_variant.Current
+  let current = timelined.current |> tl_any_variant.Current
 
   [current, ..history]
 }
 
-// Retrieves the latest edit Day of a Calendrical.
-pub fn to_latest_edit_day(calendrical: Calendrical(v)) -> Day {
-  calendrical
+// Retrieves the latest edit Moment of a Timelined.
+pub fn to_latest_edit_moment(timelined: Timelined(v)) -> Moment {
+  timelined
   |> to_current_variant
-  |> cal_current_variant.to_start_day
+  |> tl_current_variant.to_start_moment
 }
 
 // -----------------------------------------------------------------
@@ -396,9 +431,9 @@ pub fn to_latest_edit_day(calendrical: Calendrical(v)) -> Day {
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
 
-// Internal changer that sees if a Calendrical has a history.
-pub fn has_history(calendrical: Calendrical(v)) -> Bool {
-  calendrical.history
+// Internal changer that sees if a Timelined has a history.
+pub fn has_history(timelined: Timelined(v)) -> Bool {
+  timelined.history
   |> list.is_empty()
   |> bool.negate
 }
@@ -415,38 +450,36 @@ pub fn has_history(calendrical: Calendrical(v)) -> Bool {
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
 
-/// Checks if the current day is contiguous with the history.
-/// 
-/// (Current start is one day after the most recent variant's final day.)
-/// 
+/// Checks if the current Moment is contiguous with the history.
+///
+/// (Current start is one day after the most recent variant's final Moment.)
+///
 /// Will return True if there's no history.
-fn current_is_contiguous_with_history(calendrical: Calendrical(v)) -> Bool {
-  calendrical
+fn current_is_contiguous_with_history(timelined: Timelined(v)) -> Bool {
+  timelined
   |> to_history_list
   |> list.first
   |> result.map(fn(v) {
-    let last_history_final = cal_past_variant.to_final_day(v)
-    let current_start = cal_current_variant.to_start_day(calendrical.current)
+    let last_history_final = tl_past_variant.to_end_excluding_moment(v)
+    let current_start = tl_current_variant.to_start_moment(timelined.current)
 
-    day.difference(last_history_final, from: current_start) == 1
+    moment.difference(last_history_final, from: current_start)
+    == duration.nanoseconds(0)
   })
   |> result.unwrap(True)
 }
 
 /// Checks if every consecutive variant is contiguous
 /// with each other.
-/// 
-/// (as in, the final day of the next variant is one day
-/// before the start day of the next variant.)
-fn variants_are_contiguous(calendrical: Calendrical(v)) -> Bool {
-  calendrical
+fn variants_are_contiguous(timelined: Timelined(v)) -> Bool {
+  timelined
   |> to_history_list
   |> list.window_by_2
   |> list.map(fn(pair) {
     // remember this runs in reverse chronological order.
-    day_interval.is_contiguous(
-      cal_past_variant.to_day_interval(pair.1),
-      before: cal_past_variant.to_day_interval(pair.0),
+    moment_interval.is_contiguous(
+      tl_past_variant.to_moment_interval(pair.1),
+      before: tl_past_variant.to_moment_interval(pair.0),
     )
   })
   |> list.contains(False)
@@ -454,20 +487,20 @@ fn variants_are_contiguous(calendrical: Calendrical(v)) -> Bool {
 }
 
 /// Checks if the first variant in this structure has
-/// the same start day as the marked history_start.
-fn first_variant_matches_history_start(calendrical: Calendrical(v)) -> Bool {
-  calendrical
+/// the same start Moment as the marked history_start.
+fn first_variant_matches_history_start(timelined: Timelined(v)) -> Bool {
+  timelined
   |> to_history_list
   |> list.last
   |> result.map(fn(v) {
     v
-    |> cal_past_variant.to_start_day
-    |> fn(x) { x == calendrical.history_start }
+    |> tl_past_variant.to_start_moment
+    |> fn(x) { x == timelined.history_start }
   })
   |> result.unwrap(
-    calendrical.current
-    |> cal_current_variant.to_start_day
-    |> fn(x) { x == calendrical.history_start },
+    timelined.current
+    |> tl_current_variant.to_start_moment
+    |> fn(x) { x == timelined.history_start },
   )
 }
 
@@ -486,27 +519,27 @@ fn first_variant_matches_history_start(calendrical: Calendrical(v)) -> Bool {
 /// Helper type for cut_and_truncate_history().
 type OverlapAccumulation(v) {
   OverlapAccumulation(
-    deleted: List(CalPastVariant(v)),
-    truncated: Option(CalPastVariant(v)),
-    kept: List(CalPastVariant(v)),
+    deleted: List(TLPastVariant(v)),
+    truncated: Option(TLPastVariant(v)),
+    kept: List(TLPastVariant(v)),
   )
 }
 
 /// Internal function for insert_new_current() where it's known
 /// that a new current insertion will overlap
-/// a Calendrical's history.
-/// 
+/// a Timelined's history.
+///
 /// This function returns a version of that history where variants
 /// are removed and/or truncated to make space for the new variant.
 fn cut_and_truncate_history(
-  calendrical: Calendrical(v),
-  proposed_current: CalCurrentVariant(v),
-) -> List(CalPastVariant(v)) {
+  timelined: Timelined(v),
+  proposed_current: TLCurrentVariant(v),
+) -> List(TLPastVariant(v)) {
   // fold over the history
 
   let plan =
     list.fold(
-      over: calendrical.history,
+      over: timelined.history,
       from: OverlapAccumulation(truncated: None, kept: [], deleted: []),
       with: fn(b, a) { identify_overlaps(proposed_current, a, b) },
     )
@@ -515,26 +548,28 @@ fn cut_and_truncate_history(
 
   case plan.truncated {
     None -> kept
-    Some(truncated) -> [truncated, ..kept]
+    Some(truncated) -> {
+      [truncated, ..kept]
+    }
   }
 }
 
 /// The function that identifies and accumulates overlaps.
 fn identify_overlaps(
-  current: CalCurrentVariant(v),
-  past: CalPastVariant(v),
+  current: TLCurrentVariant(v),
+  past: TLPastVariant(v),
   acc: OverlapAccumulation(v),
 ) -> OverlapAccumulation(v) {
   case
-    cal_past_variant.truncate(
+    tl_past_variant.truncate(
       past,
-      behind: cal_current_variant.to_start_day(current),
+      behind: tl_current_variant.to_start_moment(current),
     )
   {
-    Error(day_interval.FinalIsLaterThanOriginal) ->
+    Error(moment_interval.ResultIntervalIsLarger) ->
       OverlapAccumulation(..acc, kept: [past, ..acc.kept])
     Ok(truncated) -> OverlapAccumulation(..acc, truncated: Some(truncated))
-    Error(day_interval.FinalIsEarlierThanStart) ->
+    Error(moment_interval.ResultIntervalIsZero) ->
       OverlapAccumulation(..acc, deleted: [past, ..acc.deleted])
   }
 }

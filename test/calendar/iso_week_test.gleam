@@ -1,10 +1,11 @@
-import calendar/iso_date
-import calendar/iso_week
-import day
+
 import gleam/list
 import gleam/order
 import gleeunit/should
-import interval/day_interval
+import timepoint/calendar/iso_date
+import timepoint/calendar/iso_week
+import timepoint/day
+import timepoint/interval/day_interval
 
 // ----------------------------------------------------
 // ----------------------------------------------------
@@ -100,10 +101,10 @@ pub fn week_list_from_date_sunday_test() {
 // ----------------------------------------------------
 // ----------------------------------------------------
 
-/// 
+///
 /// xx  xx  25  26  27  28  29
 /// 30  31  01  02  03  04  05
-/// 
+///
 /// -> One week
 pub fn list_from_inside_interval_1_test() {
   day_interval.new(
@@ -120,9 +121,9 @@ pub fn list_from_inside_interval_1_test() {
   ])
 }
 
-/// 
+///
 /// xx  xx  25  26  27  28  xx
-/// 
+///
 /// -> No weeks
 pub fn list_from_inside_interval_2_test() {
   day_interval.new(
@@ -134,9 +135,9 @@ pub fn list_from_inside_interval_2_test() {
   |> should.equal([])
 }
 
-/// 
+///
 /// 23  24  25  26  27  28  29
-/// 
+///
 /// -> One week
 pub fn list_from_inside_interval_3_test() {
   day_interval.new(
@@ -153,10 +154,10 @@ pub fn list_from_inside_interval_3_test() {
   ])
 }
 
-/// 
+///
 /// 23  24  25  26  27  28  29
 /// 30  31  01  02  03  04  05
-/// 
+///
 /// -> Two weeks
 pub fn list_from_inside_interval_4_test() {
   day_interval.new(
@@ -209,10 +210,10 @@ pub fn list_from_inside_interval_5_test() {
 // ----------------------------------------------------
 // ----------------------------------------------------
 
-/// 
+///
 /// xx  xx  25  26  27  28  29
 /// 30  31  01  02  03  04  05
-/// 
+///
 /// -> Two weeks
 pub fn list_from_around_interval_1_test() {
   day_interval.new(
@@ -233,9 +234,9 @@ pub fn list_from_around_interval_1_test() {
   ])
 }
 
-/// 
+///
 /// xx  xx  25  26  27  28  xx
-/// 
+///
 /// -> One week
 pub fn list_from_around_interval_2_test() {
   day_interval.new(
@@ -252,9 +253,9 @@ pub fn list_from_around_interval_2_test() {
   ])
 }
 
-/// 
+///
 /// 23  24  25  26  27  28  29
-/// 
+///
 /// -> One week
 pub fn list_from_around_interval_3_test() {
   day_interval.new(
@@ -271,10 +272,10 @@ pub fn list_from_around_interval_3_test() {
   ])
 }
 
-/// 
+///
 /// 23  24  25  26  27  28  29
 /// 30  31  01  02  03  04  05
-/// 
+///
 /// -> Two weeks
 pub fn list_from_around_interval_4_test() {
   day_interval.new(
@@ -360,7 +361,7 @@ pub fn to_monday_2_test() {
 // ----------------------------------------------------
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn to_list_1_test() {
   iso_week.from_day(day.testing_iso8601("2026-03-27"))
   |> iso_week.to_list
@@ -385,7 +386,7 @@ pub fn to_list_1_test() {
 // ----------------------------------------------------
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn is_equal_1_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-03-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-03-27"))
@@ -396,7 +397,7 @@ pub fn is_equal_1_test() {
 }
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn is_equal_2_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-03-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-03-28"))
@@ -407,7 +408,7 @@ pub fn is_equal_2_test() {
 }
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn is_equal_3_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-03-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-02-28"))
@@ -424,7 +425,7 @@ pub fn is_equal_3_test() {
 // ----------------------------------------------------
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn compare_1_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-03-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-03-27"))
@@ -435,7 +436,7 @@ pub fn compare_1_test() {
 }
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn compare_2_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-02-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-03-27"))
@@ -446,7 +447,7 @@ pub fn compare_2_test() {
 }
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn compare_3_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-04-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-03-27"))
@@ -463,7 +464,7 @@ pub fn compare_3_test() {
 // ----------------------------------------------------
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn compare_reverse_1_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-03-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-03-27"))
@@ -474,7 +475,7 @@ pub fn compare_reverse_1_test() {
 }
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn compare_reverse_2_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-02-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-03-27"))
@@ -485,7 +486,7 @@ pub fn compare_reverse_2_test() {
 }
 
 /// 23  24  25  26  27  28  29
-/// 
+///
 pub fn compare_reverse_3_test() {
   let week_a = iso_week.from_day(day.testing_iso8601("2026-04-27"))
   let week_b = iso_week.from_day(day.testing_iso8601("2026-03-27"))

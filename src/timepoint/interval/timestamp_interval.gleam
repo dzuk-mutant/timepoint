@@ -2,15 +2,15 @@ import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/order.{Eq, Gt, Lt}
 import gleam/time/timestamp.{type Timestamp}
-import timestamp_extra
+import timepoint/timestamp_extra
 
 /// Represents a range of time for comparison.
-/// 
+///
 /// Collision in a TimestampInterval is inclusive at the start
 /// point (Eq/Gt) and exclusive at the end (Lt).
-/// 
+///
 /// TimestampIntervals can only be compared to Timestamps.
-/// 
+///
 /// If you want to compare with Days and DayIntervals, you need
 /// a MomentWindow.
 pub opaque type TimestampInterval {
@@ -71,7 +71,7 @@ pub fn to_json(interval: TimestampInterval) -> Json {
 }
 
 /// Attempts to decode a Timestamp from JSON.
-/// 
+///
 /// If it's malformed, or formed but the end is
 /// before the start, it will throw an Error.
 pub fn decoder() -> Decoder(TimestampInterval) {
@@ -155,28 +155,28 @@ pub type TruncateError {
   ResultIntervalIsLarger
 }
 
-/// Attempts to move the end_excluding 
+/// Attempts to move the end_excluding
 /// Timestamp to the same point as a given Momeent
-/// 
+///
 /// Also used to check if a truncation is applicable
 /// when it comes to overlap checks.
-/// 
+///
 /// ```
 /// will provide a result,
 /// even if the result is the same:
-/// 
+///
 ///    s--------e      s-------e
 ///    s---T           s-------T
-/// 
+///
 /// ResultIntervalIsZero:
-/// 
+///
 ///   s--------e       s-------e
 ///   T              T
-/// 
+///
 /// ResultIntervalIsLarger:
 ///  e--------e
-///  s-----------T 
-/// 
+///  s-----------T
+///
 /// ```
 ///
 pub fn truncate(
@@ -201,14 +201,14 @@ pub fn truncate(
 // -----------------------------------------------
 
 /// Checks if a Timestamp lands inside a TimestampInterval.
-/// 
+///
 /// correct:
-/// 
-/// |-------|    |-----|   
-///    m         m    
-/// 
+///
+/// |-------|    |-----|
+///    m         m
+///
 /// ```
-/// 
+///
 pub fn is_around_timestamp(
   interval: TimestampInterval,
   timestamp: Timestamp,
@@ -220,14 +220,14 @@ pub fn is_around_timestamp(
 }
 
 /// Checks if a Timestamp lands before a TimestampInterval.
-/// 
+///
 /// correct:
-/// 
-///       |-------|     
-///    m         
-/// 
+///
+///       |-------|
+///    m
+///
 /// ```
-/// 
+///
 pub fn is_after_timestamp(
   interval: TimestampInterval,
   timestamp: Timestamp,
@@ -239,14 +239,14 @@ pub fn is_after_timestamp(
 }
 
 /// Checks if a TimestampInterval is fully inside another TimestampInterval.
-/// 
+///
 /// ```
-/// 
+///
 /// correct:
-/// 
+///
 ///     a-----a      a----a       a----a
 ///    b-------b     b-----b    b------b
-/// 
+///
 /// ```
 pub fn is_inside(a: TimestampInterval, of b: TimestampInterval) {
   case to_collision_with_timestamp(b, a.start) {
@@ -260,21 +260,21 @@ pub fn is_inside(a: TimestampInterval, of b: TimestampInterval) {
 }
 
 /// Checks if a TimestampInterval is at least partly overlapping another TimestampInterval.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 ///     a-----a      a----a       a----a
 ///    b-------b     b-----b    b------b
-/// 
-/// 
-///   a-----a          a------a 
-///     b------b     b-----b     
-/// 
-/// 
-/// 
+///
+///
+///   a-----a          a------a
+///     b------b     b-----b
+///
+///
+///
 /// ```
-/// 
+///
 pub fn is_overlapped(a: TimestampInterval, by b: TimestampInterval) {
   case to_collision_with_timestamp(b, a.start) {
     TimestampBeforeStart | TimestampAtStart | TimestampInside -> True
@@ -287,15 +287,15 @@ pub fn is_overlapped(a: TimestampInterval, by b: TimestampInterval) {
 }
 
 /// Checks if two TimestampIntervals are considered 'contiguous'.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 /// 1----1
 ///      2----2
-/// 
+///
 /// ```
-/// 
+///
 pub fn is_contiguous(
   prev: TimestampInterval,
   ahead_of next: TimestampInterval,

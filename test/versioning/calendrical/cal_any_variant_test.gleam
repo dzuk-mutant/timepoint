@@ -1,8 +1,8 @@
-import day
+import timepoint/day
 import gleeunit/should
-import versioning/calendrical/cal_any_variant.{Current, Past}
-import versioning/calendrical/cal_current_variant
-import versioning/calendrical/cal_past_variant
+import timepoint/versioning/calendrical/cal_any_variant.{Current, Past}
+import timepoint/versioning/calendrical/cal_current_variant
+import timepoint/versioning/calendrical/cal_past_variant
 
 pub fn unwrap_current_variant_test() {
   cal_current_variant.new(

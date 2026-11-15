@@ -1,9 +1,9 @@
-import day
+import timepoint/day
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json
 import gleeunit/should
-import interval/day_interval
-import versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
+import timepoint/interval/day_interval
+import timepoint/versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
 
 // --------------------------------------------
 // --------------------------------------------
@@ -76,7 +76,7 @@ pub fn to_start_day_test() {
 
 ///    |------|
 ///  o-------------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_1_test() {
   cal_current_variant.new(
@@ -92,7 +92,7 @@ pub fn is_effective_in_day_interval_1_test() {
 
 ///    |------|
 ///    o-------------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_2_test() {
   cal_current_variant.new(
@@ -108,7 +108,7 @@ pub fn is_effective_in_day_interval_2_test() {
 
 ///    |------|
 ///       o----------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_3_test() {
   cal_current_variant.new(
@@ -124,7 +124,7 @@ pub fn is_effective_in_day_interval_3_test() {
 
 ///    |------|
 ///           o---------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_4_test() {
   cal_current_variant.new(
@@ -140,7 +140,7 @@ pub fn is_effective_in_day_interval_4_test() {
 
 ///    |------|
 ///               o---------
-/// 
+///
 ///    (False)
 pub fn is_effective_in_day_interval_5_test() {
   cal_current_variant.new(
@@ -160,7 +160,7 @@ pub fn is_effective_in_day_interval_5_test() {
 
 ///      x
 ///    o---------
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_1_test() {
   cal_current_variant.new(
@@ -173,7 +173,7 @@ pub fn is_effective_on_day_1_test() {
 
 ///      x
 ///      o-------
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_2_test() {
   cal_current_variant.new(
@@ -186,7 +186,7 @@ pub fn is_effective_on_day_2_test() {
 
 ///      x
 ///        o-------
-/// 
+///
 ///     (False)
 pub fn is_effective_on_day_3_test() {
   cal_current_variant.new(
@@ -203,7 +203,7 @@ pub fn is_effective_on_day_3_test() {
 
 ///      x
 ///    o---------
-/// 
+///
 ///     (True)
 pub fn overlaps_1_test() {
   cal_current_variant.new(
@@ -216,7 +216,7 @@ pub fn overlaps_1_test() {
 
 ///      x
 ///      o-------
-/// 
+///
 ///     (True)
 pub fn overlaps_2_test() {
   cal_current_variant.new(
@@ -229,7 +229,7 @@ pub fn overlaps_2_test() {
 
 ///      x
 ///        o-------
-/// 
+///
 ///     (False)
 pub fn overlaps_3_test() {
   cal_current_variant.new(

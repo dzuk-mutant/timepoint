@@ -1,8 +1,8 @@
 import gleeunit/should
-import moment
-import versioning/timelined/tl_any_variant.{Current, Past}
-import versioning/timelined/tl_current_variant
-import versioning/timelined/tl_past_variant
+import timepoint/moment
+import timepoint/versioning/timelined/tl_any_variant.{Current, Past}
+import timepoint/versioning/timelined/tl_current_variant
+import timepoint/versioning/timelined/tl_past_variant
 
 pub fn unwrap_current_variant_test() {
   tl_current_variant.new(

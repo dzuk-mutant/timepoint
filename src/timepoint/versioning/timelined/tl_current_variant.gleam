@@ -1,12 +1,12 @@
-import day.{type Day}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
-import interval/day_interval.{type DayInterval}
-import interval/moment_interval.{type MomentInterval}
-import moment.{type Moment}
+import timepoint/day.{type Day}
+import timepoint/interval/day_interval.{type DayInterval}
+import timepoint/interval/moment_interval.{type MomentInterval}
+import timepoint/moment.{type Moment}
 
 /// Represents a starting Moment for the relevancy or effect of a piece of associated information.
-/// 
+///
 /// The information should be considered 'in effect' as long as the context window is overlapping or after it.
 pub opaque type TLCurrentVariant(v) {
   TLCurrentVariant(start: Moment, value: v)
@@ -19,7 +19,7 @@ pub opaque type TLCurrentVariant(v) {
 // ---------------------------------
 
 /// Creates a new TLCurrentVariant.
-/// 
+///
 /// Will switch the start and end around if they are in reverse order.
 pub fn new(value value: v, start start: Moment) -> TLCurrentVariant(v) {
   TLCurrentVariant(value:, start:)
@@ -105,7 +105,7 @@ pub fn to_start_moment(variant: TLCurrentVariant(v)) -> Moment {
 // ---------------------------------
 
 /// Checks if an TLCurrentVariant is effective at some point in time inside a MomentInterval.
-/// 
+///
 /// Will be True if the two intervals overlap, except where the end of the Effect is the same as the Query.
 pub fn is_effective_in_moment_interval(
   variant: TLCurrentVariant(v),
@@ -130,7 +130,7 @@ pub fn is_effective_on_day(variant: TLCurrentVariant(v), day: Day) -> Bool {
 }
 
 /// Checks to see if the TLCurrentVariant overlaps a given Moment.
-/// 
+///
 /// It's an alias of active_on_day, which is probably going to be semantically useful going forward.
 pub fn overlaps(variant: TLCurrentVariant(v), moment: Moment) -> Bool {
   moment.is_earlier_or_equal(variant.start, to: moment)

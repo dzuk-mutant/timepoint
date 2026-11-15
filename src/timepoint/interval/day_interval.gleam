@@ -1,13 +1,13 @@
-import day.{type Day}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/list
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
-import moment.{type Moment}
+import timepoint/day.{type Day}
+import timepoint/moment.{type Moment}
 
 /// A type that represents a span of Days.
-/// 
+///
 /// This span of days can be a single length -
 /// as in, it represents a span of days that is 1
 /// day long.
@@ -26,10 +26,10 @@ pub opaque type DayInterval {
 // -----------------------------------------------
 
 /// Creates a new DayInterval.
-/// 
+///
 /// This is an unsafe constructor - if the final
 /// is earlier than the start, it will be made that way.
-/// 
+///
 /// I want to make this more safe in the future, but I
 /// don't want to choke my code with inelegant Result
 /// unwraps.
@@ -73,7 +73,7 @@ pub fn to_json(interval: DayInterval) -> Json {
 }
 
 /// Attempts to decode a DayInterval from JSON.
-/// 
+///
 /// If it's malformed, or formed but the final is
 /// before the start, it will throw an Error.
 pub fn decoder() -> Decoder(DayInterval) {
@@ -120,13 +120,13 @@ pub type TruncateError {
 
 /// Attempts to move the end Day to a position 1 day
 /// before the given day.
-/// 
+///
 /// Also used to check if a truncation is applicable
 /// when it comes to overlap checks.
-/// 
+///
 /// Will return Error(FinalIsEarlierThanStart) if the new_final Day
 /// is before the first Day.
-/// 
+///
 /// Will return Error(FinalIsLongerThanOriginal) if the new_final Day
 /// is later than the original final Day.
 pub fn truncate(
@@ -261,14 +261,14 @@ pub fn to_collision_with_moment(
 // -----------------------------------------------
 
 /// Checks if a Day lands PointInside a DayInterval.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 /// |-------|    |-----|   |----|
 ///    d         d              d
-///  
-/// 
+///
+///
 /// ```
 /// Checks if a Day lands PointInside a DayInterval.
 pub fn is_around_day(interval: DayInterval, d: Day) -> Bool {
@@ -279,14 +279,14 @@ pub fn is_around_day(interval: DayInterval, d: Day) -> Bool {
 }
 
 /// Checks if a Moment lands PointInside a DayInterval.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 /// |-------|    |-----|   |----|
 ///    m         m              m
-///  
-/// 
+///
+///
 /// ```
 pub fn is_around_moment(interval: DayInterval, m: Moment) -> Bool {
   case to_collision_with_moment(interval, m) {
@@ -296,14 +296,14 @@ pub fn is_around_moment(interval: DayInterval, m: Moment) -> Bool {
 }
 
 /// Checks if a Moment lands before a DayInterval.
-/// 
+///
 /// ```
 /// correct:
-/// 
-///      |-------| 
-///    m        
-///  
-/// 
+///
+///      |-------|
+///    m
+///
+///
 /// ```
 pub fn is_after_moment(interval: DayInterval, m: Moment) -> Bool {
   case to_collision_with_moment(interval, m) {
@@ -313,14 +313,14 @@ pub fn is_after_moment(interval: DayInterval, m: Moment) -> Bool {
 }
 
 /// Checks if a DayInterval is fully PointInside another DayInterval.
-/// 
+///
 /// ```
-/// 
+///
 /// correct:
-/// 
+///
 ///     a-----a      a----a       a----a
 ///    b-------b     b-----b    b------b
-/// 
+///
 /// ```
 pub fn is_inside(a: DayInterval, of b: DayInterval) {
   case to_collision_with_day(b, a.start) {
@@ -334,23 +334,23 @@ pub fn is_inside(a: DayInterval, of b: DayInterval) {
 }
 
 /// Checks if a DayInterval is at least partly PointInside another DayInterval.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 ///     a-----a      a----a       a----a
 ///    b-------b     b-----b    b------b
-/// 
-/// 
+///
+///
 ///   a-----a          a------a       a------a
 ///     b------b     b-----b     b----b
-/// 
-/// 
+///
+///
 ///    a-----a
 ///          b-----b
-/// 
+///
 /// ```
-/// 
+///
 pub fn is_overlapped(a: DayInterval, by b: DayInterval) {
   case to_collision_with_day(b, a.start) {
     PointBeforeStart | PointAtStart | PointInside | PointAtFinal -> True
@@ -363,17 +363,17 @@ pub fn is_overlapped(a: DayInterval, by b: DayInterval) {
 }
 
 /// Checks if two DayIntervals are considered 'contiguous'.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 /// a----a
 ///       b----b
-/// 
+///
 /// (b's start is one day after a's end)
-/// 
+///
 /// ```
-/// 
+///
 pub fn is_contiguous(a: DayInterval, before b: DayInterval) -> Bool {
   day.difference(a.final, from: b.start) == 1
 }

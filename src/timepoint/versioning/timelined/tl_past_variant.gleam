@@ -1,11 +1,11 @@
-import day.{type Day}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/result
-import interval/day_interval.{type DayInterval}
-import interval/moment_interval.{type MomentInterval}
-import moment.{type Moment}
-import versioning/timelined/tl_current_variant.{type TLCurrentVariant}
+import timepoint/day.{type Day}
+import timepoint/interval/day_interval.{type DayInterval}
+import timepoint/interval/moment_interval.{type MomentInterval}
+import timepoint/moment.{type Moment}
+import timepoint/versioning/timelined/tl_current_variant.{type TLCurrentVariant}
 
 ///  A data type representing a version of a data type at a particular point in time in the past.
 pub opaque type TLPastVariant(v) {
@@ -98,9 +98,9 @@ pub fn decoder(
 // ---------------------------------
 // ---------------------------------
 
-/// Moves the end Moment 1ms 
+/// Moves the end Moment 1ms
 /// before the given end_excluding Moment.
-/// 
+///
 /// Will return Result(moment_interval.TruncateError)
 /// if the given end_excluding Moment is not a correct input.
 pub fn truncate(
@@ -133,7 +133,7 @@ pub fn unwrap(variant: TLPastVariant(v)) -> v {
   variant.value
 }
 
-/// Converts to a MomentInterval. 
+/// Converts to a MomentInterval.
 pub fn to_moment_interval(variant: TLPastVariant(v)) -> MomentInterval {
   variant.interval
 }
@@ -145,9 +145,9 @@ pub fn to_moment_interval(variant: TLPastVariant(v)) -> MomentInterval {
 // ---------------------------------
 
 /// Checks if a Past Variant lands inside a MomentInterval.
-/// 
+///
 /// Will be True if the two overlap.
-/// 
+///
 /// Exactly the same functionality as its Cal counterpart, just with moments.
 pub fn is_effective_in_moment_interval(
   variant: TLPastVariant(v),
@@ -158,7 +158,7 @@ pub fn is_effective_in_moment_interval(
 }
 
 /// Checks if a Past Variant lands inside a DayInterval.
-/// 
+///
 /// Will be True if the two overlap.
 pub fn is_effective_in_day_interval(
   variant: TLPastVariant(v),
@@ -169,8 +169,8 @@ pub fn is_effective_in_day_interval(
 }
 
 /// Checks if a Past Variant lands on a Day.
-/// 
-/// WIll be true if the range of Moment encompasses the Day in some way. 
+///
+/// WIll be true if the range of Moment encompasses the Day in some way.
 pub fn is_effective_on_day(variant: TLPastVariant(v), day: Day) -> Bool {
   variant.interval
   |> moment_interval.is_around_day(day)

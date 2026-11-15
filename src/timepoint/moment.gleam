@@ -3,9 +3,9 @@ import gleam/json.{type Json}
 import gleam/order.{type Order, Eq, Gt, Lt}
 import gleam/time/duration.{type Duration}
 import gleam/time/timestamp.{type Timestamp}
-import offset.{type Offset}
-import parse/rfc3339
-import timestamp_extra
+import timepoint/offset.{type Offset}
+import timepoint/parse/rfc3339
+import timepoint/timestamp_extra
 
 /// A type that combines a Timestamp with an Offset.
 ///

@@ -1,11 +1,11 @@
-import day
+import timepoint/day
 import gleeunit/should
-import interval/day_interval
-import versioning/calendrical
-import versioning/calendrical/cal_any_variant.{Current, Past}
-import versioning/calendrical/cal_current_variant
-import versioning/calendrical/cal_past_variant
-import versioning/calendrical/cal_slice
+import timepoint/interval/day_interval
+import timepoint/versioning/calendrical
+import timepoint/versioning/calendrical/cal_any_variant.{Current, Past}
+import timepoint/versioning/calendrical/cal_current_variant
+import timepoint/versioning/calendrical/cal_past_variant
+import timepoint/versioning/calendrical/cal_slice
 
 fn eq_func(a: String, b: String) -> Bool {
   a == b

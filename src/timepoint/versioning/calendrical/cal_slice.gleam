@@ -1,13 +1,13 @@
-import day.{type Day}
 import gleam/list
 import gleam/option.{type Option, None, Some}
 import gleam/result
-import interval/day_interval.{type DayInterval}
-import versioning/calendrical/cal_any_variant.{type CalAnyVariant, Current, Past}
-import versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
-import versioning/calendrical/cal_past_variant.{type CalPastVariant}
+import timepoint/day.{type Day}
+import timepoint/interval/day_interval.{type DayInterval}
+import timepoint/versioning/calendrical/cal_any_variant.{type CalAnyVariant, Current, Past}
+import timepoint/versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
+import timepoint/versioning/calendrical/cal_past_variant.{type CalPastVariant}
 
-/// A slice of a Calendrical. When a Calendrical is 
+/// A slice of a Calendrical. When a Calendrical is
 /// filtered, this type is returned.
 pub type CalSlice(v) {
   CalSlice(
@@ -54,12 +54,12 @@ pub fn is_empty(slice: CalSlice(v)) -> Bool {
 // ------------------------------------------------------------
 
 /// Converts a CalSlice to a list of AnyVariants.
-/// 
+///
 /// For when you just need to map over stuff.
-/// 
+///
 /// You will lose the bounding data for the Slice
 /// with this operation.
-/// 
+///
 pub fn to_any_list(slice: CalSlice(v)) -> List(CalAnyVariant(v)) {
   let mapped_history =
     slice.history

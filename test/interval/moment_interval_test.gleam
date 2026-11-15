@@ -1,10 +1,10 @@
-import day
+import timepoint/day
 import gleam/json
 import gleam/result
 import gleeunit/should
-import interval/day_interval
-import interval/moment_interval.{type MomentInterval}
-import moment
+import timepoint/interval/day_interval
+import timepoint/interval/moment_interval.{type MomentInterval}
+import timepoint/moment
 
 // -----------------------------------------------
 // -----------------------------------------------
@@ -122,9 +122,9 @@ pub fn json_i_erroneous_1_test() {
 ///
 ///   |---------|
 ///   n--------------n
-/// 
+///
 ///   (Error(EndIsLaterThanOriginal))
-/// 
+///
 pub fn truncate_1_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("1999-05-01T00:00:00.000Z"),
@@ -139,10 +139,10 @@ pub fn truncate_1_test() {
 ///
 ///   |---------|
 ///             n
-/// 
+///
 ///   (same final)
 ///   (Ok)
-/// 
+///
 pub fn truncate_2_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("1999-05-01T00:00:00.000Z"),
@@ -162,10 +162,10 @@ pub fn truncate_2_test() {
 ///
 ///   |---------|
 ///        n
-/// 
+///
 ///   (earlier final)
 ///   (Ok)
-/// 
+///
 pub fn truncate_3_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("1999-05-01T00:00:00.000Z"),
@@ -185,10 +185,10 @@ pub fn truncate_3_test() {
 ///
 ///   |---------|
 ///     n
-/// 
+///
 ///   (same-day final)
 ///   (Ok)
-/// 
+///
 pub fn truncate_4_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("1999-05-01T00:00:00.000Z"),
@@ -208,9 +208,9 @@ pub fn truncate_4_test() {
 ///
 ///     |---------|
 ///     n
-/// 
+///
 ///   (Error(EndIsAtOrEarlierThanStart))
-/// 
+///
 pub fn truncate_5_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("1999-05-01T00:00:00.000Z"),
@@ -225,9 +225,9 @@ pub fn truncate_5_test() {
 ///
 ///     |---------|
 /// n
-/// 
+///
 ///   (Error(EndIsAtOrEarlierThanStart))
-/// 
+///
 pub fn truncate_6_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("1999-05-01T00:00:00.000Z"),
@@ -250,9 +250,9 @@ pub fn truncate_6_test() {
 ///
 ///   |---------|
 ///                 d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_day_1_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -265,9 +265,9 @@ pub fn is_around_day_1_test() {
 ///
 ///   |---------|
 ///              d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_day_2_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -280,9 +280,9 @@ pub fn is_around_day_2_test() {
 ///
 ///   |---------|
 ///             d
-/// 
+///
 ///   (True)
-/// 
+///
 pub fn is_around_day_3_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -295,9 +295,9 @@ pub fn is_around_day_3_test() {
 ///
 ///   |---------|
 ///              d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_day_3x_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -310,9 +310,9 @@ pub fn is_around_day_3x_test() {
 ///
 ///   |---------|
 ///         d
-/// 
+///
 ///   (True)
-/// 
+///
 pub fn is_around_day_4_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -325,9 +325,9 @@ pub fn is_around_day_4_test() {
 ///
 ///   |---------|
 ///   d
-/// 
+///
 ///   (True)
-/// 
+///
 pub fn is_around_day_5_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -340,9 +340,9 @@ pub fn is_around_day_5_test() {
 ///
 ///    |---------|
 ///   d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_day_6_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -355,9 +355,9 @@ pub fn is_around_day_6_test() {
 ///
 ///       |---------|
 ///   d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_day_7_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -378,9 +378,9 @@ pub fn is_around_day_7_test() {
 ///
 ///   |---------|
 ///                 d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_moment_1_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -395,9 +395,9 @@ pub fn is_around_moment_1_test() {
 ///
 ///   |---------|
 ///              d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_moment_2_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -412,10 +412,10 @@ pub fn is_around_moment_2_test() {
 ///
 ///   |---------|
 ///             d
-/// 
+///
 ///   (at end_excluding by 1ms)
 ///   (False)
-/// 
+///
 pub fn is_around_moment_3_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -430,10 +430,10 @@ pub fn is_around_moment_3_test() {
 ///
 ///   |---------|
 ///              d
-///   
+///
 ///   (off by 1ms)
 ///   (False)
-/// 
+///
 pub fn is_around_moment_3x_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -448,9 +448,9 @@ pub fn is_around_moment_3x_test() {
 ///
 ///   |---------|
 ///         d
-/// 
+///
 ///   (True)
-/// 
+///
 pub fn is_around_moment_4_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -465,9 +465,9 @@ pub fn is_around_moment_4_test() {
 ///
 ///   |---------|
 ///   d
-/// 
+///
 ///   (True)
-/// 
+///
 pub fn is_around_moment_5_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -482,9 +482,9 @@ pub fn is_around_moment_5_test() {
 ///
 ///    |---------|
 ///   d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_moment_6_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -499,9 +499,9 @@ pub fn is_around_moment_6_test() {
 ///
 ///       |---------|
 ///   d
-/// 
+///
 ///   (False)
-/// 
+///
 pub fn is_around_moment_7_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2036-08-01T00:00:00.000Z"),
@@ -523,10 +523,10 @@ pub fn is_around_moment_7_test() {
 
 ///
 ///    a---------a
-///                   b------b            
-/// 
+///                   b------b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_1_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -541,10 +541,10 @@ pub fn is_inside_1_test() {
 
 ///
 ///    a---------a
-///              b------b            
-/// 
+///              b------b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_2_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -559,10 +559,10 @@ pub fn is_inside_2_test() {
 
 ///
 ///    a---------a
-///           b------b            
-/// 
+///           b------b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_3_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -577,10 +577,10 @@ pub fn is_inside_3_test() {
 
 ///
 ///    a---------a
-///  b-------------b            
-/// 
+///  b-------------b
+///
 ///   (True)
-/// 
+///
 pub fn is_inside_4_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -595,10 +595,10 @@ pub fn is_inside_4_test() {
 
 ///
 ///    a---------a
-///    b---------b            
-/// 
+///    b---------b
+///
 ///   (True)
-/// 
+///
 pub fn is_inside_5_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -613,10 +613,10 @@ pub fn is_inside_5_test() {
 
 ///
 ///    a---------a
-///      b-----b            
-/// 
+///      b-----b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_6_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -631,10 +631,10 @@ pub fn is_inside_6_test() {
 
 ///
 ///    a---------a
-///        b-----b            
-/// 
+///        b-----b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_7_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -649,10 +649,10 @@ pub fn is_inside_7_test() {
 
 ///
 ///        a-----a
-///    b---------b            
-/// 
+///    b---------b
+///
 ///   (True)
-/// 
+///
 pub fn is_inside_8_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -667,10 +667,10 @@ pub fn is_inside_8_test() {
 
 ///
 ///    a---------a
-///    b-----b            
-/// 
+///    b-----b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_9_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -685,10 +685,10 @@ pub fn is_inside_9_test() {
 
 ///
 ///    a------a
-///    b---------b            
-/// 
+///    b---------b
+///
 ///   (True)
-/// 
+///
 pub fn is_inside_10_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -703,10 +703,10 @@ pub fn is_inside_10_test() {
 
 ///
 ///    a---------a
-///  b-----b            
-/// 
+///  b-----b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_11_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -721,10 +721,10 @@ pub fn is_inside_11_test() {
 
 ///
 ///        a---------a
-///  b-----b            
-/// 
+///  b-----b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_12_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -739,10 +739,10 @@ pub fn is_inside_12_test() {
 
 ///
 ///          a---------a
-///  b-----b            
-/// 
+///  b-----b
+///
 ///   (False)
-/// 
+///
 pub fn is_inside_13_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -765,10 +765,10 @@ pub fn is_inside_13_test() {
 
 ///
 ///    a---------a
-///                   b------b            
-/// 
+///                   b------b
+///
 ///   (False)
-/// 
+///
 pub fn is_overlapped_1_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -783,11 +783,11 @@ pub fn is_overlapped_1_test() {
 
 ///
 ///    a---------a
-///               b------b  
-///           
+///               b------b
+///
 ///   (off by 1ms)
 ///   (False)
-/// 
+///
 pub fn is_overlapped_2_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -802,11 +802,11 @@ pub fn is_overlapped_2_test() {
 
 ///
 ///    a---------a
-///              b------b            
-/// 
+///              b------b
+///
 ///   (end_excluding on start)
 ///   (False)
-/// 
+///
 pub fn is_overlapped_2x_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -821,10 +821,10 @@ pub fn is_overlapped_2x_test() {
 
 ///
 ///    a---------a
-///           b------b            
-/// 
+///           b------b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_3_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -839,10 +839,10 @@ pub fn is_overlapped_3_test() {
 
 ///
 ///    a---------a
-///  b-------------b            
-/// 
+///  b-------------b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_4_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -857,10 +857,10 @@ pub fn is_overlapped_4_test() {
 
 ///
 ///    a---------a
-///    b---------b            
-/// 
+///    b---------b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_5_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -875,10 +875,10 @@ pub fn is_overlapped_5_test() {
 
 ///
 ///    a---------a
-///      b-----b            
-/// 
+///      b-----b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_6_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -893,10 +893,10 @@ pub fn is_overlapped_6_test() {
 
 ///
 ///    a---------a
-///        b-----b            
-/// 
+///        b-----b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_7_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -911,10 +911,10 @@ pub fn is_overlapped_7_test() {
 
 ///
 ///        a-----a
-///    b---------b            
-/// 
+///    b---------b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_8_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -929,10 +929,10 @@ pub fn is_overlapped_8_test() {
 
 ///
 ///    a---------a
-///    b-----b            
-/// 
+///    b-----b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_9_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -947,10 +947,10 @@ pub fn is_overlapped_9_test() {
 
 ///
 ///    a------a
-///    b---------b            
-/// 
+///    b---------b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_10_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -965,10 +965,10 @@ pub fn is_overlapped_10_test() {
 
 ///
 ///    a---------a
-///  b-----b            
-/// 
+///  b-----b
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapped_11_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -983,11 +983,11 @@ pub fn is_overlapped_11_test() {
 
 ///
 ///        a---------a
-///  b-----b            
-/// 
+///  b-----b
+///
 ///   (start on end_excluding)
 ///   (False)
-/// 
+///
 pub fn is_overlapped_12_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1002,11 +1002,11 @@ pub fn is_overlapped_12_test() {
 
 ///
 ///         a---------a
-///  b-----b            
-/// 
+///  b-----b
+///
 ///   (out by 1ms)
 ///   (False)
-/// 
+///
 pub fn is_overlapped_12x_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1021,10 +1021,10 @@ pub fn is_overlapped_12x_test() {
 
 ///
 ///          a---------a
-///  b-----b            
-/// 
+///  b-----b
+///
 ///   (False)
-/// 
+///
 pub fn is_overlapped_13_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1047,10 +1047,10 @@ pub fn is_overlapped_13_test() {
 
 ///
 ///    t---------t
-///                   d------d            
-/// 
+///                   d------d
+///
 ///   (False)
-/// 
+///
 pub fn is_overlapped_by_day_interval_1_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1065,11 +1065,11 @@ pub fn is_overlapped_by_day_interval_1_test() {
 
 ///
 ///    t---------t
-///               d------d  
-///           
+///               d------d
+///
 ///   (off by 1ms)
 ///   (False)
-/// 
+///
 pub fn is_overlapping_day_interval_2_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1084,11 +1084,11 @@ pub fn is_overlapping_day_interval_2_test() {
 
 ///
 ///    t---------t
-///              d------d            
-/// 
+///              d------d
+///
 ///   (at end_excluding by 1ms)
 ///   (False)
-/// 
+///
 pub fn is_overlapping_day_interval_2x_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1103,10 +1103,10 @@ pub fn is_overlapping_day_interval_2x_test() {
 
 ///
 ///    t---------t
-///           d------d            
-/// 
+///           d------d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_3_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1121,10 +1121,10 @@ pub fn is_overlapping_day_interval_3_test() {
 
 ///
 ///    t---------t
-///  d-------------d            
-/// 
+///  d-------------d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_4_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1139,10 +1139,10 @@ pub fn is_overlapping_day_interval_4_test() {
 
 ///
 ///    t---------t
-///    d---------d            
-/// 
+///    d---------d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_5_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1157,10 +1157,10 @@ pub fn is_overlapping_day_interval_5_test() {
 
 ///
 ///    t---------t
-///      d-----d            
-/// 
+///      d-----d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_6_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1175,10 +1175,10 @@ pub fn is_overlapping_day_interval_6_test() {
 
 ///
 ///    t---------t
-///        d-----d            
-/// 
+///        d-----d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_7_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1193,10 +1193,10 @@ pub fn is_overlapping_day_interval_7_test() {
 
 ///
 ///        t-----t
-///    d---------d            
-/// 
+///    d---------d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_8_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1211,10 +1211,10 @@ pub fn is_overlapping_day_interval_8_test() {
 
 ///
 ///    t---------t
-///    d-----d            
-/// 
+///    d-----d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_9_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1229,10 +1229,10 @@ pub fn is_overlapping_day_interval_9_test() {
 
 ///
 ///    t------t
-///    d---------d            
-/// 
+///    d---------d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_10_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1247,10 +1247,10 @@ pub fn is_overlapping_day_interval_10_test() {
 
 ///
 ///    t---------t
-///  d-----d            
-/// 
+///  d-----d
+///
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_11_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1265,11 +1265,11 @@ pub fn is_overlapping_day_interval_11_test() {
 
 ///
 ///        t---------t
-///  d-----d            
-/// 
+///  d-----d
+///
 ///   (in by 1ms)
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_12_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1284,11 +1284,11 @@ pub fn is_overlapping_day_interval_12_test() {
 
 ///
 ///        t---------t
-///  d-----d            
-/// 
+///  d-----d
+///
 ///   (in by 1ms)
 ///   (True)
-/// 
+///
 pub fn is_overlapping_day_interval_12a_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2025-02-02T00:00:00.000Z"),
@@ -1303,11 +1303,11 @@ pub fn is_overlapping_day_interval_12a_test() {
 
 ///
 ///         t---------t
-///  d-----d            
-/// 
+///  d-----d
+///
 ///   (out by 1ms)
 ///   (False)
-/// 
+///
 pub fn is_overlapping_day_interval_12x_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1322,10 +1322,10 @@ pub fn is_overlapping_day_interval_12x_test() {
 
 ///
 ///          t---------t
-///  d-----d            
-/// 
+///  d-----d
+///
 ///   (False)
-/// 
+///
 pub fn is_overlapping_day_interval_13_test() {
   moment_interval.new(
     start: moment.testing_rfc3339("2015-08-01T00:00:00.000Z"),
@@ -1348,10 +1348,10 @@ pub fn is_overlapping_day_interval_13_test() {
 
 ///
 ///    a-------a
-///                   b------b            
-/// 
+///                   b------b
+///
 ///   (False)
-/// 
+///
 pub fn is_contiguous_1_test() {
   let a =
     moment_interval.new(
@@ -1371,10 +1371,10 @@ pub fn is_contiguous_1_test() {
 
 ///
 ///    a---------a
-///               b------b            
-/// 
+///               b------b
+///
 ///   (False)
-/// 
+///
 pub fn is_contiguous_2_test() {
   let a =
     moment_interval.new(
@@ -1395,10 +1395,10 @@ pub fn is_contiguous_2_test() {
 
 ///
 ///    a---------a
-///              b------b            
-/// 
+///              b------b
+///
 ///   (True)
-/// 
+///
 pub fn is_contiguous_3_test() {
   let a =
     moment_interval.new(
@@ -1418,10 +1418,10 @@ pub fn is_contiguous_3_test() {
 
 ///
 ///    a---------a
-///            b------b            
-/// 
+///            b------b
+///
 ///   (False)
-/// 
+///
 pub fn is_contiguous_4_test() {
   let a =
     moment_interval.new(

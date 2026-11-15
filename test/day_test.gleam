@@ -1,12 +1,12 @@
-import calendar/iso_date
-import day.{type Day}
+import timepoint/calendar/iso_date
+import timepoint/day.{type Day}
 import gleam/dict
 import gleam/dynamic/decode
 import gleam/json
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
 import gleeunit/should
-import moment
+import timepoint/moment
 
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------

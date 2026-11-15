@@ -1,16 +1,16 @@
-import day.{type Day}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/order.{Eq, Gt, Lt}
 import gleam/time/duration
-import interval/day_interval.{type DayInterval}
-import moment.{type Moment}
+import timepoint/day.{type Day}
+import timepoint/interval/day_interval.{type DayInterval}
+import timepoint/moment.{type Moment}
 
 /// A MomentInterval coming from an internal process,
 /// where other logic and tests guarantees its correctness.
-/// 
+///
 /// Represents a range of time for comparison.
-/// 
+///
 /// The start Moment is inclusive (Eq/Gt) and the
 /// end Moment is exclusive (Lt).
 pub opaque type MomentInterval {
@@ -63,7 +63,7 @@ pub fn to_start(interval: MomentInterval) -> Moment {
 // -----------------------------------------------
 
 /// Converts a MomentInterval into a JSON String.
-/// 
+///
 /// You cannot directly decode a JSON String to a
 /// MomentInterval, it has to be decoded into a
 /// RawMomentWindow and then normalised.
@@ -75,7 +75,7 @@ pub fn to_json(interval: MomentInterval) -> Json {
 }
 
 /// Attempts to decode a Moment from JSON.
-/// 
+///
 /// If it's malformed, or formed but the end is
 /// before the start, it will throw an Error.
 pub fn decoder() -> Decoder(MomentInterval) {
@@ -189,28 +189,28 @@ pub type TruncateError {
   ResultIntervalIsLarger
 }
 
-/// Attempts to move the end_excluding 
+/// Attempts to move the end_excluding
 /// Moment to the same point as a given Momeent
-/// 
+///
 /// Also used to check if a truncation is applicable
 /// when it comes to overlap checks.
-/// 
+///
 /// ```
 /// will provide a result,
 /// even if the result is the same:
-/// 
+///
 ///    s--------e      s-------e
 ///    s---T           s-------T
-/// 
+///
 /// ResultIntervalIsZero:
-/// 
+///
 ///   s--------e       s-------e
 ///   T              T
-/// 
+///
 /// ResultIntervalIsLarger:
 ///  e--------e
-///  s-----------T 
-/// 
+///  s-----------T
+///
 /// ```
 ///
 pub fn truncate(
@@ -237,12 +237,12 @@ pub fn truncate(
 /// Checks if a Day somewhat lands inside a MomentInterval.
 ///
 /// correct:
-/// 
-/// |-------|    |-----|   
-///    d         d    
-/// 
+///
+/// |-------|    |-----|
+///    d         d
+///
 /// ```
-/// 
+///
 pub fn is_around_day(interval: MomentInterval, day: Day) -> Bool {
   case to_collision_with_day(interval, day) {
     DayAtStart | DayInside -> True
@@ -253,12 +253,12 @@ pub fn is_around_day(interval: MomentInterval, day: Day) -> Bool {
 /// Checks if a Day somewhat lands before a MomentInterval.
 ///
 /// correct:
-/// 
-///     |-----|   
-///   d    
-/// 
+///
+///     |-----|
+///   d
+///
 /// ```
-/// 
+///
 pub fn is_after_day(interval: MomentInterval, day: Day) -> Bool {
   case to_collision_with_day(interval, day) {
     DayBeforeStart -> True
@@ -267,14 +267,14 @@ pub fn is_after_day(interval: MomentInterval, day: Day) -> Bool {
 }
 
 /// Checks if a Moment lands inside a MomentInterval.
-/// 
+///
 /// correct:
-/// 
-/// |-------|    |-----|   
-///    m         m    
-/// 
+///
+/// |-------|    |-----|
+///    m         m
+///
 /// ```
-/// 
+///
 pub fn is_around_moment(interval: MomentInterval, moment: Moment) -> Bool {
   case to_collision_with_moment(interval, moment) {
     MomentAtStart | MomentInside -> True
@@ -283,14 +283,14 @@ pub fn is_around_moment(interval: MomentInterval, moment: Moment) -> Bool {
 }
 
 /// Checks if a Moment lands before a MomentInterval.
-/// 
+///
 /// correct:
-/// 
-///       |-------|     
-///    m         
-/// 
+///
+///       |-------|
+///    m
+///
 /// ```
-/// 
+///
 pub fn is_after_moment(interval: MomentInterval, moment: Moment) -> Bool {
   case to_collision_with_moment(interval, moment) {
     MomentBeforeStart -> True
@@ -299,14 +299,14 @@ pub fn is_after_moment(interval: MomentInterval, moment: Moment) -> Bool {
 }
 
 /// Checks if a MomentInterval is fully inside another MomentInterval.
-/// 
+///
 /// ```
-/// 
+///
 /// correct:
-/// 
+///
 ///     a-----a      a----a       a----a
 ///    b-------b     b-----b    b------b
-/// 
+///
 /// ```
 pub fn is_inside(a: MomentInterval, of b: MomentInterval) {
   case to_collision_with_moment(b, a.start) {
@@ -320,21 +320,21 @@ pub fn is_inside(a: MomentInterval, of b: MomentInterval) {
 }
 
 /// Checks if a MomentInterval is at least partly overlapping another MomentInterval.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 ///     a-----a      a----a       a----a
 ///    b-------b     b-----b    b------b
-/// 
-/// 
-///   a-----a          a------a 
-///     b------b     b-----b     
-/// 
-/// 
-/// 
+///
+///
+///   a-----a          a------a
+///     b------b     b-----b
+///
+///
+///
 /// ```
-/// 
+///
 pub fn is_overlapped(a: MomentInterval, by b: MomentInterval) {
   case to_collision_with_moment(b, a.start) {
     MomentBeforeStart | MomentAtStart | MomentInside -> True
@@ -348,21 +348,21 @@ pub fn is_overlapped(a: MomentInterval, by b: MomentInterval) {
 
 /// Checks if a MomentInterval is at least partly
 /// overlapping a DayInterval.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 ///     d-----d      d----d       d----d
 ///    t-------t     t-----t    t------t
-/// 
-/// 
+///
+///
 ///   d-----d          d------d   d-----d
 ///     t------t     t-----t            t-------t
-/// 
-/// 
-/// 
+///
+///
+///
 /// ```
-/// 
+///
 pub fn is_overlapped_by_day_interval(
   t: MomentInterval,
   by d: DayInterval,
@@ -378,17 +378,17 @@ pub fn is_overlapped_by_day_interval(
 }
 
 /// Checks if two MomentIntervals are considered 'contiguous'.
-/// 
+///
 /// ```
 /// correct:
-/// 
+///
 /// a----a
 ///      b----b
-/// 
+///
 /// (end_excluding of a == start of b)
-/// 
+///
 /// ```
-/// 
+///
 pub fn is_contiguous(a: MomentInterval, before b: MomentInterval) -> Bool {
   a.end_excluding == b.start
 }

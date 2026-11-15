@@ -1,10 +1,10 @@
-import day
+import timepoint/day
 import gleam/dynamic/decode
 import gleam/json
 import gleeunit/should
-import interval/day_interval
-import versioning/calendrical/cal_current_variant
-import versioning/calendrical/cal_past_variant.{type CalPastVariant}
+import timepoint/interval/day_interval
+import timepoint/versioning/calendrical/cal_current_variant
+import timepoint/versioning/calendrical/cal_past_variant.{type CalPastVariant}
 
 // ----------------------------------------
 // ----------------------------------------
@@ -118,7 +118,7 @@ pub fn new_2_test() {
 }
 
 /// Start and final are in the wrong order.
-/// 
+///
 /// THIS SHOULD NOT BE ALLOWABLE IN THE APPLICATION.
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn new_unsafe_use_1_test() {
@@ -132,7 +132,7 @@ pub fn new_unsafe_use_1_test() {
 }
 
 /// Start and final are in the wrong order.
-/// 
+///
 /// THIS SHOULD NOT BE ALLOWABLE IN THE APPLICATION.
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn new_unsafe_use_2_test() {
@@ -178,7 +178,7 @@ pub fn from_day_start_2_test() {
 }
 
 /// Start and final are in the wrong order.
-/// 
+///
 /// THIS SHOULD NOT BE ALLOWABLE IN THE APPLICATION.
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn from_day_unsafe_use_1_test() {
@@ -194,7 +194,7 @@ pub fn from_day_unsafe_use_1_test() {
 }
 
 /// Start and final are in the wrong order.
-/// 
+///
 /// THIS SHOULD NOT BE ALLOWABLE IN THE APPLICATION.
 /// THIS IS A DELIBERATE EXAMPLE OF THINGS GOING WRONG.
 pub fn from_day_unsafe_use_2_test() {
@@ -217,7 +217,7 @@ pub fn from_day_unsafe_use_2_test() {
 
 ///     S--------F
 ///     S----F (new)
-/// 
+///
 ///     (Ok)
 pub fn truncate_1_test() {
   cal_past_variant.new(
@@ -237,7 +237,7 @@ pub fn truncate_1_test() {
 
 ///     S--------F
 ///     S-----------F (new)
-/// 
+///
 ///     (Ok)
 pub fn truncate_2_test() {
   cal_past_variant.new(
@@ -257,7 +257,7 @@ pub fn truncate_2_test() {
 
 ///     S--------F
 ///     S+F (new)
-/// 
+///
 ///     (Ok)
 pub fn truncate_3_test() {
   cal_past_variant.new(
@@ -277,7 +277,7 @@ pub fn truncate_3_test() {
 
 ///       S--------F
 ///     F-S (new)
-/// 
+///
 ///     (Error)
 pub fn truncate_4_test() {
   cal_past_variant.new(
@@ -291,7 +291,7 @@ pub fn truncate_4_test() {
 
 ///       S--------F
 ///  F----S (new)
-/// 
+///
 ///     (Error)
 pub fn truncate_5_test() {
   cal_past_variant.new(
@@ -311,7 +311,7 @@ pub fn truncate_5_test() {
 
 ///             |------|
 ///  o------o
-/// 
+///
 ///    (False)
 pub fn is_around_day_interval_1_test() {
   cal_past_variant.new(
@@ -328,7 +328,7 @@ pub fn is_around_day_interval_1_test() {
 
 ///         |------|
 ///  o------o
-/// 
+///
 ///    (True)
 pub fn is_around_day_interval_2_test() {
   cal_past_variant.new(
@@ -345,7 +345,7 @@ pub fn is_around_day_interval_2_test() {
 
 ///         |------|
 ///    o------o
-/// 
+///
 ///    (True)
 pub fn is_around_day_interval_3_test() {
   cal_past_variant.new(
@@ -362,7 +362,7 @@ pub fn is_around_day_interval_3_test() {
 
 ///     |-------------|
 ///        o-------o
-/// 
+///
 ///    (True)
 pub fn is_around_day_interval_4_test() {
   cal_past_variant.new(
@@ -379,7 +379,7 @@ pub fn is_around_day_interval_4_test() {
 
 ///       |-------|
 ///    o------------o
-/// 
+///
 ///    (True)
 pub fn is_around_day_interval_5_test() {
   cal_past_variant.new(
@@ -396,7 +396,7 @@ pub fn is_around_day_interval_5_test() {
 
 ///     |---------|
 ///          o----------o
-/// 
+///
 ///    (True)
 pub fn is_around_day_interval_6_test() {
   cal_past_variant.new(
@@ -413,7 +413,7 @@ pub fn is_around_day_interval_6_test() {
 
 ///     |---------|
 ///               o-----o
-/// 
+///
 ///    (True)
 pub fn is_around_day_interval_7_test() {
   cal_past_variant.new(
@@ -430,7 +430,7 @@ pub fn is_around_day_interval_7_test() {
 
 ///     |---------|
 ///                   o-----o
-/// 
+///
 ///    (False)
 pub fn is_around_day_interval_8_test() {
   cal_past_variant.new(
@@ -453,7 +453,7 @@ pub fn is_around_day_interval_8_test() {
 
 ///            H
 ///     S----F
-/// 
+///
 ///     (False)
 pub fn is_effective_on_day_1_test() {
   cal_past_variant.new(
@@ -467,7 +467,7 @@ pub fn is_effective_on_day_1_test() {
 
 ///          H
 ///     S----F
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_2_test() {
   cal_past_variant.new(
@@ -481,7 +481,7 @@ pub fn is_effective_on_day_2_test() {
 
 ///        H
 ///     S----F
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_3_test() {
   cal_past_variant.new(
@@ -495,7 +495,7 @@ pub fn is_effective_on_day_3_test() {
 
 ///        H
 ///       S+F
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_4_test() {
   cal_past_variant.new(
@@ -509,7 +509,7 @@ pub fn is_effective_on_day_4_test() {
 
 ///     H
 ///     S----F
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_5_test() {
   cal_past_variant.new(
@@ -523,7 +523,7 @@ pub fn is_effective_on_day_5_test() {
 
 ///     H
 ///        S----F
-/// 
+///
 ///     (False)
 pub fn is_effective_on_day_6_test() {
   cal_past_variant.new(

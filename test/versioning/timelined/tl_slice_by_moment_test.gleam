@@ -1,11 +1,11 @@
 import gleeunit/should
-import interval/moment_interval
-import moment
-import versioning/timelined
-import versioning/timelined/tl_any_variant.{Current, Past}
-import versioning/timelined/tl_current_variant
-import versioning/timelined/tl_past_variant
-import versioning/timelined/tl_slice_by_moment
+import timepoint/interval/moment_interval
+import timepoint/moment
+import timepoint/versioning/timelined
+import timepoint/versioning/timelined/tl_any_variant.{Current, Past}
+import timepoint/versioning/timelined/tl_current_variant
+import timepoint/versioning/timelined/tl_past_variant
+import timepoint/versioning/timelined/tl_slice_by_moment
 
 fn eq_func(a: String, b: String) -> Bool {
   a == b

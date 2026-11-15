@@ -1,12 +1,12 @@
-import calendar/iso_date
-import calendar/iso_week.{type ISOWeek}
-import day.{type Day}
+import timepoint/calendar/iso_date
+import timepoint/calendar/iso_week.{type ISOWeek}
+import timepoint/day.{type Day}
 
 /// A type representing an ISO 8601 Week Date.
-/// 
-/// ISO Week Dates are not the same as ISO Dates - 
+///
+/// ISO Week Dates are not the same as ISO Dates -
 /// for instance, years are not calculated the same.
-/// 
+///
 /// See the Wikipedia article on ISO week dates for
 /// more information - https://en.wikipedia.org/wiki/ISO_week_date
 pub opaque type ISOWeekDate {

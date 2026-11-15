@@ -1,20 +1,21 @@
 /// A Day is like a Timestamp, but for calendar days on Earth.
-/// 
+///
 /// A day represents the amount of days since 1 January 1970, which is the
 /// same Unix epoch that Timestamp uses.
-/// 
-import duration_extra
+///
+
 import gleam/dynamic/decode.{type Decoder}
 import gleam/int
 import gleam/json.{type Json}
 import gleam/order.{type Order, Eq, Gt, Lt}
 import gleam/result
 import gleam/time/timestamp
-import moment.{type Moment}
-import offset
+import timepoint/duration_extra
+import timepoint/moment.{type Moment}
+import timepoint/offset
 
 /// A Day is an abstract representation of a specific calendar day on Earth.
-/// 
+///
 /// This could be...
 /// - A specific solar/calendar day from the perspective of one place
 /// on earth.
@@ -22,16 +23,16 @@ import offset
 /// person. For instance, if they are travelling and moving across time
 /// zone offsets, they experience the same calendar day, even though the
 /// day might be getting longer or shorter.
-/// 
+///
 /// Day is roughly analogous to a Date type in other systems - a
 /// Day carries the same information as `2026-04-19` does, but
 /// with important distinctions:
-/// 
+///
 /// - It's efficient, unambiguous and impossible to construct an invalid Day.
 /// - There is no specific calendar representation attached, which means
 /// you only need to work with the idiosyncracies of a particular
 /// calendar system later rather than sooner.
-/// 
+///
 /// If you want to work in a specific calendar system, you need
 /// to cast a Day into that specific system.
 pub opaque type Day {
@@ -47,9 +48,9 @@ pub opaque type Day {
 // -----------------------------------------------------
 
 /// Casts a Moment into a Day.
-/// 
+///
 /// ## Examples
-/// 
+///
 /// ```gleam
 /// timestamp.from_unix_seconds(0)
 /// |> moment.from_timestamp(with: offset.from_mins(60))
@@ -74,9 +75,9 @@ pub fn from_moment(moment: Moment) -> Day {
 }
 
 /// Tries to create a Day from an ISO 8601 formatted-string.
-/// 
+///
 /// ## Examples
-/// 
+///
 /// ```gleam
 /// day.parse_iso8601("2026-04-20")
 /// |> result.map(day.to_unix_days)
@@ -95,11 +96,11 @@ pub fn parse_iso8601(string: String) -> Result(Day, Nil) {
 /// **a lot** of the time and unwrapping Results is unecessary
 /// for the test case. This is a version of `parse_iso8601` that
 /// simply panics when the input is wrong.
-/// 
+///
 /// Use for testing only.
-/// 
+///
 /// /// ## Examples
-/// 
+///
 /// ```gleam
 /// day.parse_iso8601("2026-04-20")
 /// |> day.to_unix_days
@@ -132,7 +133,7 @@ pub fn to_unix_days(day: Day) -> Int {
 const unix_epoch_as_rata_die: Int = 719_163
 
 /// Creates a Day from an Int representing Rata Die days.
-/// 
+///
 /// Rata die is the number of days from 1st January, 1 CE.
 pub fn from_rata_die(rata_die: Int) -> Day {
   rata_die
@@ -141,7 +142,7 @@ pub fn from_rata_die(rata_die: Int) -> Day {
 }
 
 /// Converts a Day into an Int representing Rata Die days.
-/// 
+///
 /// Rata Die is the number of days from 1st January, 1 CE.
 pub fn to_rata_die(day: Day) -> Int {
   day.unix_days

@@ -2,7 +2,7 @@
 
 import gleam/bit_array
 import gleam/result
-import offset.{type Offset}
+import timepoint/offset.{type Offset}
 
 const seconds_per_day: Int = 86_400
 
@@ -66,7 +66,7 @@ fn normalise(pt: IntermediateStructure) -> IntermediateStructure {
 /// Parses an [RFC 3339 formatted time string][spec] into a `ParsedDateTime`.
 ///
 /// [spec]: https://datatracker.ietf.org/doc/html/rfc3339#section-5.6
-/// 
+///
 /// # Examples
 ///
 /// ```gleam
@@ -74,9 +74,9 @@ fn normalise(pt: IntermediateStructure) -> IntermediateStructure {
 /// timestamp.to_unix_seconds_and_nanoseconds(ts)
 /// // -> #(1, 0)
 /// ```
-/// 
+///
 /// Parsing an invalid timestamp returns an error.
-/// 
+///
 /// ```gleam
 /// let assert Error(Nil) = timestamp.parse_rfc3339("1995-10-31")
 /// ```
@@ -103,24 +103,24 @@ fn normalise(pt: IntermediateStructure) -> IntermediateStructure {
 ///   without risk of bugs.
 ///
 /// ## Behaviour details
-/// 
-/// - Follows the grammar specified in section 5.6 Internet Date/Time Format of 
+///
+/// - Follows the grammar specified in section 5.6 Internet Date/Time Format of
 ///   RFC 3339 <https://datatracker.ietf.org/doc/html/rfc3339#section-5.6>.
-/// - The `T` and `Z` characters may alternatively be lower case `t` or `z`, 
+/// - The `T` and `Z` characters may alternatively be lower case `t` or `z`,
 ///   respectively.
-/// - Full dates and full times must be separated by `T` or `t`. A space is also 
+/// - Full dates and full times must be separated by `T` or `t`. A space is also
 ///   permitted.
-/// - Leap seconds rules are not considered.  That is, any timestamp may 
+/// - Leap seconds rules are not considered.  That is, any timestamp may
 ///   specify digts `00` - `60` for the seconds.
-/// - Any part of a fractional second that cannot be represented in the 
-///   nanosecond precision is tructated.  That is, for the time string, 
-///   `"1970-01-01T00:00:00.1234567899Z"`, the fractional second `.1234567899` 
+/// - Any part of a fractional second that cannot be represented in the
+///   nanosecond precision is tructated.  That is, for the time string,
+///   `"1970-01-01T00:00:00.1234567899Z"`, the fractional second `.1234567899`
 ///   will be represented as `123_456_789` in the `Timestamp`.
-/// 
+///
 pub fn parse(input: String) -> Result(IntermediateStructure, Nil) {
   let bytes = bit_array.from_string(input)
 
-  // Date 
+  // Date
   use #(year, bytes) <- result.try(parse_year(from: bytes))
   use bytes <- result.try(accept_byte(from: bytes, value: byte_minus))
   use #(month, bytes) <- result.try(parse_month(from: bytes))
@@ -129,7 +129,7 @@ pub fn parse(input: String) -> Result(IntermediateStructure, Nil) {
 
   use bytes <- result.try(accept_date_time_separator(from: bytes))
 
-  // Time 
+  // Time
   use #(hours, bytes) <- result.try(parse_hours(from: bytes))
   use bytes <- result.try(accept_byte(from: bytes, value: byte_colon))
   use #(minutes, bytes) <- result.try(parse_minutes(from: bytes))
@@ -317,7 +317,7 @@ fn offset_to_seconds(sign, hours hours, minutes minutes) {
 }
 
 /// Parse and return the given number of digits from the given bytes.
-/// 
+///
 fn parse_digits(
   from bytes: BitArray,
   count count: Int,
@@ -345,7 +345,7 @@ fn do_parse_digits(
 }
 
 /// Accept the given value from `bytes` and move past it if found.
-/// 
+///
 fn accept_byte(from bytes: BitArray, value value: Int) -> Result(BitArray, Nil) {
   case bytes {
     <<byte, remaining_bytes:bytes>> if byte == value -> Ok(remaining_bytes)
@@ -372,7 +372,7 @@ fn accept_empty(from bytes: BitArray) -> Result(Nil, Nil) {
 }
 
 /// Note: The caller of this function must ensure that all inputs are valid.
-/// 
+///
 fn from_date_time(
   year year: Int,
   month month: Int,
@@ -396,14 +396,14 @@ fn from_date_time(
   |> normalise
 }
 
-/// `julian_seconds_from_parts(year, month, day, hours, minutes, seconds)` 
-/// returns the number of Julian 
+/// `julian_seconds_from_parts(year, month, day, hours, minutes, seconds)`
+/// returns the number of Julian
 /// seconds represented by the given arguments.
-/// 
+///
 /// Note: It is the callers responsibility to ensure the inputs are valid.
-/// 
+///
 /// See https://www.tondering.dk/claus/cal/julperiod.php#formula
-/// 
+///
 fn julian_seconds_from_parts(
   year year: Int,
   month month: Int,
@@ -422,9 +422,9 @@ fn julian_seconds_from_parts(
 }
 
 /// Note: It is the callers responsibility to ensure the inputs are valid.
-/// 
+///
 /// See https://www.tondering.dk/claus/cal/julperiod.php#formula
-/// 
+///
 fn julian_day_from_ymd(year year: Int, month month: Int, day day: Int) -> Int {
   let adjustment = { 14 - month } / 12
   let adjusted_year = year + 4800 - adjustment

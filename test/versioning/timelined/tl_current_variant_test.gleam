@@ -1,11 +1,11 @@
-import day
+import timepoint/day
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleeunit/should
-import interval/day_interval
-import interval/moment_interval
-import moment
-import versioning/timelined/tl_current_variant.{type TLCurrentVariant}
+import timepoint/interval/day_interval
+import timepoint/interval/moment_interval
+import timepoint/moment
+import timepoint/versioning/timelined/tl_current_variant.{type TLCurrentVariant}
 
 // --------------------------------------------
 // --------------------------------------------
@@ -93,7 +93,7 @@ pub fn to_start_day_test() {
 
 ///    |------|
 ///  o-------------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_moment_interval_1_test() {
   tl_current_variant.new(
@@ -109,7 +109,7 @@ pub fn is_effective_in_moment_interval_1_test() {
 
 ///    |------|
 ///    o-------------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_moment_interval_2_test() {
   tl_current_variant.new(
@@ -125,7 +125,7 @@ pub fn is_effective_in_moment_interval_2_test() {
 
 ///    |------|
 ///       o----------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_moment_interval_3_test() {
   tl_current_variant.new(
@@ -141,7 +141,7 @@ pub fn is_effective_in_moment_interval_3_test() {
 
 ///    |------|
 ///           o---------
-/// 
+///
 ///    (False)
 pub fn is_effective_in_moment_interval_4_test() {
   tl_current_variant.new(
@@ -157,7 +157,7 @@ pub fn is_effective_in_moment_interval_4_test() {
 
 ///    |------|
 ///               o---------
-/// 
+///
 ///    (False)
 pub fn is_effective_in_moment_interval_5_test() {
   tl_current_variant.new(
@@ -177,7 +177,7 @@ pub fn is_effective_in_moment_interval_5_test() {
 
 ///    |------|
 ///  o-------------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_1_test() {
   tl_current_variant.new(
@@ -193,7 +193,7 @@ pub fn is_effective_in_day_interval_1_test() {
 
 ///    |------|
 ///    o-------------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_2_test() {
   tl_current_variant.new(
@@ -209,7 +209,7 @@ pub fn is_effective_in_day_interval_2_test() {
 
 ///    |------|
 ///       o----------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_3_test() {
   tl_current_variant.new(
@@ -225,7 +225,7 @@ pub fn is_effective_in_day_interval_3_test() {
 
 ///    |------|
 ///           o---------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_4_test() {
   tl_current_variant.new(
@@ -241,7 +241,7 @@ pub fn is_effective_in_day_interval_4_test() {
 
 ///    |------|
 ///               o---------
-/// 
+///
 ///    (False)
 pub fn is_effective_in_day_interval_5_test() {
   tl_current_variant.new(
@@ -257,7 +257,7 @@ pub fn is_effective_in_day_interval_5_test() {
 
 ///    |------|  (just misses)
 ///            o---------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_t1_test() {
   tl_current_variant.new(
@@ -273,7 +273,7 @@ pub fn is_effective_in_day_interval_t1_test() {
 
 ///    |------|  (just passes)
 ///           o---------
-/// 
+///
 ///    (True)
 pub fn is_effective_in_day_interval_t2_test() {
   tl_current_variant.new(
@@ -293,7 +293,7 @@ pub fn is_effective_in_day_interval_t2_test() {
 
 ///      x
 ///    o---------
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_1_test() {
   tl_current_variant.new(
@@ -306,7 +306,7 @@ pub fn is_effective_on_day_1_test() {
 
 ///      x
 ///      o-------
-/// 
+///
 ///     (True)
 pub fn is_effective_on_day_2_test() {
   tl_current_variant.new(
@@ -319,7 +319,7 @@ pub fn is_effective_on_day_2_test() {
 
 ///      x
 ///        o-------
-/// 
+///
 ///     (False)
 pub fn is_effective_on_day_3_test() {
   tl_current_variant.new(
@@ -336,7 +336,7 @@ pub fn is_effective_on_day_3_test() {
 
 ///      x
 ///    o---------
-/// 
+///
 ///     (True)
 pub fn overlaps_1_test() {
   tl_current_variant.new(
@@ -351,7 +351,7 @@ pub fn overlaps_1_test() {
 
 ///      x
 ///      o-------
-/// 
+///
 ///     (True)
 pub fn overlaps_2_test() {
   tl_current_variant.new(
@@ -366,7 +366,7 @@ pub fn overlaps_2_test() {
 
 ///      x
 ///        o-------
-/// 
+///
 ///     (False)
 pub fn overlaps_3_test() {
   tl_current_variant.new(

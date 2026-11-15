@@ -1,19 +1,19 @@
-import day
+import timepoint/day
 import gleam/dynamic/decode
 import gleam/json
 import gleam/list
 import gleam/option.{None, Some}
 import gleam/result
 import gleeunit/should
-import interval/day_interval
-import versioning/calendrical.{
+import timepoint/interval/day_interval
+import timepoint/versioning/calendrical.{
   type Calendrical, InvalidNewCurrentIsEarlierThanHistoricalStart, NoChange,
   NonDestructive, WillOverwriteCurrent, WillOverwriteCurrentAndHistory,
 }
-import versioning/calendrical/cal_any_variant.{Current, Past}
-import versioning/calendrical/cal_current_variant
-import versioning/calendrical/cal_past_variant
-import versioning/calendrical/cal_slice.{CalSlice}
+import timepoint/versioning/calendrical/cal_any_variant.{Current, Past}
+import timepoint/versioning/calendrical/cal_current_variant
+import timepoint/versioning/calendrical/cal_past_variant
+import timepoint/versioning/calendrical/cal_slice.{CalSlice}
 
 fn eq_func(a: String, b: String) -> Bool {
   a == b
@@ -121,7 +121,7 @@ pub fn json_io_2_test() {
 }
 
 /// one of the historical dates is not contiguous.
-/// 
+///
 /// (These numbers are using the old rata die system
 /// so they are wildly in the future now that UNIX time
 /// is used. The date formatting and logic is still
@@ -133,7 +133,7 @@ pub fn json_erroneous_string_1_test() {
 }
 
 /// one of the historical dates is not contiguous. (take 2)
-/// /// 
+/// ///
 /// (These numbers are using the old rata die system
 /// so they are wildly in the future now that UNIX time
 /// is used. The date formatting and logic is still
@@ -145,7 +145,7 @@ pub fn json_erroneous_string_2_test() {
 }
 
 /// one of the historical dates is not contiguous. (take 3, i fucked up a lot)
-/// /// 
+/// ///
 /// (These numbers are using the old rata die system
 /// so they are wildly in the future now that UNIX time
 /// is used. The date formatting and logic is still
@@ -157,7 +157,7 @@ pub fn json_erroneous_string_3_test() {
 }
 
 /// current is not contiguous with history.
-/// /// 
+/// ///
 /// (These numbers are using the old rata die system
 /// so they are wildly in the future now that UNIX time
 /// is used. The date formatting and logic is still
@@ -169,7 +169,7 @@ pub fn json_erroneous_string_4_test() {
 }
 
 /// start date doesn't match first variant.
-/// /// 
+/// ///
 /// (These numbers are using the old rata die system
 /// so they are wildly in the future now that UNIX time
 /// is used. The date formatting and logic is still
@@ -222,14 +222,14 @@ pub fn insert_new_current_1_test() {
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 ///   after
 ///   C 2025-02-26 -- (new)
 ///   H 2025-02-25 - 2025-02-25 (moved to past)
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 pub fn insert_new_current_2_test() {
   let existing =
     calendrical.new(
@@ -269,13 +269,13 @@ pub fn insert_new_current_2_test() {
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 ///   after
 ///   C 2025-02-25 -- (replaced)
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 pub fn insert_new_current_3_test() {
   let existing =
     calendrical.new(
@@ -315,14 +315,14 @@ pub fn insert_new_current_3_test() {
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 ///   after
 ///   (deleted)
 ///   C 2025-02-24 -- (new)
 ///   H 2025-02-19 - 2025-02-23 (truncated)
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 pub fn insert_new_current_4_test() {
   let existing =
     calendrical.new(
@@ -374,20 +374,20 @@ pub fn insert_new_current_4_test() {
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 ///   after
 ///   (deleted)
 ///   (deleted)
 ///   C 2025-02-19 -- (new)
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
-/// 
+///
+///
 /// THIS IS TESTED AS AN UNWRAPPED LIST BECAUSE THE
 /// INTERNAL STRUCTURE OF MAP MAKES IT HARD TO
 /// PRODUCE RELIABLE TESTS SOMETIMES DEPENDING ON HOW
 /// ITS BEEN SHUFFLED AND EDITED.
-/// 
+///
 pub fn insert_new_current_5_test() {
   let existing =
     calendrical.new(
@@ -441,14 +441,14 @@ pub fn insert_new_current_5_test() {
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 ///   after
 ///   (deleted)
 ///   (deleted)
 ///   (deleted)
 ///   C 2025-02-16 -- (new)
 ///   H 2025-02-02 - 2025-02-15 (truncated)
-/// 
+///
 pub fn insert_new_current_6_test() {
   let existing =
     calendrical.new(
@@ -492,14 +492,14 @@ pub fn insert_new_current_6_test() {
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 ///   after
 ///   (deleted)
 ///   (deleted)
 ///   (deleted)
 ///   (deleted)
 ///   C 2025-02-02 -- (new)
-/// 
+///
 pub fn insert_new_current_7_test() {
   let existing =
     calendrical.new(
@@ -539,16 +539,16 @@ pub fn insert_new_current_7_test() {
 ///   H 2025-02-19 - 2025-02-24
 ///   H 2025-02-18 - 2025-02-18
 ///   H 2025-02-02 - 2025-02-17
-/// 
+///
 ///   attempt (INVALID)
 ///   (deleted)
 ///   (deleted)
 ///   (deleted)
 ///   (deleted)
 ///   C 2025-01-01 -- (new, way before the others)
-/// 
+///
 ///   Will not execute and simply returns the existing calendrical.
-/// 
+///
 pub fn insert_new_current_8_test() {
   let existing =
     calendrical.new(
@@ -619,9 +619,9 @@ pub fn unsafe_insert_new_current_2_test() {
 ///   x  H 2025-02-19 - 2025-02-24
 ///   x  H 2025-02-18 - 2025-02-18
 ///   x  H 2025-02-02 - 2025-02-17
-/// 
-/// 
-/// 
+///
+///
+///
 pub fn filter_by_day_interval_1_test() {
   let interval =
     day_interval.new(
@@ -672,9 +672,9 @@ pub fn filter_by_day_interval_1_test() {
 ///      H 2025-02-19 - 2025-02-24
 ///   x  H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
-/// 
-/// 
-/// 
+///
+///
+///
 pub fn filter_by_day_interval_2_test() {
   let interval =
     day_interval.new(
@@ -715,9 +715,9 @@ pub fn filter_by_day_interval_2_test() {
 ///      H 2025-02-19 - 2025-02-24
 ///      H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
-/// 
-/// 
-/// 
+///
+///
+///
 pub fn filter_by_day_interval_3_test() {
   let interval =
     day_interval.new(
@@ -759,9 +759,9 @@ pub fn filter_by_day_interval_3_test() {
 ///      H 2025-02-19 - 2025-02-24
 ///      H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
-///   
+///
 ///   x  ???? (nothing for now)
-/// 
+///
 pub fn filter_by_day_interval_4_test() {
   let interval =
     day_interval.new(
@@ -794,9 +794,9 @@ pub fn filter_by_day_interval_4_test() {
 ///   x  H 2025-02-19 - 2025-02-24
 ///      H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
-/// 
-/// 
-/// 
+///
+///
+///
 pub fn filter_by_day_interval_5_test() {
   let interval =
     day_interval.new(
@@ -856,9 +856,9 @@ pub fn filter_by_day_interval_5_test() {
 ///      H 2025-02-19 - 2025-02-24
 ///      H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
-/// 
-/// 
-/// 
+///
+///
+///
 pub fn get_variant_by_day_1_test() {
   calendrical.new(
     with: "whatever",
@@ -894,8 +894,8 @@ pub fn get_variant_by_day_1_test() {
 ///      H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
 ///   x  (just before, fail)
-/// 
-/// 
+///
+///
 pub fn get_variant_by_day_2_test() {
   calendrical.new(
     with: "whatever",
@@ -924,8 +924,8 @@ pub fn get_variant_by_day_2_test() {
 ///      H 2025-02-18 - 2025-02-18
 ///   x  H 2025-02-02 - 2025-02-17
 ///     (just at the start)
-/// 
-/// 
+///
+///
 pub fn get_variant_by_day_3_test() {
   calendrical.new(
     with: "whatever",
@@ -962,8 +962,8 @@ pub fn get_variant_by_day_3_test() {
 ///      H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
 ///     (just at the start)
-/// 
-/// 
+///
+///
 pub fn get_variant_by_day_4_test() {
   calendrical.new(
     with: "whatever",
@@ -999,8 +999,8 @@ pub fn get_variant_by_day_4_test() {
 ///   x  H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
 ///     (just at the start)
-/// 
-/// 
+///
+///
 pub fn get_variant_by_day_5_test() {
   calendrical.new(
     with: "whatever",
@@ -1037,8 +1037,8 @@ pub fn get_variant_by_day_5_test() {
 ///      H 2025-02-18 - 2025-02-18
 ///      H 2025-02-02 - 2025-02-17
 ///     (just at the start)
-/// 
-/// 
+///
+///
 pub fn get_variant_by_day_6_test() {
   calendrical.new(
     with: "whatever",

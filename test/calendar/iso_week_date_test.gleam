@@ -1,5 +1,5 @@
-import calendar/iso_week_date
-import day
+import timepoint/calendar/iso_week_date
+import timepoint/day
 import gleeunit/should
 
 // ----------------------------------------------------

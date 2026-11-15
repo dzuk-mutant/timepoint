@@ -1,10 +1,10 @@
-import day.{type Day}
-import duration_extra
 import gleam/int
 import gleam/string
 import gleam/time/calendar.{type Month}
 import gleam/time/duration
 import gleam/time/timestamp
+import timepoint/day.{type Day}
+import timepoint/duration_extra
 
 /// Contains the details of the ISO Date, plus the
 /// Day, preserving it for chained usage.
@@ -53,9 +53,9 @@ pub fn from_day(day: Day) -> ISODate {
 }
 
 /// Convenience function that gives the Day.
-/// 
+///
 /// Useful for piping!
-/// 
+///
 /// ## Examples
 /// ```gleam
 /// day
@@ -68,7 +68,7 @@ pub fn to_day(date: ISODate) -> Day {
 }
 
 /// Returns an ISO 8601-formatted string.
-/// 
+///
 /// ## Examples
 /// ```gleam
 /// day.parse_iso8601("2026-04-19")
@@ -129,7 +129,7 @@ pub fn to_year(date: ISODate) -> Int {
 }
 
 /// Returns day of week number, to ISO standards.
-/// 
+///
 /// (The first day is Monday, which equals 1.)
 pub fn to_day_of_week(date: ISODate) -> DayOfWeek {
   date
@@ -138,7 +138,7 @@ pub fn to_day_of_week(date: ISODate) -> DayOfWeek {
 }
 
 /// Returns the day of the week as a number, in ISO standards.
-/// 
+///
 /// Monday is 1 and Sunday is 7.
 pub fn to_day_of_week_number(date: ISODate) -> Int {
   case int.modulo(day.to_unix_days(date.day) + 3, 7) {
@@ -148,7 +148,7 @@ pub fn to_day_of_week_number(date: ISODate) -> Int {
 }
 
 /// Returns a number representing the Ordinal Day of a year out of a Day.
-/// 
+///
 /// This is useful if you want to know how many days of the year have
 /// passed, including the given date.
 pub fn to_ordinal_day(date: ISODate) -> Int {

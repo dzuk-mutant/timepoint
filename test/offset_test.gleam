@@ -2,7 +2,7 @@ import gleam/json
 import gleam/order.{Eq, Gt, Lt}
 import gleam/time/duration
 import gleeunit/should
-import offset.{type Offset}
+import timepoint/offset.{type Offset}
 
 // -----------------------------------------------------
 // -----------------------------------------------------

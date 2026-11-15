@@ -3,8 +3,8 @@ import gleam/order.{Eq, Gt, Lt}
 import gleam/time/duration
 import gleam/time/timestamp
 import gleeunit/should
-import moment.{type Moment}
-import offset
+import timepoint/moment.{type Moment}
+import timepoint/offset
 
 // -----------------------------------------------------
 // -----------------------------------------------------
@@ -341,7 +341,7 @@ pub fn is_later_3_test() {
 }
 
 /// different offset test
-/// 
+///
 /// (offsets should not affect the calculation)
 pub fn is_later_4_test() {
   moment.from_timestamp(

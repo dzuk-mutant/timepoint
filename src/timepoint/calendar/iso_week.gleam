@@ -1,8 +1,8 @@
-import calendar/iso_date
-import day.{type Day}
 import gleam/list
 import gleam/result
-import interval/day_interval.{type DayInterval}
+import timepoint/calendar/iso_date
+import timepoint/day.{type Day}
+import timepoint/interval/day_interval.{type DayInterval}
 
 /// A type-enforced representation of a week
 /// in ISO 8601 dates.
@@ -45,7 +45,7 @@ pub fn from_day(day: Day) -> ISOWeek {
 // ---------------------------------------------------
 
 /// Creates a list of ISOWeek intervals from an Interval.
-/// 
+///
 /// Will only create ISOWeeks that are fully
 /// encompassed by the given interval. If it only
 /// encompasses partial weeks, the resulting list will be empty.
@@ -114,9 +114,9 @@ fn inside_week_acc(
 }
 
 /// Creates a list of isoweek intervals from an Interval.
-/// 
+///
 /// Will create ISOWeeks that are overlapping the given interval.
-/// 
+///
 /// So a list that partly or fully encompasses W12-W14 will
 /// encompass a list that represents W12-W14.
 pub fn list_from_around_interval(interval: DayInterval) -> List(ISOWeek) {
@@ -280,8 +280,8 @@ pub fn compare_reverse(a: ISOWeek, to b: ISOWeek) {
 // ---------------------------------------------------
 // ---------------------------------------------------
 
-/// Returns the most recent Monday behind the Day, unless 
-/// the given Day is Monday, in which case that will be 
+/// Returns the most recent Monday behind the Day, unless
+/// the given Day is Monday, in which case that will be
 /// returned instead.
 fn most_recent_monday_behind(day: Day) -> Day {
   day
@@ -291,7 +291,7 @@ fn most_recent_monday_behind(day: Day) -> Day {
 }
 
 /// Creates a week no / year tuple from a Day.
-/// 
+///
 /// For construction.
 fn tuple_from_day(day: Day) -> #(Int, Int) {
   let year =
@@ -340,7 +340,7 @@ fn last_week_no_of_year(day: Day) -> Int {
 
 /// Gets the week of year that functions in
 /// ISO 8601 Week Dates.
-/// 
+///
 /// If the resulting number is 0, it means it
 /// belongs in the previous year's final week date.
 fn day_to_week_no(day: Day) -> Int {

@@ -1,10 +1,10 @@
-import versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
-
-import day.{type Day}
 import gleam/dynamic/decode.{type Decoder}
 import gleam/json.{type Json}
 import gleam/result
-import interval/day_interval.{type DayInterval}
+import timepoint/day.{type Day}
+import timepoint/interval/day_interval.{type DayInterval}
+import timepoint/versioning/calendrical/cal_current_variant.{type CalCurrentVariant}
+
 
 ///  A data type representing a version of a data type at a particular point in time in the past.
 pub opaque type CalPastVariant(v) {
@@ -96,7 +96,7 @@ pub fn decoder(
 
 /// Moves the final Day 1 day before the
 /// given end_excluding Day.
-/// 
+///
 /// Will return Result(day_interval.TruncateError)
 /// if the given end_excluding Day is not a correct input.
 pub fn truncate(
@@ -129,7 +129,7 @@ pub fn unwrap(variant: CalPastVariant(v)) -> v {
   variant.value
 }
 
-/// Converts to a DayInterval. 
+/// Converts to a DayInterval.
 pub fn to_day_interval(variant: CalPastVariant(v)) -> DayInterval {
   variant.interval
 }
@@ -141,9 +141,9 @@ pub fn to_day_interval(variant: CalPastVariant(v)) -> DayInterval {
 // ---------------------------------
 
 /// Checks if a Past Variant lands inside a Day Window.
-/// 
+///
 /// Will be True if the two intervals overlap.
-/// 
+///
 /// Similar but not exactly the same functionality as its TL counterpart.
 pub fn is_effective_in_day_interval(
   variant: CalPastVariant(v),
