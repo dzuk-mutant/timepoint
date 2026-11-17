@@ -84,10 +84,8 @@ pub fn from_moment(moment: Moment) -> Day {
 /// // Ok(20_563)
 /// ```
 pub fn parse_iso8601(string: String) -> Result(Day, Nil) {
-  use ts <- result.try(timestamp.parse_rfc3339(string <> "T00:00:00Z"))
-
+  use ts <- result.try(moment.parse_rfc3339(string <> "T00:00:01Z"))
   ts
-  |> moment.from_timestamp(with: offset.from_minutes(0))
   |> from_moment
   |> Ok
 }
@@ -109,7 +107,7 @@ pub fn parse_iso8601(string: String) -> Result(Day, Nil) {
 pub fn testing_iso8601(string: String) -> Day {
   case parse_iso8601(string) {
     Ok(day) -> day
-    Error(_) -> panic as "incorrect ISO 8601 string for testing"
+    Error(_) -> panic as "ISO 8601 string parsing failed"
   }
 }
 
