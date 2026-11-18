@@ -13,7 +13,7 @@ import timepoint/timestamp_extra
 /// an Offset, it can't tell you what Day an event happened in,
 /// therefore it can't be used to deduce a calendar date/time.
 ///
-/// While gleam/time offers the ability to produce a calendar date by
+/// While gleam_time offers the ability to produce a calendar date by
 /// adding an offset to a Timestamp, there are many cases where it's useful
 /// to carry an offset with a Timestamp as a type, because of the same
 /// efficiency and validity guarantees that a Timestamp has.
