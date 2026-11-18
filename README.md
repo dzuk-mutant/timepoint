@@ -60,7 +60,7 @@ Ok(20_563)
 
 ## Examples
 
-These added types not only creates a nice structure for holding localising info, it also creates this clean track of information from capturing the user's time circumstances to generating calendar-based outputs, with each step getting less precise or more difficult to handle:\*
+These added types not only creates a nice structure for holding localising info, it also creates this clean track of information from capturing the user's time circumstances to generating calendar-based outputs, with each step getting less precise or generally more difficult to handle:
 
 ```gleam
 |> moment.system_time()
@@ -69,36 +69,44 @@ These added types not only creates a nice structure for holding localising info,
 
 ```
 
-\* *(though, it's always possible to reconstruct Days from ISODates, as ISODates always contain the original Day.)*
+With `Days` and the calendar handling in this bundle, you can dip into a calendar system, perform functions on that day, and then convert back out without committing to a fallible calendar system in storage:
 
+```gleam
+day_21st
+|> iso_date.from_day
+|> iso_date.closest_prev_day_of_week(iso_date.Monday)
+|> iso_date.to_day
+```
 
 
 ---
 
 # More detailed calendar functionality
 
-- Day of Week (made back when gleam_time didn't have day of week stuff)
-- Going backwards/forwards by days of the week
-- Ordinal days
-
 
 ## ISO calendar
 
-While Gregorian is a popular method of doing calendars, it's not standardised. For instance the starting day of the week can be different in different countries. I noticed that gtempo uses Sunday as the starting day, which is a US convention and not something shared in Europe. This took me by surprise when programming.
+While Gregorian is a popular method of doing calendars, it's not standardised. For instance the starting day of the week can be different in different countries. I noticed that gtempo uses Sunday as the starting day, which is a US convention and not something shared in Europe. This took me by surprise when working with that library.
 
-So for my Gregorian functionality, I aim to explicitly follow ISO 8601 standards to reduce surprises. Maybe this could be made more flexible in the future, but the app I'm making this for only needs an ISO calendar for very specific technical reasons.
+With that in mind my calendar functionality specifically follows ISO standards where applicable, and makes it clear in naming.
 
 
 ## ISO weeks and week dates
 
 They're a niche but useful way of arranging time depending on the situation. I needed them for my app!
 
+```gleam
+let week_days =
+today
+|> iso_week.from_day
+|> iso_week.to_list
+```
 
 ---
 
 ## Intervals/windowing
 
-Make, manipulate and compare intervals of time against each other. You can make these intervals out of Days, Moments or Intervals. You can compare MomentIntervals with Days and DayIntervals!.
+Make, manipulate and compare intervals of time against each other. You can make these intervals out of Days, Moments or Intervals. You can compare MomentIntervals with Days and DayIntervals!. Turn DayIntervals into lists of Days you can use to build calendar views!
 
 Some of these Interval types help power functionality elsewhere in the package, such as ISO Weeks and versioning.
 
@@ -126,14 +134,15 @@ calendrical.new(
 
 ## JSON encode/decode
 
-Each data type has functions for JSON encode/decode, since that's been a huge part of the app I'm working on. Is it a good idea for a package? Probably not, but it's in this bundle of code, and it's tightly integrated to the extent that it's worse to take it out at the moment...
+Each data type has functions for JSON encode/decode, since that's been a huge part of the app I'm working on. Is it a good idea for a package? Very likely not, but it's in this bundle of code, and it's tightly integrated to the extent that it's worse for my app to take it out at the moment...
 
 ----
 
 # Future plans
 
-- Make Interval constructors safe.
+- Make Interval constructors safe in a way that's not annoying to use.
 - Come up with neater and more consistent names for `Calendrical`, `Timelined` and related types.
+- Find a nice way to say goodbye to the JSON code. (probably by removing versioned types and re-integrating them into my app?)
 
 -----
 
