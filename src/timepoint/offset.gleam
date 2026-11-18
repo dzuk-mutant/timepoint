@@ -22,9 +22,7 @@
 /// This module does not cover time zones, just offsets that
 /// may happen to be a part of a particular time zone.
 
-import gleam/dynamic/decode.{type Decoder}
 import gleam/int
-import gleam/json.{type Json}
 import gleam/order.{type Order}
 import gleam/time/calendar
 import gleam/time/duration.{type Duration}
@@ -121,28 +119,4 @@ pub fn is_equal(offset_1: Offset, to offset_2: Offset) -> Bool {
 /// Compares the values of each offset against each other.
 pub fn compare(offset_1: Offset, to offset_2: Offset) -> Order {
   int.compare(to_minutes(offset_1), with: to_minutes(offset_2))
-}
-
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// ---------------------- JSON -------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-
-const default: Offset = Offset(seconds: 0)
-
-pub fn to_json(offset: Offset) -> Json {
-  offset.seconds
-  |> json.int()
-}
-
-pub fn decoder() -> Decoder(Offset) {
-  decode.new_primitive_decoder("Offset", fn(offset) {
-    case decode.run(offset, decode.int) {
-      Error(_) -> Error(default)
-      Ok(mins) -> Ok(from_seconds(mins))
-    }
-  })
 }

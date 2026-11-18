@@ -1,5 +1,3 @@
-import gleam/dynamic/decode.{type Decoder}
-import gleam/json.{type Json}
 import gleam/list
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
@@ -52,53 +50,6 @@ pub fn new_with_end_excluding(
 ) -> DayInterval {
   let final = decrement(end_excluding)
   DayInterval(start:, final:)
-}
-
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// ------------------- JSON ----------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-
-/// Converts a DayInterval into JSON.
-pub fn to_json(interval: DayInterval) -> Json {
-  json.object([
-    #("start", day.to_json(interval.start)),
-    #("final", day.to_json(interval.final)),
-  ])
-}
-
-/// Attempts to decode a DayInterval from JSON.
-///
-/// If it's malformed, or formed but the final is
-/// before the start, it will throw an Error.
-pub fn decoder() -> Decoder(DayInterval) {
-  let default =
-    DayInterval(start: day.from_unix_days(0), final: day.from_unix_days(0))
-
-  decode.new_primitive_decoder("DayInterval", fn(interval) {
-    let day_decoder = day.decoder()
-
-    let interval_decoder = {
-      use start <- decode.field("start", day_decoder)
-      use final <- decode.field("final", day_decoder)
-
-      decode.success(#(start, final))
-    }
-
-    case decode.run(interval, interval_decoder) {
-      Error(_) -> Error(default)
-      Ok(raw_interval) ->
-        case day.is_earlier(raw_interval.1, than: raw_interval.0) {
-          True -> Error(default)
-          False -> Ok(new(raw_interval.0, raw_interval.1))
-        }
-    }
-  })
 }
 
 // -----------------------------------------------

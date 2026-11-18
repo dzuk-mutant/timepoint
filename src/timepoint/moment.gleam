@@ -1,5 +1,4 @@
-import gleam/dynamic/decode.{type Decoder}
-import gleam/json.{type Json}
+
 import gleam/order.{type Order, Eq, Gt, Lt}
 import gleam/time/duration.{type Duration}
 import gleam/time/timestamp.{type Timestamp}
@@ -178,46 +177,4 @@ pub fn subtract(moment: Moment, duration duration: Duration) -> Moment {
   let ts = to_timestamp(moment)
 
   Moment(..moment, timestamp: timestamp_extra.subtract(ts, duration))
-}
-
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// ----------------------- JSON ------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-
-/// The string function used for all DateTimes
-/// in the Database apart from dict keys.
-pub fn to_json(moment: Moment) -> Json {
-  json.object([
-    #("timestamp", moment.timestamp |> timestamp_extra.to_json),
-    #("offset", moment.offset |> offset.to_json),
-  ])
-}
-
-/// A version of DateTimes decoding for the application
-/// as a Decoder primitive.
-pub fn decoder() -> Decoder(Moment) {
-  let default =
-    Moment(
-      // 8 March 2025
-      timestamp: timestamp_extra.default(),
-      offset: offset.from_minutes(0),
-    )
-  decode.new_primitive_decoder("DateTime", fn(datetime) {
-    let offset_decoder = offset.decoder()
-    let timestamp_decoder = timestamp_extra.decoder()
-
-    let datetimestore_decoder = {
-      use timestamp <- decode.field("timestamp", timestamp_decoder)
-      use offset <- decode.field("offset", offset_decoder)
-      decode.success(Moment(timestamp:, offset:))
-    }
-    case decode.run(datetime, datetimestore_decoder) {
-      Error(_) -> Error(default)
-      Ok(moment) -> Ok(moment)
-    }
-  })
 }

@@ -1,9 +1,8 @@
-import gleam/json
 import gleam/order.{Eq, Gt, Lt}
 import gleam/time/duration
 import gleam/time/timestamp
 import gleeunit/should
-import timepoint/moment.{type Moment}
+import timepoint/moment
 import timepoint/offset
 
 // -----------------------------------------------------
@@ -421,82 +420,4 @@ pub fn add_2_test() {
     timestamp.from_unix_seconds(124),
     with: offset.from_minutes(0),
   ))
-}
-
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -------------------- JSON ---------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-
-pub fn output(input: Moment, expected_output: String) {
-  input
-  |> moment.to_json()
-  |> json.to_string()
-  |> should.equal(expected_output)
-}
-
-pub fn output_input(input_and_expected_output: Moment) {
-  let date_decoder = moment.decoder()
-
-  input_and_expected_output
-  |> moment.to_json()
-  |> json.to_string()
-  |> json.parse(using: date_decoder)
-  |> should.equal(Ok(input_and_expected_output))
-}
-
-// ----------------- TESTS --------------------
-
-pub fn example_1_input_output_test() {
-  output_input(moment.from_timestamp(
-    timestamp.from_unix_seconds(8_888_888),
-    with: offset.from_minutes(0),
-  ))
-}
-
-pub fn example_2_input_output_test() {
-  output_input(
-    timestamp.from_unix_seconds(3_242_342_358)
-    |> moment.from_timestamp(with: offset.from_minutes(210)),
-  )
-}
-
-pub fn example_3_input_output_test() {
-  output_input(moment.from_timestamp(
-    timestamp.from_unix_seconds(21_312_312_312),
-    with: offset.from_minutes(-600),
-  ))
-}
-
-pub fn example_1_output_test() {
-  output(
-    moment.from_timestamp(
-      timestamp.from_unix_seconds(1_741_392_000),
-      with: offset.from_minutes(0),
-    ),
-    "{\"timestamp\":{\"unix_s\":1741392000,\"unix_ns\":0},\"offset\":0}",
-  )
-}
-
-pub fn example_2_output_test() {
-  output(
-    moment.from_timestamp(
-      timestamp.from_unix_seconds(813_479_756),
-      with: offset.from_minutes(-240),
-    ),
-    "{\"timestamp\":{\"unix_s\":813479756,\"unix_ns\":0},\"offset\":-14400}",
-  )
-}
-
-pub fn example_3_output_test() {
-  output(
-    moment.from_timestamp(
-      timestamp.from_unix_seconds(1_267_912_800),
-      with: offset.from_minutes(640),
-    ),
-    "{\"timestamp\":{\"unix_s\":1267912800,\"unix_ns\":0},\"offset\":38400}",
-  )
 }

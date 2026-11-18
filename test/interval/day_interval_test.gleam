@@ -1,11 +1,9 @@
 import timepoint/calendar/iso_date
 import timepoint/day
-import gleam/json
 import gleam/list
-import gleam/result
 import gleeunit/should
 import timepoint/interval/day_interval.{
-  type DayInterval, PointAfterFinal, PointAtFinal, PointAtStart,
+  PointAfterFinal, PointAtFinal, PointAtStart,
   PointBeforeStart, PointInside,
 }
 import timepoint/moment
@@ -26,90 +24,6 @@ pub fn new_single_2_test() {
   ))
 }
 
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// ------------------- JSON ------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-
-fn json_output(
-  interval interval: DayInterval,
-  expected_output expected_output: String,
-) {
-  interval
-  |> day_interval.to_json()
-  |> json.to_string()
-  |> should.equal(expected_output)
-}
-
-fn json_output_input(input_and_expected_output: DayInterval) {
-  let default =
-    day_interval.new(start: day.from_unix_days(0), final: day.from_unix_days(0))
-  let day_interval_decoder = day_interval.decoder()
-  input_and_expected_output
-  |> day_interval.to_json()
-  |> json.to_string()
-  |> json.parse(using: day_interval_decoder)
-  |> result.unwrap(default)
-  |> should.equal(input_and_expected_output)
-}
-
-fn example_1() {
-  day_interval.new(
-    start: day.testing_iso8601("2025-03-09"),
-    final: day.testing_iso8601("2025-03-10"),
-  )
-}
-
-pub fn example_1_output_input_test() {
-  json_output_input(example_1())
-}
-
-fn example_2() {
-  day_interval.new_single(day.testing_iso8601("1988-12-16"))
-}
-
-pub fn example_2_output_test() {
-  json_output(
-    interval: example_2(),
-    expected_output: "{\"start\":6924,\"final\":6924}",
-  )
-}
-
-pub fn example_2_output_input_test() {
-  json_output_input(example_2())
-}
-
-fn example_3() {
-  day_interval.new(
-    start: day.testing_iso8601("2032-03-09"),
-    final: day.testing_iso8601("2033-03-16"),
-  )
-}
-
-pub fn example_3_output_input_test() {
-  json_output_input(example_3())
-}
-
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-
-fn json_i_erroneous(input: String) {
-  let decoder = day_interval.decoder()
-  input
-  |> json.parse(using: decoder)
-  |> result.is_error
-  |> should.equal(True)
-}
-
-/// start is later than final.
-pub fn json_i_erroneous_1_test() {
-  "{\"start\":1,\"final\":0}"
-  |> json_i_erroneous()
-}
 
 // -----------------------------------------------
 // -----------------------------------------------

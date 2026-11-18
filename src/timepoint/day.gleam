@@ -4,9 +4,7 @@
 /// same Unix epoch that Timestamp uses.
 ///
 
-import gleam/dynamic/decode.{type Decoder}
 import gleam/int
-import gleam/json.{type Json}
 import gleam/order.{type Order, Eq, Gt, Lt}
 import gleam/result
 import gleam/time/timestamp
@@ -200,54 +198,4 @@ pub fn add(sd: Day, days days: Int) -> Day {
 /// Subtracts a specified number of days from the Day.
 pub fn subtract(sd: Day, days days: Int) -> Day {
   Day(unix_days: sd.unix_days - days)
-}
-
-// ----------------------------------------------------
-// ----------------------------------------------------
-// --------------------- JSON ------------------------
-// ----------------------------------------------------
-// ----------------------------------------------------
-
-/// Useful for most JSON values, apart from if you need
-/// to use a Day as a Dict key, in which case, use `to_json_dict_key()`.
-pub fn to_json(day: Day) -> Json {
-  json.int(to_unix_days(day))
-}
-
-/// A function that converts a Day to a String that's
-/// usable as a JSON Dict key.
-pub fn to_json_dict_key(day: Day) -> String {
-  day
-  |> to_unix_days
-  |> int.to_string
-}
-
-/// A decoder for Days when used as normal values.
-pub fn decoder() -> Decoder(Day) {
-  // 2000-01-01
-  let default = from_unix_days(730_120)
-
-  decode.new_primitive_decoder("Date", fn(date) {
-    case decode.run(date, decode.int) {
-      Error(_) -> Error(default)
-      Ok(rd) -> Ok(Day(unix_days: rd))
-    }
-  })
-}
-
-/// A decoder for Days when used as Dict keys.
-pub fn decoder_dict_key() -> Decoder(Day) {
-  // 2000-01-01
-  let default = from_unix_days(730_120)
-
-  decode.new_primitive_decoder("Date", fn(date) {
-    case decode.run(date, decode.string) {
-      Error(_) -> Error(default)
-      Ok(str) ->
-        case int.parse(str) {
-          Error(_) -> Error(default)
-          Ok(rd) -> Ok(Day(unix_days: rd))
-        }
-    }
-  })
 }

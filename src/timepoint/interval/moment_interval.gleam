@@ -1,5 +1,3 @@
-import gleam/dynamic/decode.{type Decoder}
-import gleam/json.{type Json}
 import gleam/order.{Eq, Gt, Lt}
 import gleam/time/duration
 import timepoint/day.{type Day}
@@ -50,60 +48,6 @@ pub fn to_end_excluding(interval: MomentInterval) -> Moment {
 
 pub fn to_start(interval: MomentInterval) -> Moment {
   interval.start
-}
-
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// ------------------- JSON ----------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-// -----------------------------------------------
-
-/// Converts a MomentInterval into a JSON String.
-///
-/// You cannot directly decode a JSON String to a
-/// MomentInterval, it has to be decoded into a
-/// RawMomentWindow and then normalised.
-pub fn to_json(interval: MomentInterval) -> Json {
-  json.object([
-    #("start", moment.to_json(interval.start)),
-    #("end_excluding", moment.to_json(interval.end_excluding)),
-  ])
-}
-
-/// Attempts to decode a Moment from JSON.
-///
-/// If it's malformed, or formed but the end is
-/// before the start, it will throw an Error.
-pub fn decoder() -> Decoder(MomentInterval) {
-  let default =
-    MomentInterval(
-      start: moment.testing_rfc3339("2025-03-10T00:00:00.000Z"),
-      end_excluding: moment.testing_rfc3339("2025-03-10T00:00:00.000Z"),
-    )
-
-  decode.new_primitive_decoder("RawMomentInterval", fn(interval) {
-    let moment_decoder = moment.decoder()
-
-    let interval_decoder = {
-      use start <- decode.field("start", moment_decoder)
-      use end_excluding <- decode.field("end_excluding", moment_decoder)
-
-      decode.success(#(start, end_excluding))
-    }
-
-    case decode.run(interval, interval_decoder) {
-      Error(_) -> Error(default)
-      Ok(raw_interval) ->
-        case moment.is_earlier(raw_interval.1, than: raw_interval.0) {
-          True -> Error(default)
-          False -> Ok(new(raw_interval.0, raw_interval.1))
-        }
-    }
-  })
 }
 
 // -----------------------------------------------

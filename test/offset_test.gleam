@@ -1,8 +1,7 @@
-import gleam/json
 import gleam/order.{Eq, Gt, Lt}
 import gleam/time/duration
 import gleeunit/should
-import timepoint/offset.{type Offset}
+import timepoint/offset
 
 // -----------------------------------------------------
 // -----------------------------------------------------
@@ -131,55 +130,4 @@ pub fn compare_6_test() {
   offset.from_minutes(210)
   |> offset.compare(offset.from_minutes(00))
   |> should.equal(Gt)
-}
-
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -------------------- JSON ---------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-
-pub fn output(input: Offset, expected_output: String) {
-  input
-  |> offset.to_json()
-  |> json.to_string()
-  |> should.equal(expected_output)
-}
-
-pub fn output_input(input_and_expected_output: Offset) {
-  let date_decoder = offset.decoder()
-
-  input_and_expected_output
-  |> offset.to_json()
-  |> json.to_string()
-  |> json.parse(using: date_decoder)
-  |> should.equal(Ok(input_and_expected_output))
-}
-
-// ----------------- TESTS --------------------
-
-pub fn example_1_input_output_test() {
-  output_input(offset.from_minutes(120))
-}
-
-pub fn example_2_input_output_test() {
-  output_input(offset.from_minutes(90))
-}
-
-pub fn example_3_input_output_test() {
-  output_input(offset.from_minutes(-510))
-}
-
-pub fn example_1_output_test() {
-  output(offset.from_minutes(-510), "-30600")
-}
-
-pub fn example_2_output_test() {
-  output(offset.from_minutes(600), "36000")
-}
-
-pub fn example_3_output_test() {
-  output(offset.from_minutes(0), "0")
 }

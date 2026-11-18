@@ -1,8 +1,5 @@
 import timepoint/calendar/iso_date
-import timepoint/day.{type Day}
-import gleam/dict
-import gleam/dynamic/decode
-import gleam/json
+import timepoint/day
 import gleam/order.{Eq, Gt, Lt}
 import gleam/result
 import gleeunit/should
@@ -457,74 +454,4 @@ pub fn subtract_2_test() {
   day.from_unix_days(123_123)
   |> day.subtract(days: 0)
   |> should.equal(day.from_unix_days(123_123))
-}
-
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -------------------- JSON ---------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-// -----------------------------------------------------
-
-pub fn output(input: Day, expected_output: String) {
-  input
-  |> day.to_json()
-  |> json.to_string()
-  |> should.equal(expected_output)
-}
-
-pub fn output_input(input_and_expected_output: Day) {
-  let date_decoder = day.decoder()
-
-  input_and_expected_output
-  |> day.to_json()
-  |> json.to_string()
-  |> json.parse(using: date_decoder)
-  |> should.equal(Ok(input_and_expected_output))
-}
-
-// ----------------- TESTS --------------------
-
-pub fn example_1_input_output_test() {
-  output_input(day.from_unix_days(739_318))
-}
-
-pub fn example_2_input_output_test() {
-  output_input(day.from_unix_days(728_578))
-}
-
-pub fn example_3_input_output_test() {
-  output_input(day.from_unix_days(733_837))
-}
-
-pub fn example_1_output_test() {
-  output(day.from_unix_days(739_318), "739318")
-}
-
-pub fn example_2_output_test() {
-  output(day.from_unix_days(728_578), "728578")
-}
-
-pub fn example_3_output_test() {
-  output(day.from_unix_days(733_837), "733837")
-}
-
-pub fn testing_date_keys_test() {
-  let date_key_decoder = day.decoder_dict_key()
-  let buh = dict.from_list([#(day.testing_iso8601("2001-01-01"), "beep")])
-
-  buh
-  |> json.dict(day.to_json_dict_key, json.string)
-  |> json.to_string()
-  |> json.parse(decode.dict(
-    // basically the type signature for decode.then
-    // expects you to have a function that takes in
-    // the initially decoded type and then the decoder
-    // you actually want. We don't need that so have a
-    // weird type signature!
-    date_key_decoder,
-    decode.string,
-  ))
-  |> should.equal(Ok(buh))
 }
