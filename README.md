@@ -1,5 +1,7 @@
 # Timepoint
 
+> [!note] This was not vibe coded.
+
 An extension of gleam_time functionality.
 
 ---
