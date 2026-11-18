@@ -20,12 +20,9 @@ A type that combines a Timestamp with an Offset.
 
 A Timestamp is perfect for a non-ambiguous point in time, but without
 an Offset, you can't tell what Day an event happened in,
-therefore it can't be used to deduce a calendar date/time.
+therefore it can't be used to deduce a calendar datetime.
 
-While gleam_time offers the ability to produce a calendar date by
-adding an offset to a Timestamp, there are many cases where it's useful
-to carry an offset with a Timestamp as a type, such as when you want
-to capture when a user did something, in the time circumstances that they did it.
+While gleam_time allows you to get the calendar day from a Timestamp through a function that lets you combine an offset, it would be really handy to be able to store the equivalent of a localised datetime already in a UNIX-ey format. That's what Moments are for.
 
 
 ```gleam
