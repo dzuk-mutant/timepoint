@@ -26,7 +26,7 @@ While gleam_time allows you to get the calendar day from a Timestamp through a f
 
 
 ```gleam
-|> moment.system_time()
+moment.system_time()
 |> day.from_moment()
 |> iso_date.from_day()
 
@@ -54,7 +54,7 @@ calendar system later rather than sooner.
 ```gleam
 day.parse_iso8601("2026-04-20")
 |> result.map(day.to_unix_days)
-Ok(20_563)
+// Ok(20_563)
 ```
 
 
@@ -63,7 +63,7 @@ Ok(20_563)
 These added types not only creates a nice structure for holding localising info, it also creates this clean track of information from capturing the user's time circumstances to generating calendar-based outputs, with each step getting less precise or generally more difficult to handle:
 
 ```gleam
-|> moment.system_time()
+moment.system_time()
 |> day.from_moment()
 |> iso_date.from_day()
 
