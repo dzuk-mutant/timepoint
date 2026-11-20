@@ -112,26 +112,6 @@ Some of these Interval types help power functionality elsewhere in the package, 
 
 ---
 
-## Historical versioning
-
-Hold and track historical changes to a type over time, with type-enforced intervals and type-enforced edit outcomes.
-
-This might be very niche, and the naming conventions are weird right now, but it is a huge part of the app I'm working on, and I think it's quite neat.
-
-```gleam
-calendrical.new(
-  with: "whatever",
-  starting_at: day.testing_iso8601("2025-02-02"),
-  equality_fn: eq_func,
-)
-|> calendrical.insert_new_current(
-  with: "new thing",
-  starting_at: day.testing_iso8601("2025-02-18"),
-)
-```
-
----
-
 ## JSON encode/decode
 
 Each data type has functions for JSON encode/decode, since that's been a huge part of the app I'm working on. Is it a good idea for a package? Very likely not, but it's in this bundle of code, and it's tightly integrated to the extent that it's worse for my app to take it out at the moment...
@@ -141,8 +121,7 @@ Each data type has functions for JSON encode/decode, since that's been a huge pa
 # Future plans
 
 - Make Interval constructors safe in a way that's not annoying to use.
-- Come up with neater and more consistent names for `Calendrical`, `Timelined` and related types.
-- Find a nice way to say goodbye to the JSON code. (probably by removing versioned types and re-integrating them into my app?)
+- Find a nice way to say goodbye to the JSON code.
 
 -----
 
