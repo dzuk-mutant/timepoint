@@ -39,11 +39,9 @@ A lil type that supports the `Moment` type.
 
 ## Days
 
-A `Day` is an abstract representation of a specific solar day on Earth. This could be from the perspective of one location or one person (if they are journeying around the world that day).
+A `Day` is an representation of a specific solar day on Earth. This could be from the perspective of one location or one person (if they are journeying around the world that day, that day can be longer or shorter than 24 hours).
 
-`Day` is roughly analogous to a Date type in other systems - a
-Day carries the same information as `2026-04-19` does, but
-with important distinctions:
+Under the hood, it is an epoch-based equivalent to a date in other datetime libraries. A Day type carries the same information as `2026-04-19` does, but with important distinctions:
 
 - It's efficient.
 - It's impossible to construct an invalid Day.
@@ -69,7 +67,7 @@ moment.system_time()
 
 ```
 
-With `Days` and the calendar handling in this bundle, you can dip into a calendar system, perform functions on that day, and then convert back out without committing to a fallible calendar system in storage:
+With `Days` and the calendar handling in this bundle, you can dip into a calendar system, perform functions on that day, and then convert back out without committing to a fallible calendar system in storage, or to make it open to easy interpretation in other calendar systems:
 
 ```gleam
 day_21st
@@ -86,14 +84,14 @@ day_21st
 
 ## ISO calendar
 
-While Gregorian is a popular method of doing calendars, it's not standardised. For instance the starting day of the week can be different in different countries. I noticed that gtempo uses Sunday as the starting day, which is a US convention and not something shared in Europe. This took me by surprise when working with that library.
+While the Gregorian calendar is a popular method of doing calendars, it's not standardised. For instance the starting day of the week can be different in different countries. I noticed that gtempo uses Sunday as the starting day, which is a US convention and not something shared in Europe. This took me by surprise when working with that library.
 
 With that in mind my calendar functionality specifically follows ISO standards where applicable, and makes it clear in naming.
 
 
 ## ISO weeks and week dates
 
-They're a niche but useful way of arranging time depending on the situation. I needed them for my app!
+They're a niche but useful way of arranging time depending on the situation. I need them for my app!
 
 ```gleam
 let week_days =
@@ -106,7 +104,44 @@ today
 
 ## Intervals/windowing
 
-Make, manipulate and compare intervals of time against each other. You can make these intervals out of Days, Moments or Intervals. You can compare MomentIntervals with Days and DayIntervals!. Turn DayIntervals into lists of Days you can use to build calendar views!
+Make, manipulate and compare intervals of time against each other. You can make these intervals out of Days, Moments or Intervals.
+
+Use intervals to check databases:
+
+```gleam  
+common_test.activity()
+|> activity.slice(by: day_interval.new(start: this_day, final: next_day))
+|> activity_slice.has_user_activity
+|> should.equal(True)
+```
+
+Perform collision detection on intervals. You can compare Moment and Day-based types and intervals against each other:
+
+```gleam
+pub fn is_effective_in_moment_interval(
+  variant: TLCurrentVariant(v),
+  interval: MomentInterval,
+) -> Bool {
+  moment_interval.is_around_moment(interval, variant.start)
+  || moment_interval.is_after_moment(interval, variant.start)
+}
+
+pub fn is_effective_in_day_interval(
+  variant: TLCurrentVariant(v),
+  interval: DayInterval,
+) -> Bool {
+  day_interval.is_around_moment(interval, variant.start)
+  || day_interval.is_after_moment(interval, variant.start)
+}
+
+```
+
+Turn DayIntervals into lists of days to build daily slices or views of data:
+
+```gleam
+activity_slice.interval
+|> day_interval.to_list
+```
 
 Some of these Interval types help power functionality elsewhere in the package, such as ISO Weeks and versioning.
 
@@ -114,7 +149,7 @@ Some of these Interval types help power functionality elsewhere in the package, 
 
 ## JSON encode/decode
 
-Each data type has functions for JSON encode/decode, since that's been a huge part of the app I'm working on. Is it a good idea for a package? Very likely not, but it's in this bundle of code, and it's tightly integrated to the extent that it's worse for my app to take it out at the moment...
+Each data type has functions for JSON encode/decode, since that's been a huge part of the app I'm working on. Is it a good idea for a package? Very likely not, and I'll probably remove it in a future commit.
 
 ----
 
@@ -122,6 +157,7 @@ Each data type has functions for JSON encode/decode, since that's been a huge pa
 
 - Make Interval constructors safe in a way that's not annoying to use.
 - Find a nice way to say goodbye to the JSON code.
+- Licensing! This uses some code from gleam_time, which is currently missing a license, so I don't feel comfortable licensing this code yet.
 
 -----
 

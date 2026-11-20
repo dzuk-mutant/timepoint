@@ -19,7 +19,7 @@ import timepoint/timestamp_extra
 /// efficiency and validity guarantees that a Timestamp has.
 ///
 /// Moments keep the best parts of Timestamp while adding the minimum
-/// possible information to derive Days, Dates and Times.
+/// possible information to derive localised datetimes.
 ///
 /// ```gleam
 ///
